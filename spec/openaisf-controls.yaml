@@ -1,17 +1,6 @@
-# OpenAISF Control Catalog v1.0-draft
+# OpenAISF Control Catalog
 # The Open AI Safety Framework — machine-readable control specification.
-#
-# This is the load-bearing artifact of OpenAISF. Every control is:
-#   - testable  : has a `check` predicate the conformance CLI can evaluate
-#   - tiered    : applies at one or more of T1 (solo) / T2 (SME) / T3 (enterprise) / T4 (frontier)
-#   - crosswalked : references external regimes (see openaisf-crosswalk.yaml)
-#   - evidenced : declares the artifacts required to substantiate conformance
-#
-# Conformance rule: an AI system is OpenAISF-conformant at tier T when, for every
-# control whose `tiers` contains T, the conformance CLI exits 0 (automated) OR a
-# signed attestation with consistent evidence is present (manual).
-#
-# License: CC-BY-4.0 (the spec is open and free). See LICENSE.
+# License: CC-BY-4.0. See LICENSE.
 
 schema_version: "1.0-draft"
 framework: OpenAISF
@@ -21,17 +10,19 @@ lead_claims:
   - "The MCP governance standard."
   - "Model substitution safety."
 
-# Legend for `check.kind`:
-#   auto-static  : CLI inspects files/config (no execution)
-#   auto-runtime : CLI executes the system / runs evals
-#   attest       : signed YAML attestation + evidence, consistency-checked by CLI
-#   attest-3rd   : independent assessor attestation (T3/T4)
-
 tiers:
   T1: { name: "Solo/Indie",     philosophy: "Don't be reckless.",            audit: "self" }
   T2: { name: "Startup/SME",    philosophy: "Demonstrable care.",            audit: "self + optional review" }
   T3: { name: "Enterprise",     philosophy: "Evidence and accountability.",  audit: "independent assessor" }
   T4: { name: "Frontier",       philosophy: "Prove it, repeatedly.",         audit: "continuous assurance" }
+
+# Core vs Expansion — a second axis, ORTHOGONAL to tiers.
+# Every tier offers a CORE baseline ("get compliant + basic assurance") plus
+# EXPANSION depth. Core control IDs are D#-C0N; expansion control IDs are D#-X0N.
+# A control's level is independent of which tiers (T1-T4) it applies to.
+levels:
+  core: "Baseline — required for compliance and basic assurance at every tier the control is in scope."
+  expansion: "Advanced / frontier depth — beyond the baseline."
 
 domains:
 
@@ -41,7 +32,8 @@ domains:
   - id: D1
     name: Governance & Accountability
     controls:
-      - id: D1-01
+      - id: D1-C01
+        level: core
         title: AI safety policy exists and is versioned
         normative: "A written AI safety policy is present in the repo, dated, versioned, and names a accountable owner."
         tiers: [T1, T2, T3, T4]
@@ -49,7 +41,8 @@ domains:
         evidence: [policy.md]
         crosswalk: { iso_42001: [A.2.2], nist_rmf: [GV-1.1], eu_ai_act: [] }
 
-      - id: D1-02
+      - id: D1-C02
+        level: core
         title: Named accountable owner per AI system
         normative: "Each AI system declares a single accountable human owner (not a team)."
         tiers: [T2, T3, T4]
@@ -57,7 +50,8 @@ domains:
         evidence: [openaisf.yaml]
         crosswalk: { iso_42001: [A.3.2], nist_rmf: [GV-2] }
 
-      - id: D1-03
+      - id: D1-C03
+        level: core
         title: Change management for AI-affecting configs
         normative: "Changes to model routing, prompts, tool grants, and safety configs require review (PR + approver)."
         tiers: [T2, T3, T4]
@@ -65,7 +59,8 @@ domains:
         evidence: [CODEOWNERS, branch-proof.json]
         crosswalk: { iso_42001: [A.6.2.3], nist_rmf: [GV-3] }
 
-      - id: D1-04
+      - id: D1-C04
+        level: core
         title: Concerns / responsible-disclosure channel
         normative: "A channel exists for staff/users to report AI safety concerns without retaliation."
         tiers: [T2, T3, T4]
@@ -79,7 +74,8 @@ domains:
   - id: D2
     name: Risk & Impact
     controls:
-      - id: D2-01
+      - id: D2-C01
+        level: core
         title: Intended-use & context statement
         normative: "Each AI system declares intended use, out-of-scope uses, and deployment context."
         tiers: [T1, T2, T3, T4]
@@ -87,7 +83,8 @@ domains:
         evidence: [openaisf.yaml]
         crosswalk: { iso_42001: [A.5.2], nist_rmf: [MP-1.1], eu_ai_act: [Art.9(2)(b)] }
 
-      - id: D2-02
+      - id: D2-C02
+        level: core
         title: Impact assessment on individuals & groups
         normative: "For T3/T4, a documented impact assessment covers affected individuals, groups, and societal harms."
         tiers: [T3, T4]
@@ -95,7 +92,8 @@ domains:
         evidence: [risk/impact-assessment.md]
         crosswalk: { iso_42001: [A.5.4, A.5.5], nist_rmf: [MP-3.3], eu_ai_act: [Art.27] }
 
-      - id: D2-03
+      - id: D2-C03
+        level: core
         title: Risk register maintained
         normative: "A living risk register links each identified risk to a mitigation owner and status."
         tiers: [T2, T3, T4]
@@ -103,7 +101,8 @@ domains:
         evidence: [risk/register.yaml]
         crosswalk: { iso_42001: [A.6.1.2], nist_rmf: [MP-2] }
 
-      - id: D2-04
+      - id: D2-C04
+        level: core
         title: Routing-topology risk assessment (runtime layer)
         normative: "The fallback/routing topology is assessed as a single risk object: the union of all providers/models in every chain (jurisdiction, data policy, eval profile, ToS)."
         tiers: [T3, T4]
@@ -117,7 +116,8 @@ domains:
   - id: D3
     name: Data, Provenance & Memory
     controls:
-      - id: D3-01
+      - id: D3-C01
+        level: core
         title: Data-source & license declaration
         normative: "Training/fine-tune/RAG data sources are declared with license and acquisition method."
         tiers: [T2, T3, T4]
@@ -125,7 +125,8 @@ domains:
         evidence: [data/sources.yaml]
         crosswalk: { iso_42001: [A.7.2, A.7.3, A.7.5] }
 
-      - id: D3-02
+      - id: D3-C02
+        level: core
         title: PII / regulated-data handling
         normative: "A classification of which data classes may enter the system; regulated classes have controls."
         tiers: [T2, T3, T4]
@@ -133,7 +134,8 @@ domains:
         evidence: [data/classification.yaml]
         crosswalk: { eu_ai_act: [Art.10], nist_rmf: [MP-4] }
 
-      - id: D3-03
+      - id: D3-C03
+        level: core
         title: Retrieval-layer security (RAG/vector)
         normative: "Vector stores have tenant isolation; retrieved chunks are treated as untrusted input; ingestion has integrity controls."
         tiers: [T2, T3, T4]
@@ -141,7 +143,8 @@ domains:
         evidence: [rag/controls.yaml]
         crosswalk: { owasp_llm: [LLM08], note: "OWASP LLM08 is shallow; this goes deeper." }
 
-      - id: D3-04
+      - id: D3-C04
+        level: core
         title: Agent memory integrity
         normative: "Persistent agent memory is scoped per-user, integrity-protected, and supports erasure (right-to-be-forgotten)."
         tiers: [T3, T4]
@@ -149,7 +152,8 @@ domains:
         evidence: [memory/controls.yaml]
         crosswalk: { gdpr: [Art.17], note: "OpenAISF-original: GDPR Art.17 has no agent-memory reading in any framework." }
 
-      - id: D3-05
+      - id: D3-C05
+        level: core
         title: Tenant isolation assurance
         normative: "Controls prevent cross-customer data/cache/memory leakage; 'does my data train your model?' is answered and bounded."
         tiers: [T3, T4]
@@ -157,7 +161,8 @@ domains:
         evidence: [arch/tenant-isolation.md]
         crosswalk: { owasp_llm: [LLM02, LLM06] }
 
-      - id: D3-06
+      - id: D3-C06
+        level: core
         title: Sovereignty & residency
         normative: "Declared residency for weights, inferences, memory, and fine-tune data; cross-border transfers are explicit and bounded."
         tiers: [T3, T4]
@@ -171,7 +176,8 @@ domains:
   - id: D4
     name: Model & Supply-Chain Integrity
     controls:
-      - id: D4-01
+      - id: D4-C01
+        level: core
         title: Model card / system card
         normative: "Each model in use has a model card (capabilities, limits, evals, training-data summary)."
         tiers: [T2, T3, T4]
@@ -179,7 +185,8 @@ domains:
         evidence: [models/*/card.yaml]
         crosswalk: { iso_42001: [A.8.2], eu_ai_act: [Annex XI] }
 
-      - id: D4-02
+      - id: D4-X01
+        level: expansion
         title: Base-model provenance & signing  (sigstore-for-models)
         normative: "Base models and adapters carry cryptographic provenance attestation; weight-hash verified at load; adapters chain to a signed base."
         tiers: [T3, T4]
@@ -187,7 +194,8 @@ domains:
         evidence: [models/provenance.json, sigstore-log]
         crosswalk: { slsa: [], note: "SLSA is software-only; OpenAISF extends it to weights/adapters." }
 
-      - id: D4-03
+      - id: D4-C02
+        level: core
         title: SBOM-for-AI
         normative: "A machine-readable AI-BOM lists models, datasets, embeddings, tools, and dependencies with versions."
         tiers: [T2, T3, T4]
@@ -195,7 +203,8 @@ domains:
         evidence: [ai-bom.json]
         crosswalk: { iso_42001: [A.4.2, A.10.3] }
 
-      - id: D4-04
+      - id: D4-C03
+        level: core
         title: MODEL PORT EQUIVALENCE — substitution safety gate  ★ LEAD CLAIM
         normative: "Any model substitution runs a carrier eval set; behavioural-equivalence delta must be under threshold before promotion."
         tiers: [T2, T3, T4]
@@ -203,7 +212,8 @@ domains:
         evidence: [evals/substitution.yaml, eval-reports/]
         crosswalk: { owasp_llm: [LLM03, LLM05], note: "No incumbent treats runtime substitution as a control." }
 
-      - id: D4-05
+      - id: D4-C04
+        level: core
         title: Provider-jurisdiction drift control
         normative: "A request containing regulated data cannot be transparently re-routed to a different jurisdiction/provider via fallback."
         tiers: [T3, T4]
@@ -211,7 +221,8 @@ domains:
         evidence: [routing-config.yaml]
         crosswalk: { note: "OpenAISF-original; the LiteLLM-fallback blind spot." }
 
-      - id: D4-06
+      - id: D4-C05
+        level: core
         title: Deployed-model attestation (runtime lineage)
         normative: "The model serving production traffic is provably the assessed model (no silent alias swap)."
         tiers: [T3, T4]
@@ -219,7 +230,8 @@ domains:
         evidence: [served-attestation.json]
         crosswalk: { note: "OpenAISF-original." }
 
-      - id: D4-07
+      - id: D4-C06
+        level: core
         title: Adaptation (fine-tune) control
         normative: "Fine-tunes are approved, use declared data, and the adapted model is re-tested to confirm it inherits (does not lose) base safety properties."
         tiers: [T3, T4]
@@ -227,7 +239,8 @@ domains:
         evidence: [adaptation-log.yaml]
         crosswalk: { note: "Defends against fine-tune-away-refusals attacks; no incumbent control." }
 
-      - id: D4-08
+      - id: D4-C07
+        level: core
         title: Model end-of-life & decommissioning
         normative: "Deprecated models have a migration plan, eval reproducibility archive, and data-destruction on retirement."
         tiers: [T3, T4]
@@ -241,7 +254,8 @@ domains:
   - id: D5
     name: Adversarial & Security Controls
     controls:
-      - id: D5-01
+      - id: D5-C01
+        level: core
         title: Prompt-injection defenses present & tested
         normative: "Defenses against direct and indirect prompt injection are present and exercised by an eval suite."
         tiers: [T2, T3, T4]
@@ -249,7 +263,8 @@ domains:
         evidence: [eval-reports/pi.json]
         crosswalk: { owasp_llm: [LLM01], mitre_atlas: [AML.T0051] }
 
-      - id: D5-02
+      - id: D5-C02
+        level: core
         title: Output handling (downstream-safe)
         normative: "Model outputs are treated as untrusted; downstream rendering/encoding prevents XSS, escalation, injection."
         tiers: [T2, T3, T4]
@@ -257,7 +272,8 @@ domains:
         evidence: [arch/output-handling.md]
         crosswalk: { owasp_llm: [LLM02, LLM05] }
 
-      - id: D5-03
+      - id: D5-C03
+        level: core
         title: Sensitive-information disclosure controls
         normative: "System prompts, secrets, and PII are bounded from leaking in outputs; pre-egress DLP present."
         tiers: [T2, T3, T4]
@@ -265,7 +281,8 @@ domains:
         evidence: [dlp-config.yaml]
         crosswalk: { owasp_llm: [LLM02, LLM07] }
 
-      - id: D5-04
+      - id: D5-C04
+        level: core
         title: Runtime AI firewalling (gateway-enforced, out-of-band)
         normative: "High-risk domains (PII, source code, secrets) are mediated by a guardrail the application cannot bypass (gateway/firewall layer)."
         tiers: [T3, T4]
@@ -273,7 +290,8 @@ domains:
         evidence: [gateway-config.yaml]
         crosswalk: { note: "WAF vendors : OWASP :: AI-firewall vendors : OpenAISF." }
 
-      - id: D5-05
+      - id: D5-C05
+        level: core
         title: Outcome-based policy (bound what the AI does)
         normative: "Policy bounds AI outcomes/actions (what it may do), not just who may call it."
         tiers: [T3, T4]
@@ -287,7 +305,8 @@ domains:
   - id: D6
     name: Robustness, Reliability & Interaction Integrity
     controls:
-      - id: D6-01
+      - id: D6-C01
+        level: core
         title: Hallucination / grounding controls
         normative: "Where factual accuracy is in scope, grounding controls and a hallucination metric are present."
         tiers: [T2, T3, T4]
@@ -295,14 +314,16 @@ domains:
         evidence: [eval-reports/hallucination.json]
         crosswalk: { owasp_llm: [LLM09] }
 
-      - id: D6-02
+      - id: D6-C02
+        level: core
         title: Fallback / graceful degradation
         normative: "On model failure/refusal/overflow, the system degrades gracefully (no crash, no unbounded retry)."
         tiers: [T2, T3, T4]
         check: { kind: attest, rule: "fallback design documented; tested" }
         evidence: [arch/fallback.md]
 
-      - id: D6-03
+      - id: D6-C03
+        level: core
         title: Rollback for prompts/models/agents
         normative: "Prompts, model routing, and agent configs are versioned and revertible in production."
         tiers: [T2, T3, T4]
@@ -310,7 +331,8 @@ domains:
         evidence: [versions/]
         crosswalk: { note: "Standard SDLC assumes deterministic software; AI rollback is different." }
 
-      - id: D6-04
+      - id: D6-X01
+        level: expansion
         title: Continuous automated red-teaming (CART)
         normative: "Automated adversarial testing runs in CI; regressions block release."
         tiers: [T3, T4]
@@ -318,7 +340,8 @@ domains:
         evidence: [ci-logs/, red-team-reports/]
         crosswalk: { note: "neural-aegis-tier gap; red-team vendors conform to this." }
 
-      - id: D6-05
+      - id: D6-C04
+        level: core
         title: Interaction integrity — deception / sycophancy bounds
         normative: "Model behavior that misleads, sycophantically agrees, or manipulates users is measured and bounded."
         tiers: [T3, T4]
@@ -326,7 +349,8 @@ domains:
         evidence: [eval-reports/interaction-integrity.json]
         crosswalk: { eu_ai_act: [Art.5(1)(a)], note: "EU AI Act has the legal line; OpenAISF adds the control." }
 
-      - id: D6-06
+      - id: D6-C05
+        level: core
         title: Vulnerable-user protection
         normative: "For systems reachable by minors or vulnerable users: age-gating, child-safety controls, parasocial-attachment bounds."
         tiers: [T3, T4]
@@ -340,7 +364,8 @@ domains:
   - id: D7
     name: Transparency, Disclosure & Prompt-as-Code
     controls:
-      - id: D7-01
+      - id: D7-C01
+        level: core
         title: AI disclosure to end-users
         normative: "Users are informed they are interacting with AI; synthetic content is marked (C2PA/provenance where applicable)."
         tiers: [T1, T2, T3, T4]
@@ -348,7 +373,8 @@ domains:
         evidence: [disclosure.md]
         crosswalk: { eu_ai_act: [Art.50], nist_rmf: [MS-2.9] }
 
-      - id: D7-02
+      - id: D7-C02
+        level: core
         title: Prompt-as-code (version/review/rollback)
         normative: "System prompts, agent configs, and tool schemas are version-controlled, reviewed (PR), and revertible."
         tiers: [T2, T3, T4]
@@ -356,7 +382,8 @@ domains:
         evidence: [prompts/, CODEOWNERS]
         crosswalk: { note: "No framework requires prompt review like SOC 2 requires code review." }
 
-      - id: D7-03
+      - id: D7-C03
+        level: core
         title: Citation / epistemic integrity
         normative: "Where the system cites sources, citations are accurate and verifiable; unsupported claims are flagged."
         tiers: [T2, T3, T4]
@@ -364,7 +391,8 @@ domains:
         evidence: [eval-reports/citations.json]
         crosswalk: { owasp_llm: [LLM09], note: "Deeper than OWASP's 'misinformation'." }
 
-      - id: D7-04
+      - id: D7-C04
+        level: core
         title: AI accessibility (two-sided)
         normative: "AI is usable by disabled users (a11y of the interface) AND does not cause a11y failures (hallucinated alt-text, unusable voice clones)."
         tiers: [T2, T3, T4]
@@ -372,7 +400,8 @@ domains:
         evidence: [a11y/review.md]
         crosswalk: { wcag: [], note: "WCAG doesn't cover AI outputs; AI frameworks ignore a11y." }
 
-      - id: D7-05
+      - id: D7-C05
+        level: core
         title: System documentation for interested parties
         normative: "A system summary is available to buyers/regulators on request."
         tiers: [T3, T4]
@@ -381,12 +410,13 @@ domains:
         crosswalk: { iso_42001: [A.8.2, A.8.5] }
 
   # ─────────────────────────────────────────────────────────────────────
-  # D8 — AGENTIC CONTROL  (D8a single-agent, D8b multi-agent)
+  # D8 — AGENTIC CONTROL
   # ─────────────────────────────────────────────────────────────────────
   - id: D8
     name: Agentic Control
     controls:
-      - id: D8a-01
+      - id: D8-C01
+        level: core
         title: Action budgets
         normative: "Each agent declares a per-session cap (calls, tokens, $, write-ops); exceeding triggers oversight or hard-stop."
         tiers: [T2, T3, T4]
@@ -394,21 +424,24 @@ domains:
         evidence: [agents/config.yaml]
         crosswalk: { owasp_llm: [LLM06] }
 
-      - id: D8a-02
+      - id: D8-C02
+        level: core
         title: Capability manifest (default-deny)
         normative: "Every agent declares the tools/data/sources it may touch; the runtime enforces default-deny."
         tiers: [T2, T3, T4]
         check: { kind: auto-static, rule: "capability-manifest.yaml present; no `*` grants" }
         evidence: [capability-manifest.yaml]
 
-      - id: D8a-03
+      - id: D8-C03
+        level: core
         title: Checkpoint & rollback for irreversible actions
         normative: "Agents operate against reversible checkpoints; irreversible actions require human approval."
         tiers: [T3, T4]
         check: { kind: attest, rule: "rollback design documented; irreversible set enumerated + gated" }
         evidence: [agents/rollback.md]
 
-      - id: D8a-04
+      - id: D8-C04
+        level: core
         title: Tamper-evident action logging
         normative: "Every tool call is logged with intent, input, output, and authorization basis; logs are tamper-evident."
         tiers: [T2, T3, T4]
@@ -416,14 +449,16 @@ domains:
         evidence: [logs/schema.yaml]
         crosswalk: { eu_ai_act: [Art.12] }
 
-      - id: D8a-05
+      - id: D8-C05
+        level: core
         title: Agent identity
         normative: "Agents carry a verifiable identity; actions are attributable to a specific agent instance."
         tiers: [T3, T4]
         check: { kind: attest, rule: "agent-identity scheme documented" }
         evidence: [agents/identity.md]
 
-      - id: D8b-01
+      - id: D8-C06
+        level: core
         title: Multi-agent coordination — delegation limits
         normative: "Delegation chains have a depth limit; an agent cannot spawn a more-privileged agent (no-monotonic-privilege)."
         tiers: [T3, T4]
@@ -431,7 +466,8 @@ domains:
         evidence: [agents/delegation-policy.yaml]
         crosswalk: { note: "OpenAISF-original; the un-owned half of agentic safety." }
 
-      - id: D8b-02
+      - id: D8-X01
+        level: expansion
         title: Multi-agent — emergent-behavior & loop budgets
         normative: "Agent meshes have handoff/loop budgets; emergent behavior is eval-tested; quorum required for irreversible multi-agent action."
         tiers: [T3, T4]
@@ -444,7 +480,8 @@ domains:
   - id: D9
     name: Operations, Telemetry & Incident Response
     controls:
-      - id: D9-01
+      - id: D9-C01
+        level: core
         title: Canonical inference-event log  (LTE)  ★ LEAD CLAIM
         normative: "A canonical inference-event log records prompt, response, model+version, provider, tokens, cost, guardrail verdict, identity, timestamp; retention declared."
         tiers: [T2, T3, T4]
@@ -452,7 +489,8 @@ domains:
         evidence: [telemetry/schema.yaml]
         crosswalk: { iso_42001: [A.6.2.6, A.6.2.8], eu_ai_act: [Art.12, Art.72], note: "Defines the artifact ISO/EU leave unspecified." }
 
-      - id: D9-02
+      - id: D9-C02
+        level: core
         title: Online evaluation on live traffic  (LTE)
         normative: "Online evals run on live traffic covering safety, quality, and cost drift."
         tiers: [T3, T4]
@@ -460,14 +498,16 @@ domains:
         evidence: [telemetry/online-eval.yaml]
         crosswalk: { eu_ai_act: [Art.72] }
 
-      - id: D9-03
+      - id: D9-C03
+        level: core
         title: Drift & anomaly alerting
         normative: "Drift on quality/safety/cost triggers alerts with owners."
         tiers: [T3, T4]
         check: { kind: attest, rule: "alerting config present with owner per signal" }
         evidence: [telemetry/alerts.yaml]
 
-      - id: D9-04
+      - id: D9-C04
+        level: core
         title: Incident-response & post-market monitoring
         normative: "IR runbooks exist for AI-specific incidents (injection, runaway spend, harmful output); serious incidents are reported per regime."
         tiers: [T2, T3, T4]
@@ -475,7 +515,8 @@ domains:
         evidence: [ir/runbooks/]
         crosswalk: { iso_42001: [A.8.4], eu_ai_act: [Art.73], osaa_safe: ["incident-report-compatible"] }
 
-      - id: D9-05
+      - id: D9-X01
+        level: expansion
         title: Inference sustainability accounting
         normative: "Per-request CO2e is tracked (or estimated); a sustainability preference may inform model choice."
         tiers: [T4]
@@ -490,7 +531,8 @@ domains:
     name: Tool & MCP Security
     lead_claim: "The MCP governance standard."
     controls:
-      - id: D10-01
+      - id: D10-C01
+        level: core
         title: Tool allow-list & signing
         normative: "Tools/MCP servers are allow-listed and cryptographically signed; unsigned tools blocked at load."
         tiers: [T2, T3, T4]
@@ -498,28 +540,32 @@ domains:
         evidence: [tools/allow-list.yaml, sigstore-log]
         crosswalk: { note: "MCP shipped after every framework; OpenAISF is first to govern it." }
 
-      - id: D10-02
+      - id: D10-C02
+        level: core
         title: Capability manifest (default-deny, per tool)
         normative: "Each tool declares data sources, side effects, and reversibility; runtime enforces default-deny; no implicit capabilities."
         tiers: [T2, T3, T4]
         check: { kind: auto-static, rule: "per-tool manifest present; no `*` capabilities" }
         evidence: [tools/*/manifest.yaml]
 
-      - id: D10-03
+      - id: D10-C03
+        level: core
         title: No implicit trust of tool output
         normative: "Tool/MCP output is treated as untrusted input; re-validated before model consumption (defense against tool-result injection)."
         tiers: [T3, T4]
         check: { kind: attest, rule: "tool-output validation documented + tested" }
         evidence: [tools/validation.md]
 
-      - id: D10-04
+      - id: D10-C04
+        level: core
         title: Runtime isolation & least-privilege OAuth
         normative: "Each tool runs in isolation with least-privilege OAuth scopes; no credential pass-through; scopes reviewed periodically."
         tiers: [T3, T4]
         check: { kind: attest, rule: "isolation + scope-minimization documented" }
         evidence: [tools/oauth-scopes.yaml]
 
-      - id: D10-05
+      - id: D10-X01
+        level: expansion
         title: MCP-server provenance & integrity
         normative: "MCP servers carry provenance attestation; rug-pull/poisoning detection on update; version-pinning."
         tiers: [T3, T4]
@@ -534,7 +580,8 @@ domains:
     name: Resource & Spend Control
     lead_claim: "Cost-as-governance: economic DoS is the most common AI incident — treat it as a control."
     controls:
-      - id: D11-01
+      - id: D11-C01
+        level: core
         title: Per-identity inference budgets
         normative: "Per-key/team/user token/$/call caps enforced at the gateway; overage triggers oversight or hard-stop."
         tiers: [T2, T3, T4]
@@ -542,21 +589,24 @@ domains:
         evidence: [budgets.yaml]
         crosswalk: { owasp_llm: [LLM04, LLM10], note: "OWASP names the vuln; OpenAISF makes it a governance control." }
 
-      - id: D11-02
+      - id: D11-C02
+        level: core
         title: Runaway-agent spend protection
         normative: "Agents have hard spend ceilings independent of action budgets; runaway spend auto-terminates."
         tiers: [T2, T3, T4]
         check: { kind: auto-static, rule: "agent spend ceilings declared + enforced" }
         evidence: [agents/config.yaml]
 
-      - id: D11-03
+      - id: D11-C03
+        level: core
         title: Billing-abuse & key-theft defenses
         normative: "Controls detect API-key theft, anomalous spend, and multi-tenant billing abuse."
         tiers: [T3, T4]
         check: { kind: attest, rule: "spend-anomaly detection present" }
         evidence: [telemetry/spend-anomaly.yaml]
 
-      - id: D11-04
+      - id: D11-C04
+        level: core
         title: Spend telemetry & attribution
         normative: "Spend is attributable to system/owner/use-case and reported."
         tiers: [T3, T4]
@@ -591,7 +641,10 @@ annexes:
 # ───────────────────────────────────────────────────────────────────────
 counts:
   domains: 11
+  total_controls: 59
   core_controls: 54
+  expansion_controls: 5
+  openaisf_original: 25
   profile_extensions: "sector-specific (see openaisf-profiles.yaml)"
   first_class_original_domains: [D10, D11]
-  lead_claims: [D4-MPE, D9-LTE, D10]
+  lead_claims: [D4-C03, D9-C01, D10]

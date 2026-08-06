@@ -7,7 +7,8 @@ OpenAISF-conformant at tier T when `openaisf check` exits 0.
 Scope of this prototype:
   - Loads openaisf-controls.yaml + openaisf-crosswalk.yaml.
   - Evaluates the project in the current directory against a target tier.
-  - Implements real checks for the auto-static T1 controls + key T2 controls.
+  - Implements auto-static checks for 3 T1 controls (D1-C01, D2-C01, D7-C01);
+    all other controls return `manual` (attestation required).
   - Emits a human report, a machine-readable JSON report, and prints the badge.
 
 Not in this prototype (later versions):
@@ -113,10 +114,10 @@ class CheckResult:
 # Each auto-static control gets a small predicate here. We key by control_id.
 # For controls not yet implemented, we mark `manual` and ask for attestation.
 # ───────────────────────────────────────────────────────────────────────
-def _check_D1_01(proj: Project) -> CheckResult:
+def _check_D1_C01(proj: Project) -> CheckResult:
     ok = proj.exists("POLICY.md") or proj.exists("policy.md") or proj.exists("policy")
     return CheckResult(
-        "D1-01", "AI safety policy exists and is versioned", "T1",
+        "D1-C01", "AI safety policy exists and is versioned", "T1",
         "pass" if ok else "fail",
         "policy file present" if ok else "no POLICY.md or policy/ found",
     )
@@ -139,10 +140,10 @@ def _yaml_field(cfg_text: str, field: str) -> str | None:
     return None
 
 
-def _check_D2_01(proj: Project) -> CheckResult:
+def _check_D2_C01(proj: Project) -> CheckResult:
     cfg = proj.read("openaisf.yaml") or proj.read("openaisf.yml")
     if not cfg:
-        return CheckResult("D2-01", "Intended-use & context statement", "T1",
+        return CheckResult("D2-C01", "Intended-use & context statement", "T1",
                            "fail", "no openaisf.yaml found")
     iu = _yaml_field(cfg, "intended_use")
     ctx = _yaml_field(cfg, "context")
@@ -150,14 +151,14 @@ def _check_D2_01(proj: Project) -> CheckResult:
                if v is None or _looks_like_placeholder(v)]
     ok = not missing
     return CheckResult(
-        "D2-01", "Intended-use & context statement", "T1",
+        "D2-C01", "Intended-use & context statement", "T1",
         "pass" if ok else "fail",
         "intended_use + context present and non-placeholder" if ok
         else f"openaisf.yaml has placeholder/missing: {', '.join(missing)}",
     )
 
 
-def _check_D7_01(proj: Project) -> CheckResult:
+def _check_D7_C01(proj: Project) -> CheckResult:
     candidates = ["DISCLOSURE.md", "disclosure.md", "README.md"]
     text = ""
     for c in candidates:
@@ -171,7 +172,7 @@ def _check_D7_01(proj: Project) -> CheckResult:
             text = c
             break
     return CheckResult(
-        "D7-01", "AI disclosure to end-users", "T1",
+        "D7-C01", "AI disclosure to end-users", "T1",
         "pass" if text else "fail",
         f"disclosure language found in {text}" if text
         else "no AI disclosure marker (need 'AI' + 'generated/disclosure') in DISCLOSURE.md/README.md",
@@ -180,9 +181,9 @@ def _check_D7_01(proj: Project) -> CheckResult:
 
 # Registry of implemented auto-static checks (control_id -> fn)
 STATIC_CHECKS = {
-    "D1-01": _check_D1_01,
-    "D2-01": _check_D2_01,
-    "D7-01": _check_D7_01,
+    "D1-C01": _check_D1_C01,
+    "D2-C01": _check_D2_C01,
+    "D7-C01": _check_D7_C01,
 }
 
 

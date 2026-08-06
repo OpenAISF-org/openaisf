@@ -49,13 +49,13 @@ field. OpenAISF fills it.
 
 - **D10 — Tool & MCP Security.** *The MCP governance standard.* MCP shipped
   after every framework; OpenAISF is first to govern it.
-- **D4-MPE — Model Port Equivalence.** *Substitution safety.* Swapping
+- **D4-C03 — Model Port Equivalence.** *Substitution safety.* Swapping
   GPT-4 → Claude silently breaks certified properties; OpenAISF makes the
   substitution a controlled, re-validated event.
-- **D9-LTE — LLM Telemetry & Live Evaluation.** The canonical inference-event
+- **D9-C01 — LLM Telemetry & Live Evaluation.** The canonical inference-event
   log + online evals that EU AI Act Art. 72 demands but doesn't specify.
 
-**25 of 54 controls are OpenAISF-original** — no incumbent equivalent.
+**25 of 59 controls are OpenAISF-original** — no incumbent equivalent.
 
 ## The four tiers
 
@@ -93,7 +93,7 @@ signal NIST RMF refuses to issue, at a fraction of ISO 42001's cost.
 
 ```
 spec/
-  openaisf-controls.yaml    ← the standard: 54 controls, 11 domains, T1-T4
+  openaisf-controls.yaml    ← the standard: 59 controls (54 core + 5 expansion), 11 domains, T1-T4
   openaisf-crosswalk.yaml   ← mappings to ISO 42001 / NIST RMF / OWASP / ATLAS /
                               EU AI Act / CSA AICM / SAIF / OSAA SAFE
 cli/
