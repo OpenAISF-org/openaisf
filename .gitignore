@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Test scaffolding from running the CLI locally
+/openaisf.yaml
+/POLICY.md
+/risk/
+/data/
+/models/
+/agents/
+/tools/
+/evals/
+/telemetry/
+/docs/
+/disclosure.md
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp

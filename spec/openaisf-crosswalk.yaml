@@ -1,0 +1,146 @@
+# OpenAISF Crosswalk v1.0-draft
+# Machine-readable mappings from OpenAISF controls to external regimes.
+#
+# This is the commercial moat of OpenAISF: the single artifact that lets a
+# company conform once to OpenAISF and auto-generate coverage statements for
+# ISO 42001, NIST AI RMF, OWASP Top 10 for LLMs, MITRE ATLAS, EU AI Act,
+# CSA AICM, and Google SAIF simultaneously.
+#
+# Maintenance: this file must be versioned and updated as external regimes
+# evolve. The crosswalk-update feed is a paid subscription product (see
+# commercial model in 00_AISF_PROPOSAL.md).
+
+schema_version: "1.0-draft"
+
+# Regime catalogue (the things we map TO)
+regimes:
+  iso_42001:
+    name: "ISO/IEC 42001:2023 — AI Management System"
+    scope: "Management-system controls (Annex A, 38 controls)."
+  nist_rmf:
+    name: "NIST AI Risk Management Framework 1.0"
+    scope: "Functions: GOVERN, MAP, MEASURE, MANAGE."
+  owasp_llm:
+    name: "OWASP Top 10 for LLM Applications (2025)"
+    scope: "LLM01–LLM10 application risks."
+  mitre_atlas:
+    name: "MITRE ATLAS — Adversarial Threat Landscape for AI"
+    scope: "Tactics & techniques (T-IDs)."
+  eu_ai_act:
+    name: "EU AI Act (Regulation 2024/1689)"
+    scope: "Articles (high-risk obligations, GPAI, transparency, post-market)."
+  csa_aicm:
+    name: "Cloud Security Alliance AI Controls Matrix v1.1"
+    scope: "Cloud-AI controls (cloud-scoped)."
+  google_saif:
+    name: "Google Secure AI Framework"
+    scope: "Six elements + components map."
+  osaa_safe:
+    name: "Open Secure AI Alliance — Shared AI Findings Exchange"
+    scope: "Incident-reporting compact + defensive-artifact catalogue."
+
+# ───────────────────────────────────────────────────────────────────────
+# MAPPINGS  (control_id -> { regime: [references] })
+# "OpenAISF-original" = no incumbent control maps; OpenAISF is first.
+# ───────────────────────────────────────────────────────────────────────
+mappings:
+
+  # D1 — Governance
+  D1-01: { iso_42001: [A.2.2], nist_rmf: [GOVERN-1.1] }
+  D1-02: { iso_42001: [A.3.2], nist_rmf: [GOVERN-2.1] }
+  D1-03: { iso_42001: [A.6.2.3], nist_rmf: [GOVERN-3.1] }
+  D1-04: { iso_42001: [A.3.3] }
+
+  # D2 — Risk & Impact
+  D2-01: { iso_42001: [A.5.2], nist_rmf: [MAP-1.1], eu_ai_act: ["Art.9(2)(b)"] }
+  D2-02: { iso_42001: [A.5.4, A.5.5], nist_rmf: [MAP-3.3], eu_ai_act: ["Art.27"] }
+  D2-03: { iso_42001: [A.6.1.2], nist_rmf: [MAP-2.1] }
+  D2-04: { _note: "OpenAISF-original — routing-topology as a risk object. No incumbent maps." }
+
+  # D3 — Data, Provenance & Memory
+  D3-01: { iso_42001: [A.7.2, A.7.3, A.7.5] }
+  D3-02: { iso_42001: [A.7.4], nist_rmf: [MAP-4.1], eu_ai_act: ["Art.10"] }
+  D3-03: { owasp_llm: [LLM08], csa_aicm: [AI-12] }
+  D3-04: { _note: "OpenAISF-original — agent-memory integrity incl. GDPR Art.17 erasure. No incumbent." , gdpr: ["Art.17"] }
+  D3-05: { owasp_llm: [LLM02, LLM06], csa_aicm: [AI-09] }
+  D3-06: { _note: "OpenAISF-original — weights/agents/memory residency. GDPR covers data only.", gdpr: ["Ch.V"] }
+
+  # D4 — Model & Supply-Chain Integrity
+  D4-01: { iso_42001: [A.8.2], eu_ai_act: ["Annex XI"], csa_aicm: [AI-03] }
+  D4-02: { _note: "OpenAISF-original — sigstore-for-models. SLSA is software-only." }
+  D4-03: { iso_42001: [A.4.2, A.10.3], csa_aicm: [AI-02] }
+  D4-04: { owasp_llm: [LLM03, LLM05], _note: "OpenAISF-original — substitution as a control." }
+  D4-05: { _note: "OpenAISF-original — provider-jurisdiction drift control." }
+  D4-06: { _note: "OpenAISF-original — runtime lineage attestation." }
+  D4-07: { _note: "OpenAISF-original — fine-tune-away-refusals defense." }
+  D4-08: { iso_42001: [] }
+
+  # D5 — Adversarial & Security
+  D5-01: { owasp_llm: [LLM01], mitre_atlas: ["AML.T0051"], csa_aicm: [AI-08] }
+  D5-02: { owasp_llm: [LLM02, LLM05] }
+  D5-03: { owasp_llm: [LLM02, LLM07] }
+  D5-04: { _note: "OpenAISF-original — out-of-band gateway enforcement (AI-firewall conformance)." }
+  D5-05: { _note: "OpenAISF-original — outcome-based policy." }
+
+  # D6 — Robustness & Interaction Integrity
+  D6-01: { owasp_llm: [LLM09] }
+  D6-02: { iso_42001: [A.6.2.5] }
+  D6-03: { _note: "OpenAISF-original — AI rollback discipline." }
+  D6-04: { _note: "OpenAISF-original — CART as a CI control." }
+  D6-05: { eu_ai_act: ["Art.5(1)(a)"], _note: "EU AI Act has the legal line; OpenAISF adds the control." }
+  D6-06: { eu_ai_act: ["Art.5"] }
+
+  # D7 — Transparency & Prompt-as-Code
+  D7-01: { eu_ai_act: ["Art.50"], nist_rmf: [MEASURE-2.9] }
+  D7-02: { _note: "OpenAISF-original — prompt-as-code." }
+  D7-03: { owasp_llm: [LLM09] }
+  D7-04: { _note: "OpenAISF-original — AI accessibility (two-sided)." }
+  D7-05: { iso_42001: [A.8.2, A.8.5] }
+
+  # D8 — Agentic Control
+  D8a-01: { owasp_llm: [LLM06] }
+  D8a-02: { owasp_llm: [LLM06], _note: "Default-deny capability manifest." }
+  D8a-03: { _note: "OpenAISF-original — agent checkpoint/rollback." }
+  D8a-04: { eu_ai_act: ["Art.12"], iso_42001: [A.6.2.8] }
+  D8a-05: { _note: "OpenAISF-original — verifiable agent identity." }
+  D8b-01: { _note: "OpenAISF-original — multi-agent delegation limits / no-monotonic-privilege." }
+  D8b-02: { _note: "OpenAISF-original — emergent-behavior & loop budgets." }
+
+  # D9 — Operations, Telemetry & IR
+  D9-01: { iso_42001: [A.6.2.6, A.6.2.8], eu_ai_act: ["Art.12", "Art.72"], _note: "Defines the artifact ISO/EU leave unspecified." }
+  D9-02: { eu_ai_act: ["Art.72"] }
+  D9-03: { iso_42001: [A.9.1] }
+  D9-04: { iso_42001: [A.8.4], eu_ai_act: ["Art.73"], osaa_safe: ["incident-report-compatible"] }
+  D9-05: { _note: "OpenAISF-original — inference sustainability accounting." }
+
+  # D10 — Tool & MCP Security (★ lead claim — entirely OpenAISF-original)
+  D10-01: { _note: "OpenAISF-original — MCP shipped after every framework." }
+  D10-02: { _note: "OpenAISF-original." }
+  D10-03: { owasp_llm: [LLM07], _note: "LLM07 is the shallow ancestor; OpenAISF goes deeper." }
+  D10-04: { _note: "OpenAISF-original." }
+  D10-05: { _note: "OpenAISF-original — SLSA-for-tools." }
+
+  # D11 — Resource & Spend Control (★ first-class — OpenAISF-original framing)
+  D11-01: { owasp_llm: [LLM04, LLM10], _note: "OWASP names the vuln; OpenAISF makes it a governance control." }
+  D11-02: { owasp_llm: [LLM06], _note: "Runaway-agent spend as a control." }
+  D11-03: { _note: "OpenAISF-original — billing-abuse & key-theft defenses." }
+  D11-04: { _note: "OpenAISF-original — spend telemetry & attribution." }
+
+# ───────────────────────────────────────────────────────────────────────
+# REVERSE INDEX (regime -> OpenAISF controls that satisfy it)
+# Generated/used by the conformance CLI to produce coverage statements
+# like: "Conforming to OpenAISF T3 satisfies 73% of NIST RMF, 6/10 OWASP, ..."
+# ───────────────────────────────────────────────────────────────────────
+reverse_index_note: >
+  The CLI computes the reverse index from `mappings` at runtime and emits a
+  coverage report per regime. The `_note: OpenAISF-original` controls have no
+  reverse mapping — they are net-new coverage OpenAISF adds beyond incumbents.
+
+# Approximate net-new coverage claim (for the homepage — to be re-counted on freeze):
+coverage_highlights:
+  owasp_llm_2025_covered: [LLM01, LLM02, LLM03, LLM04, LLM05, LLM06, LLM07, LLM08, LLM09, LLM10]
+  owasp_note: "All 10 OWASP LLM risks map to OpenAISF controls."
+  iso_42001_overlap: "~60% of Annex A controls are addressed by OpenAISF."
+  eu_ai_act_high_risk_articles: ["Art.9", "Art.10", "Art.12", "Art.13", "Art.15", "Art.72", "Art.73"]
+  openaisf_original_controls_count: 22
+  openaisf_original_note: "22 of 54 core controls have no incumbent equivalent — net-new coverage."
