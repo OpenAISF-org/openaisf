@@ -4,6 +4,7 @@
 
 Created by Maarten Loose.
 Status: **Request for Comments** — draft for public review, 7 August 2026.
+Creator: Maarten Loose · [linkedin.com/in/mloose](https://www.linkedin.com/in/mloose/) · [trusecure.co](https://www.trusecure.co)
 Specification CC-BY-4.0. Reference tooling Apache-2.0.
 
 ---
@@ -16,7 +17,7 @@ Every AI governance regime in use today answers the question *"were you complian
 
 Conformance is a state with a heartbeat, not an event that produced a document. The engineer-legible form, which is how this is meant to travel: **your compliance has a TTL.**
 
-This RFC specifies 112 controls across 20 domains, a computed applicability model, a two-plane evidence interface, and a conformance lease that expires on its own. It is accompanied by a reference implementation that runs the whole loop.
+This RFC specifies 118 controls across 20 domains, 36 of which have no incumbent equivalent, a computed applicability model, a two-plane evidence interface, and a conformance lease that expires on its own. It is accompanied by a reference implementation that runs the whole loop.
 
 Comments are invited on all sections, and specifically on §9.
 
@@ -75,7 +76,7 @@ Constitutional. A control that breaks one does not enter the catalog.
 
 ## 5. The catalog
 
-20 domains, 112 controls. Each control carries a machine-evaluable scope predicate, so an exhaustive catalog still produces a short list.
+20 domains, 118 controls. Each control carries a machine-evaluable scope predicate, so an exhaustive catalog still produces a short list.
 
 | | Domain | | Domain |
 |---|---|---|---|
@@ -90,14 +91,58 @@ Constitutional. A control that breaks one does not enter the catalog.
 | D09 | Robustness, Reliability & Fallback | D19 | Conformance & Evidence Integrity |
 | D10 | Human Oversight & Intervention | D20 | Resource, Cost & Environmental Impact |
 
+### 5.1 What OpenAISF requires that no incumbent regime does
+
+36 of the 118 controls map to zero requirements at full strength across ISO/IEC
+42001, NIST AI RMF, the EU AI Act and the CSA AI Controls Matrix. The figure is
+computed by the method in §9 rather than asserted. 15 of the 20 domains contain
+at least one. A representative selection:
+
+| Risk | Incumbent requirement | OpenAISF |
+|---|---|---|
+| An agent doing work nobody authorised, inside its permissions throughout | none | `D15-C07` detect activity outside the recorded business purpose |
+| An agent whose actions stop matching the plan it announced | none | `D15-C01` compare declared intent against actions taken |
+| A kill switch that has never been exercised | none | `D16-C02` exercise containment on a cadence, record time to contain |
+| Detectors that have never fired | none | `D16-C03` inject a simulated rogue agent, measure time to detect |
+| Unbounded agent consumption | none | `D07-C02` per-session budget for calls, tokens, spend, egress |
+| Privilege escalation on agent spawn | none | `D07-C03` bounded delegation depth, no escalation |
+| Irreversible autonomous action | none | `D07-C04` classify by reversibility, gate the irreversible |
+| Prompt and completion stores on no data map | none | `D03-C11` inventory them as a data store, not as logs |
+| Deletion that leaves the derived embedding | none | `D03-C13` prove deletion by attempted retrieval, semantic queries included |
+| Upstream assurance silently lapsing | none | `D17-C02` inherited controls degrade with the upstream lease |
+| A declared policy that never executed | none | `D19-C03` check declared configuration against observed enforcement |
+| Oversight degrading to rubber-stamping | none | `D10-C03` monitor acceptance rate; near-total is a finding |
+
+### 5.2 Data governance
+
+Existing data governance regimes were written for records that are copied. An AI
+system creates stores nobody inventories and derives artefacts that are
+*computed*, losing their classification at the moment of derivation. D03 carries
+16 controls, 7 of them original:
+
+- `D03-C11` — prompts, completions and tool I/O appear in the data inventory with
+  an owner, classification and retention. They MUST NOT be treated as logs.
+- `D03-C12` — embeddings, indexes, caches and fine-tuning corpora inherit the
+  classification and residency of their most sensitive source.
+- `D03-C13` — deletion is proven by attempted retrieval through the system's own
+  paths, including semantically equivalent queries.
+- `D03-X01` — combining data classes in one model context requires a declared
+  policy; output takes the classification of the most sensitive contributor.
+- `D03-X02` — operational data MUST NOT be reused for training outside its
+  collection purpose without a recorded decision naming the data and the model.
+- `D03-X03` — isolation in shared retrieval and cache layers is verified by
+  attempting cross-boundary retrieval, which MUST fail.
+- `D03-C07` — AI data classification is inherited from the organisation's
+  existing scheme rather than invented alongside it.
+
 **Scope is computed.** A control declares `applies_when` over system class, autonomy level, data class and risk classification; the Statement of Applicability resolves it. Measured on the reference implementation:
 
 | System | T1 | T2 | T3 |
 |---|---:|---:|---:|
-| Internal non-agentic LLM application | 4 | 34 | — |
-| Agentic, tool-using, handling personal data | 4 | 49 | 77 |
+| Internal non-agentic LLM application | 4 | 35 | — |
+| Agentic, tool-using, handling personal data | 4 | 51 | 77 |
 
-112 controls exist. Nobody reads more than 77 and most read 34. **T1 is four controls, of which one is required** — the free tier is meant to be minutes, and that is an executable test in the reference implementation rather than an aspiration.
+118 controls exist. Nobody reads more than 77 and most read 35. **T1 is four controls, of which one is required** — the free tier is meant to be minutes, and that is an executable test in the reference implementation rather than an aspiration.
 
 ---
 
@@ -190,7 +235,7 @@ The 133 exclusions are the framework's most consequential judgement and are the 
 
 No requirement was excluded to produce a complete coverage report, and control D19-C05 fails the conformance run where an exclusion is contradicted by the subject's telemetry.
 
-**Originality is computed, never asserted.** Regimes are classified as *requirement* catalogs (ISO, NIST, EU, AICM) or *threat* catalogs (OWASP, ATLAS, MCP-38). A mapping to a threat catalog establishes that a control is relevant to a known attack and can never establish that somebody already requires it, so it can never count as full strength. Two or more full mappings is `adopted`; one is `derived`; zero is `OpenAISF-original`. **30 of 112** controls are original by that computation, and the default is `full` so claiming novelty costs an explicit, reviewable edit while disclaiming it is free.
+**Originality is computed, never asserted.** Regimes are classified as *requirement* catalogs (ISO, NIST, EU, AICM) or *threat* catalogs (OWASP, ATLAS, MCP-38). A mapping to a threat catalog establishes that a control is relevant to a known attack and can never establish that somebody already requires it, so it can never count as full strength. Two or more full mappings is `adopted`; one is `derived`; zero is `OpenAISF-original`. **36 of 118** controls are original by that computation, and the default is `full` so claiming novelty costs an explicit, reviewable edit while disclaiming it is free.
 
 ---
 
