@@ -15,7 +15,13 @@ A control catalog, an applicability model, an evidence format and a conformance
 tool. It defines what an organisation must do to operate AI systems safely, and
 it decides mechanically whether the organisation is doing it.
 
-The conformance model is the distinguishing property:
+It is **not a mapping of existing frameworks**. OpenAISF covers every requirement
+of ISO/IEC 42001, NIST AI RMF and the EU AI Act, and adds **36 controls of its
+own that no incumbent framework requires** — for agent containment,
+agent-specific detection, AI data governance and the integrity of conformance
+evidence itself. Section 1.1 lists them.
+
+The second distinguishing property is the conformance model:
 
 > An AI system is OpenAISF-conformant at tier T **for as long as** it keeps
 > producing signed evidence that satisfies tier T's applicable controls.
@@ -24,9 +30,56 @@ Conformance is a state, not an event. It has a duration and it expires. A
 certificate issued today stops asserting anything once the evidence behind it
 stops arriving, without any party deciding that it should.
 
-**Scope.** 20 domains, 112 controls, four assurance tiers from prototype to
+**Scope.** 20 domains, 118 controls, four assurance tiers from prototype to
 frontier. Covers large language models, agents, and classical machine learning
 including credit scoring, medical imaging, computer vision and biometrics.
+
+### 1.1 What OpenAISF requires that nothing else does
+
+**36 of 118 controls have no incumbent equivalent.** The figure is computed, not
+claimed: a control counts as original only when it maps to zero requirements at
+full strength across ISO/IEC 42001, NIST AI RMF, the EU AI Act and the CSA AI
+Controls Matrix. A hand-written originality claim that disagrees with the
+computation is an error, not an override. 15 of the 20 domains contain at least
+one.
+
+| Risk | ISO / NIST / AI Act / AICM | OpenAISF |
+|---|---|---|
+| An agent doing work nobody authorised — inside its permissions throughout | nothing | Detect activity outside the recorded business purpose `D15-C07` |
+| An agent whose actions stop matching the plan it announced | nothing | Compare declared intent against actions taken `D15-C01` |
+| A kill switch nobody has ever pulled | nothing | Exercise containment on a cadence, record time to contain `D16-C02` |
+| Detectors that have never fired, so nobody knows if they can | nothing | Inject a simulated rogue agent, measure time to detect `D16-C03` |
+| An agent spending without limit until the invoice arrives | nothing | Per-session budget for calls, tokens, spend, egress `D07-C02` |
+| An agent that spawns another with privileges it never held | nothing | Bounded delegation depth, no escalation on spawn `D07-C03` |
+| An irreversible action taken autonomously | nothing | Classify actions by reversibility, gate the irreversible `D07-C04` |
+| The prompt log — the largest sensitive store you hold, on no data map | nothing | Inventory prompts and completions as a data store `D03-C11` |
+| Deletion that removes the record and leaves the embedding | nothing | Prove deletion by attempted retrieval, semantic queries included `D03-C13` |
+| A supplier's assurance quietly going stale under you | nothing | Inherited controls degrade when the upstream lease does `D17-C02` |
+| A policy declared enabled that never actually ran | nothing | Check declared configuration against observed enforcement `D19-C03` |
+| Approving everything because you approve everything | nothing | Monitor oversight acceptance rate; near-total is a finding `D10-C03` |
+
+Twelve of thirty-six. `openaisf coverage` prints the current count; the full set
+is derivable from the catalog by selecting controls whose crosswalk contains no
+full-strength mapping.
+
+### 1.2 AI data governance
+
+**16 data controls, 7 of them original.** Existing data governance was written
+for records in databases. An AI system creates stores nobody inventories and
+derives artefacts that silently lose their classification.
+
+| What happens in production | OpenAISF |
+|---|---|
+| The prompt log becomes the largest unstructured store of sensitive data held. Built as telemetry, so it inherited a logging retention policy, sits outside DLP, and is not searched on a subject access request. | Prompts, completions and tool I/O appear in the data inventory with an owner, classification and retention. They MUST NOT be treated as application logs. `D03-C11` |
+| An embedding of a confidential contract is treated as a float array. Classification is applied to the source and lost at derivation, so the derived store ends up in another region under another policy. | Embeddings, indexes, caches and fine-tuning corpora inherit the classification and residency of their most sensitive source. `D03-C12` |
+| Deletion succeeds against the record and the embedding survives, so content stays semantically retrievable while every artefact an auditor inspects says it is gone. | Verify deletion by attempted retrieval through the system's own paths, including semantically equivalent queries. A completed deletion job is not evidence. `D03-C13` |
+| A prompt is a join, executed thousands of times a second, with no schema and no reviewer. Three classifications are concatenated; the output inherits the highest while being handled as the lowest. | Combining data classes in one context requires a declared policy; output takes the classification of the most sensitive contributor. `D03-X01` |
+| Support transcripts collected to answer a customer's question become a fine-tuning corpus because they were available. No boundary crossed, no copy left, and the model cannot be untrained later. | Operational data MUST NOT be reused for training outside its collection purpose without a recorded decision naming the data and the model. `D03-X02` |
+| A semantic cache returns one customer's answer to another's question, because the two were close in embedding space and the cache key never encoded the boundary. | Verify isolation in shared retrieval and cache layers by attempting cross-boundary retrieval. The attempt MUST fail. `D03-X03` |
+
+The seventh requires AI data classification to be inherited from the scheme the
+organisation already runs rather than invented alongside it, because two
+taxonomies diverge within months and then neither is applied. `D03-C07`
 
 ---
 
@@ -213,10 +266,10 @@ rather than read.
 
 | System | T1 | T2 | T3 |
 |---|---:|---:|---:|
-| Internal non-agentic LLM application | 4 | 34 | — |
-| Agentic, tool-using, handling personal data | 4 | 49 | 77 |
+| Internal non-agentic LLM application | 4 | 35 | — |
+| Agentic, tool-using, handling personal data | 4 | 51 | 77 |
 
-112 controls exist; a typical tier-2 system resolves to 34 and tier 1 to four, of
+118 controls exist; a typical tier-2 system resolves to 35 and tier 1 to four, of
 which one is mandatory. These figures are asserted by tests that fail the build
 if they increase.
 
@@ -277,7 +330,7 @@ catalogs (ISO, NIST, EU AI Act, CSA AICM) or threat catalogs (OWASP, ATLAS,
 MCP-38). A mapping to a threat catalog establishes relevance to a known attack
 and cannot establish that a requirement already exists. Two or more full-strength
 mappings classify a control as adopted; one as derived; zero as
-OpenAISF-original. **30 of 112 controls are OpenAISF-original** by that
+OpenAISF-original. **36 of 118 controls are OpenAISF-original** by that
 computation.
 
 OSCAL 1.1.2 Assessment Results and Component Definition are exported for GRC and

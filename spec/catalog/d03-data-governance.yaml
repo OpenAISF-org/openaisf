@@ -481,3 +481,362 @@ controls:
       owasp_llm_2025: [LLM04]
       owasp_llm_2026: [LLM05]
       mitre_atlas: [AML.T0020, AML.T0059, AML.T0115.000, AML.T0099, AML.T0018.000, AML.T0043.004]
+
+  # ---------------------------------------------------------------------------
+  # The following controls have no incumbent equivalent. Existing data
+  # governance regimes were written for records in databases. An AI system
+  # creates data stores nobody inventories, derives artefacts that silently
+  # lose their classification, and performs a join at inference time that no
+  # data model anticipated. These address that.
+  # ---------------------------------------------------------------------------
+
+  - id: D03-C11
+    title: Prompts and completions are inventoried as a data store in their own right
+    domain: D03
+    level: core
+    normative: >
+      Prompts, completions, tool inputs and tool outputs MUST appear in the
+      organisation's data inventory as a store, with an owner, a classification,
+      a retention period and a residency. They MUST NOT be treated as
+      application logs.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [conceive, operate]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        prompt_store.in_inventory == true
+        AND prompt_store.classification declared
+        AND prompt_store.retention declared
+    evidence:
+      - schema: openaisf.evidence.prompt_store_registration.v1
+        plane: control
+        fields: [store, owner, classification, retention, residency]
+      - schema: openaisf.evidence.prompt_store_volume.v1
+        plane: data
+        fields: [records, classified, unclassified, window]
+    failure_mode: >
+      Within a year of deployment the prompt log is frequently the largest
+      unstructured store of sensitive data an organisation holds, and it is on
+      nobody's data map. It was created by an engineering team as telemetry, so
+      it inherited a logging retention policy rather than a records one, sits
+      outside DLP, and is not searched when a subject access request arrives.
+      Fifty-four percent of shadow-AI tools have been used to upload sensitive
+      company data; the copy that persists is in this store.
+    rationale: >
+      Every other data control in this domain assumes the store is known. This
+      one exists because the single largest AI-created data store is routinely
+      classified as logging, and a store that is not on the map is not governed
+      by anything. Prohibiting the logging treatment explicitly is the whole
+      control: the failure is not absence of policy but application of the
+      wrong one.
+    crosswalk:
+      iso_42001:
+        - {ref: A.7.2, strength: partial}
+        - {ref: A.4.2, strength: partial}
+      nist_ai_rmf:
+        - {ref: MAP-4.1, strength: partial}
+      csa_aicm:
+        - {ref: DSP-08, strength: partial}
+
+  - id: D03-C12
+    title: Derived artefacts inherit the classification and residency of their source
+    domain: D03
+    level: core
+    normative: >
+      Embeddings, indexes, caches, summaries, fine-tuning corpora and evaluation
+      sets derived from classified data MUST carry the classification and
+      residency constraints of the most sensitive source they were derived from,
+      and MUST be recorded with a reference to that source.
+    rfc2119: MUST
+    roles: [provider, deployer, operator]
+    lifecycle: [build, operate]
+    applies_when:
+      data_class: [personal, special_category, health, financial, children, confidential]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        derived_stores.enumerated == true
+        AND derived_stores.without_inherited_classification == 0
+        AND derived_stores.residency_violations == 0
+    evidence:
+      - schema: openaisf.evidence.derivation_map.v1
+        plane: control
+        fields: [derived_store, source, inherited_class, residency]
+      - schema: openaisf.evidence.derivation_audit.v1
+        plane: data
+        fields: [stores, classified, unclassified, residency_violations, window]
+    failure_mode: >
+      An embedding of a confidential contract is treated as a float array. A
+      semantic cache of completions over patient records is treated as
+      infrastructure. Classification is applied to the source document and lost
+      at the moment of derivation, so the derived store ends up in a different
+      region, under a different retention policy, and outside the controls that
+      governed the thing it was computed from.
+    rationale: >
+      Classification schemes were built for records that are copied, not for
+      artefacts that are computed. An embedding is not a copy in any sense a data
+      map recognises, and it is not a copy in any sense that stops it being
+      reconstructable. Requiring inheritance by derivation rather than by copying
+      is the specific correction, and recording the source reference is what
+      makes D03-C13 and D12-C02 able to act on it later.
+    crosswalk:
+      iso_42001:
+        - {ref: A.7.5, strength: partial}
+        - {ref: A.7.2, strength: partial}
+      nist_ai_rmf:
+        - {ref: MEASURE-2.10, strength: partial}
+      eu_ai_act:
+        - {ref: "Art.10(5)", strength: partial}
+      csa_aicm:
+        - {ref: DSP-09, strength: partial}
+
+  - id: D03-C13
+    title: Deletion is proven by attempted retrieval, not by a deletion record
+    domain: D03
+    level: core
+    normative: >
+      Where data has been deleted on request or on expiry, the organisation MUST
+      verify the deletion by attempting to retrieve the content through the
+      system's own retrieval and generation paths, including semantically
+      equivalent queries. A completed deletion job MUST NOT be accepted as
+      evidence on its own.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [operate, retire]
+    applies_when:
+      data_class: [personal, special_category, health, financial, children]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P90D
+        T4: P30D
+      predicate: |
+        deletion_verification.method == "retrieval_attempt"
+        AND deletion_verification.includes_semantic_queries == true
+        AND residual_retrievals == 0
+    evidence:
+      - schema: openaisf.evidence.deletion_verification_policy.v1
+        plane: control
+        fields: [method, paths_tested, semantic_queries]
+      - schema: openaisf.evidence.deletion_verification_result.v1
+        plane: data
+        fields: [deletions_sampled, residual_retrievals, paths_covered, window]
+    failure_mode: >
+      A deletion succeeds against the primary record and the derived embedding
+      survives, so the content remains semantically retrievable while every
+      artefact an auditor would inspect says it is gone. Exact-match deletion
+      also does not remove a paraphrase that entered a fine-tuning corpus, and
+      the deletion job cannot detect either condition because it is reporting on
+      the operation it performed rather than on the outcome.
+    rationale: >
+      This is the same inversion the whole framework applies to conformance,
+      pointed at deletion. A deletion record is a control-plane claim; a failed
+      retrieval attempt is data-plane evidence. Requiring semantically
+      equivalent queries rather than exact match is what makes it meaningful
+      against vector stores, where the residual copy does not share a single
+      token with the original request.
+    crosswalk:
+      iso_42001:
+        - {ref: A.7.2, strength: partial}
+      nist_ai_rmf:
+        - {ref: MEASURE-2.10, strength: partial}
+      csa_aicm:
+        - {ref: DSP-12, strength: partial}
+
+  - id: D03-X01
+    title: Context assembly does not combine data classes without recorded authority
+    domain: D03
+    level: expansion
+    normative: >
+      Where a single model context is assembled from sources of differing
+      classification, the combination MUST be permitted by a declared policy, and
+      the resulting output MUST be treated at the classification of the most
+      sensitive contributing source unless a recorded decision states otherwise.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [build, operate]
+    applies_when:
+      system_class: [llm, agentic]
+      data_class: [personal, special_category, health, financial, confidential]
+    tiers:
+      T3: recommended
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P30D
+        T4: P7D
+      predicate: |
+        combination_policy declared
+        AND context_assembly.class_labelled == true
+        AND unauthorised_combinations == 0
+    evidence:
+      - schema: openaisf.evidence.combination_policy.v1
+        plane: control
+        fields: [permitted_combinations, output_class_rule]
+      - schema: openaisf.evidence.context_composition.v1
+        plane: data
+        fields: [assemblies, classes_present, unauthorised, window]
+    failure_mode: >
+      A prompt is a join, executed per request, with no schema and no reviewer.
+      Retrieved context at one classification, a user question at another, and a
+      system instruction at a third are concatenated into a single sequence, and
+      the completion silently inherits the sensitivity of the most restricted
+      input while being handled at the sensitivity of the least. No data model
+      anticipates a join that happens at inference time.
+    rationale: >
+      Every organisation controls which datasets may be joined in a warehouse.
+      Almost none apply that control to the context window, which performs the
+      same operation thousands of times a second with no record of what was
+      combined. Labelling the composition is the minimum that makes the question
+      answerable after the fact.
+    crosswalk:
+      iso_42001:
+        - {ref: A.7.2, strength: partial}
+      nist_ai_rmf:
+        - {ref: MEASURE-2.10, strength: partial}
+      csa_aicm:
+        - {ref: DSP-10, strength: partial}
+      owasp_llm_2025: [LLM02]
+      owasp_llm_2026: [LLM02]
+
+  - id: D03-X02
+    title: Reuse of operational data for training is bound to its collection purpose
+    domain: D03
+    level: expansion
+    normative: >
+      Data collected in the course of delivering a service MUST NOT be used to
+      train or fine-tune a model unless that use is within the purpose recorded
+      at collection, or a recorded decision by an accountable person establishes
+      a new basis. The decision MUST identify the data and the model.
+    rfc2119: MUST NOT
+    roles: [provider, deployer]
+    lifecycle: [source, build]
+    applies_when:
+      data_class: [personal, special_category, health, financial, children]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P90D
+        T4: P30D
+      predicate: |
+        collection_purposes recorded
+        AND training_corpora.purpose_checked == true
+        AND reuse_without_basis == 0
+    evidence:
+      - schema: openaisf.evidence.purpose_basis.v1
+        plane: control
+        fields: [dataset, collection_purpose, training_basis, decided_by]
+      - schema: openaisf.evidence.training_reuse_audit.v1
+        plane: data
+        fields: [corpora, within_purpose, reuse_without_basis, window]
+    failure_mode: >
+      Support transcripts collected to answer a customer's question become a
+      fine-tuning corpus because they were available and useful. The reuse is
+      invisible: no system boundary was crossed, no copy left the organisation,
+      and the resulting model cannot be untrained when the basis is later
+      challenged. Purpose limitation is a stated principle in every privacy
+      regime and is operationalised in almost none of them at the point where
+      training data is assembled.
+    rationale: >
+      Written as a prohibition with a named exception rather than a process
+      requirement, because the failure is silent and the remedy is a decision
+      somebody has to make on the record. Binding it to D01-C03's authorised
+      purpose means one definition of purpose governs both what the system may
+      do and what it may learn from.
+    crosswalk:
+      iso_42001:
+        - {ref: A.7.3, strength: partial}
+      nist_ai_rmf:
+        - {ref: MAP-1.1, strength: partial}
+      eu_ai_act:
+        - {ref: "Art.10(2)(b)", strength: partial}
+      csa_aicm:
+        - {ref: DSP-02, strength: partial}
+
+  - id: D03-X03
+    title: Tenant isolation is verified in shared retrieval and cache layers
+    domain: D03
+    level: expansion
+    normative: >
+      Where a retrieval index, semantic cache, embedding store or completion
+      cache serves more than one tenant, customer or data boundary, isolation
+      MUST be verified by attempting cross-boundary retrieval, and the attempt
+      MUST fail.
+    rfc2119: MUST
+    roles: [operator, provider]
+    lifecycle: [release, operate, observe]
+    applies_when:
+      data_class: [personal, special_category, health, financial, confidential]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P30D
+        T4: P7D
+      predicate: |
+        shared_layers.enumerated == true
+        AND isolation_test.performed_within_freshness == true
+        AND cross_boundary_retrievals == 0
+    evidence:
+      - schema: openaisf.evidence.tenancy_map.v1
+        plane: control
+        fields: [layer, boundary_scheme, shared]
+      - schema: openaisf.evidence.isolation_test.v1
+        plane: data
+        fields: [attempts, blocked, leaked, window]
+    failure_mode: >
+      A semantic cache keyed on question similarity returns one customer's
+      answer to another customer's question, because the two questions were
+      close enough in embedding space and the cache key never encoded the
+      boundary. Vector indexes fail the same way through metadata filters that
+      are applied after retrieval rather than within it. Both are invisible in
+      testing that uses a single tenant.
+    rationale: >
+      Isolation in these layers is asserted at design time and almost never
+      exercised, because exercising it requires deliberately attempting the
+      thing the system is supposed to prevent. That attempt is the only evidence
+      that distinguishes a boundary that holds from one that has never been
+      pushed.
+    crosswalk:
+      iso_42001:
+        - {ref: A.7.2, strength: partial}
+      nist_ai_rmf:
+        - {ref: MEASURE-2.7, strength: partial}
+      csa_aicm:
+        - {ref: "I&S-06", strength: partial}
+        - {ref: DSP-19, strength: partial}
+      owasp_llm_2025: [LLM08]
+      owasp_llm_2026: [LLM09]
+      mcp_38: [MCP-06]
