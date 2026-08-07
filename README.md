@@ -3,7 +3,9 @@
 **An open conformance framework for AI safety and security.**
 
 Created by **Maarten Loose**.
-Specification CC-BY-4.0 · Tooling Apache-2.0 · Status: Request for Comments, August 2026
+**Specification** CC-BY-4.0 
+**Tooling** Apache-2.0
+**Status:** Request for Comments, August 2026
 
 ---
 
