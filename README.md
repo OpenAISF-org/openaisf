@@ -390,6 +390,9 @@ notices, and the open legal actions.
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Control authoring requirements and rejection criteria |
 | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | |
 
+The website is a separate repository:
+[openaisf/website](https://github.com/openaisf/website) → [openaisf.org](https://openaisf.org).
+
 ## 11. Comments
 
 This is a Request for Comments. Open an issue. The most useful submissions, in

@@ -91,6 +91,10 @@ two occasions.** It is now computed from the crosswalk.
 - The v0.1 catalog, crosswalk and CLI. Replaced wholesale.
 - `LICENSE` as a single file, split into the specification and tooling licences
   it always should have been.
+- `site/`. The website moved to its own repository,
+  [openaisf/website](https://github.com/openaisf/website), so that it has one
+  source rather than two copies drifting apart. This repository is the standard;
+  that one is the site.
 
 ### Known gaps
 
