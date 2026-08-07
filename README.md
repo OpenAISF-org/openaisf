@@ -7,134 +7,288 @@ Created by **Maarten Loose**.<br>
 **Tooling** Apache-2.0<br>
 **Status:** Request for Comments, August 2026
 
+> **This document is the why and the how.** For the numbers, the differentiator
+> and the case for adopting it, see **[openaisf.org](https://openaisf.org)**.
+> For the normative specification, see
+> [rfc/RFC-OpenAISF-v1.0.md](rfc/RFC-OpenAISF-v1.0.md).
+
 ---
 
-## 1. What OpenAISF is
+## Part I — Why
 
-A control catalog, an applicability model, an evidence format and a conformance
-tool. It defines what an organisation must do to operate AI systems safely, and
-it decides mechanically whether the organisation is doing it.
+### 1. The three gaps
 
-It is **not a mapping of existing frameworks**. OpenAISF covers every requirement
-of ISO/IEC 42001, NIST AI RMF and the EU AI Act, and adds **36 controls of its
-own that no incumbent framework requires** — for agent containment,
-agent-specific detection, AI data governance and the integrity of conformance
-evidence itself. Section 1.1 lists them.
+Every AI governance framework in wide use was designed before agents shipped in
+production. Three consequences follow, and they are why organisations pass
+audits and are harmed anyway.
 
-The second distinguishing property is the conformance model:
+**They govern models. Organisations run agents.** An agent holds credentials,
+calls tools, and acts. Nothing in ISO/IEC 42001, NIST AI RMF or the EU AI Act
+asks what an agent is permitted to reach, how you would notice it going outside
+that, or whether anyone has ever verified you can stop it. The measured
+consequence: 58–59% of enterprises report monitoring their AI agents and only
+37–40% report containment capability.
 
-> An AI system is OpenAISF-conformant at tier T **for as long as** it keeps
+**They govern databases. AI creates new data.** Prompt logs, embeddings,
+semantic caches, fine-tuning corpora. These are stores of sensitive data that
+appear on no data map, inherited a logging retention policy because an
+engineering team created them as telemetry, and are not reached by any deletion
+process. Data governance was written for records that are *copied*; an embedding
+is *computed*, and classification is lost at the moment of derivation.
+
+**They certify a moment. Systems change hourly.** A prompt edit, an upstream
+model version change, or a new tool granted to an agent can invalidate a control
+within the hour. The certificate remains valid for a year. The industry knows
+this and papers over it with a **bridge letter** — an unaudited management
+statement that nothing material has changed since the audit closed.
+
+### 2. What follows from that
+
+Two design commitments. Everything else in the framework is machinery for them.
+
+**Conformance has to be a state, not an event.**
+
+> An AI system is OpenAISF-conformant at tier T for as long as it keeps
 > producing signed evidence that satisfies tier T's applicable controls.
 
-Conformance is a state, not an event. It has a duration and it expires. A
-certificate issued today stops asserting anything once the evidence behind it
-stops arriving, without any party deciding that it should.
+Stop producing evidence and the badge goes stale, then expires. Nobody decides
+this. A conformance statement carries its own `stale_after` and `expires_at`, so
+the state is computed against the *reader's* clock — which means a lapsed badge
+reads as lapsed in somebody else's README, with nobody notified and nobody able
+to prevent it.
 
-**Scope.** 20 domains, 118 controls, four assurance tiers from prototype to
-frontier. Covers large language models, agents, and classical machine learning
-including credit scoring, medical imaging, computer vision and biometrics.
+**The framework has to cover risks the incumbents miss, or it is a mapping
+exercise.** 36 of 118 controls have no incumbent equivalent. The full table of
+what they cover is on [the website](https://openaisf.org/#gaps); the reasoning
+behind several of them is in §4.
 
-### 1.1 What OpenAISF requires that nothing else does
+### 3. Why it is free
 
-**36 of 118 controls have no incumbent equivalent.** The figure is computed, not
-claimed: a control counts as original only when it maps to zero requirements at
-full strength across ISO/IEC 42001, NIST AI RMF, the EU AI Act and the CSA AI
-Controls Matrix. A hand-written originality claim that disagrees with the
-computation is an error, not an override. 15 of the 20 domains contain at least
-one.
+The specification is CC-BY-4.0 and the tooling Apache-2.0, and any tier —
+including tier 4 — is reachable self-assessed, with no certifier and no fee.
 
-| Risk | ISO / NIST / AI Act / AICM | OpenAISF |
-|---|---|---|
-| An agent doing work nobody authorised — inside its permissions throughout | nothing | Detect activity outside the recorded business purpose `D15-C07` |
-| An agent whose actions stop matching the plan it announced | nothing | Compare declared intent against actions taken `D15-C01` |
-| A kill switch nobody has ever pulled | nothing | Exercise containment on a cadence, record time to contain `D16-C02` |
-| Detectors that have never fired, so nobody knows if they can | nothing | Inject a simulated rogue agent, measure time to detect `D16-C03` |
-| An agent spending without limit until the invoice arrives | nothing | Per-session budget for calls, tokens, spend, egress `D07-C02` |
-| An agent that spawns another with privileges it never held | nothing | Bounded delegation depth, no escalation on spawn `D07-C03` |
-| An irreversible action taken autonomously | nothing | Classify actions by reversibility, gate the irreversible `D07-C04` |
-| The prompt log — the largest sensitive store you hold, on no data map | nothing | Inventory prompts and completions as a data store `D03-C11` |
-| Deletion that removes the record and leaves the embedding | nothing | Prove deletion by attempted retrieval, semantic queries included `D03-C13` |
-| A supplier's assurance quietly going stale under you | nothing | Inherited controls degrade when the upstream lease does `D17-C02` |
-| A policy declared enabled that never actually ran | nothing | Check declared configuration against observed enforcement `D19-C03` |
-| Approving everything because you approve everything | nothing | Monitor oversight acceptance rate; near-total is a finding `D10-C03` |
+That is not generosity. A conformance standard is worth something only when
+relying parties recognise it, and nothing gates recognition faster than a
+paywall between an engineer and the control text. The commercial layer sits
+where independent assurance genuinely costs money to produce: **TruCert**,
+TruSecure's implementation of the Certifier role, sells a counter-signature and
+the work of running the evidence machinery. It sells nothing that gates access
+to the standard.
 
-Twelve of thirty-six. `openaisf coverage` prints the current count; the full set
-is derivable from the catalog by selecting controls whose crosswalk contains no
-full-strength mapping.
+**Declared interest.** The creator holds a commercial interest in TruSecure. The
+mitigation is structural rather than a promise: the catalog, crosswalk, SoA
+schema, evidence schemas, log format and CLI contain no reference to TruSecure
+other than attribution. A dependency of any specification artefact on TruSecure
+is a defect and should be filed as one.
 
-### 1.2 AI data governance
+### 4. Decisions worth arguing with
 
-**16 data controls, 7 of them original.** Existing data governance was written
-for records in databases. An AI system creates stores nobody inventories and
-derives artefacts that silently lose their classification.
+The choices below are the ones most likely to be contested. Each is stated with
+its reasoning so that disagreement can be specific.
 
-| What happens in production | OpenAISF |
-|---|---|
-| The prompt log becomes the largest unstructured store of sensitive data held. Built as telemetry, so it inherited a logging retention policy, sits outside DLP, and is not searched on a subject access request. | Prompts, completions and tool I/O appear in the data inventory with an owner, classification and retention. They MUST NOT be treated as application logs. `D03-C11` |
-| An embedding of a confidential contract is treated as a float array. Classification is applied to the source and lost at derivation, so the derived store ends up in another region under another policy. | Embeddings, indexes, caches and fine-tuning corpora inherit the classification and residency of their most sensitive source. `D03-C12` |
-| Deletion succeeds against the record and the embedding survives, so content stays semantically retrievable while every artefact an auditor inspects says it is gone. | Verify deletion by attempted retrieval through the system's own paths, including semantically equivalent queries. A completed deletion job is not evidence. `D03-C13` |
-| A prompt is a join, executed thousands of times a second, with no schema and no reviewer. Three classifications are concatenated; the output inherits the highest while being handled as the lowest. | Combining data classes in one context requires a declared policy; output takes the classification of the most sensitive contributor. `D03-X01` |
-| Support transcripts collected to answer a customer's question become a fine-tuning corpus because they were available. No boundary crossed, no copy left, and the model cannot be untrained later. | Operational data MUST NOT be reused for training outside its collection purpose without a recorded decision naming the data and the model. `D03-X02` |
-| A semantic cache returns one customer's answer to another's question, because the two were close in embedding space and the cache key never encoded the boundary. | Verify isolation in shared retrieval and cache layers by attempting cross-boundary retrieval. The attempt MUST fail. `D03-X03` |
+#### No control requires preventing prompt injection
 
-The seventh requires AI data classification to be inherited from the scheme the
-organisation already runs rather than invented alongside it, because two
-taxonomies diverge within months and then neither is applied. `D03-C07`
+Prompt injection is unsolved at the model layer. Adaptive attacks defeat
+published defences at rates above 85–90%, and OpenAI, Anthropic and Google
+DeepMind all say so. A control reading *"the system shall prevent prompt
+injection"* cannot be satisfied, which makes every conformant system a liar and
+the framework worthless.
+
+So controls bound what a successful injection can reach, require detection by
+detectors **proven by drill to fire**, and require containment that has been
+exercised and timed. This is principle **P2**: no control may require an outcome
+the field has not achieved.
+
+#### Originality is computed, never asserted
+
+The count of original controls is a public claim about the framework, and the
+pressure on it runs one way. So it is derived from the crosswalk rather than
+maintained by hand, and a hand-written `provenance` value that disagrees with
+the computation is an **error**, not an override.
+
+Regimes are classified as *requirement* catalogs (ISO, NIST, EU AI Act, CSA
+AICM) or *threat* catalogs (OWASP, ATLAS, MCP-38). A threat catalog describes
+attacks and imposes no obligations, so a mapping to one can establish relevance
+but never that something is already required. Two or more full-strength mappings
+means `adopted`; one means `derived`; zero means `OpenAISF-original`. The
+default is `full`, so claiming novelty costs an explicit, reviewable edit while
+disclaiming it is free.
+
+An earlier version of this rule counted *how many regimes a control touched*,
+which conflated breadth of mapping with derivativeness and understated the
+original set. That is recorded in [CHANGELOG.md](CHANGELOG.md) rather than
+quietly fixed.
+
+#### The crosswalk is built backwards, and the exclusions are published
+
+Mapping outward from your own controls shows what you found. It can never show
+what you missed. So each regime is inventoried down to its atomic requirements
+and the engine walks *that* list, requiring every requirement to be covered by
+named controls or excluded with a written reason. There is no third state, and
+an unresolved requirement fails the build.
+
+133 requirements are excluded and every one carries its reason. That is the most
+consequential judgement in the framework, and it is published precisely so it
+can be attacked. If an exclusion is wrong, that is the most useful thing anyone
+can tell us.
+
+#### A missing signal is a failure, not silence
+
+A compliant system and a completely broken evidence pipeline emit identical
+silence. Treating silence as an absence of findings passes both, so a control
+whose required evidence was never produced fails.
+
+#### Fabrication is disqualifying, whatever the obligation level
+
+Where a control plane record declares a policy enabled and the data plane shows
+live traffic with zero enforcement decisions, the control fails — and **an
+attestation cannot resolve it**. A signed statement from an accountable person
+does not override telemetry.
+
+That failure blocks conformance even where the control is only *recommended* at
+that tier, and revokes the lease rather than degrading it. Obligation level
+governs whether a shortfall affects conformance. It does not govern the
+treatment of a false statement.
+
+#### Agents may read and check, but never assert
+
+The MCP server exposes the catalog, applicability resolution, conformance
+checking and badge verification. It exposes **no** tool that writes evidence,
+signs a statement or appends to the log, because an agent submitting evidence
+about its own conformance is the model reporting on the model. A test fails the
+build if a tool name contains a writing verb.
 
 ---
 
-## 2. Why conformance expires
+## Part II — How it works
 
-Existing assurance regimes are retrospective. SOC 2 Type II examines operating
-effectiveness across a review period of three to twelve months and issues a
-report after that period closes. ISO/IEC 42001 certifies on a three-year cycle
-with annual surveillance audits. Both sample the period rather than observing
-all of it.
+### 5. The model in five pieces
 
-The interval between the end of an examination period and the moment a report is
-read is covered, in practice, by a **bridge letter**: an unaudited statement from
-management asserting that nothing material has changed. That instrument exists
-because the gap is real and universally acknowledged.
+**The catalog.** 118 controls across 20 domains. Each carries normative text, a
+machine-evaluable scope predicate, a verification method, the evidence it
+expects, its crosswalk, and — required, not decorative — the real failure it
+exists to prevent, citing a named incident where one exists.
 
-AI systems change faster than the assurance interval. A prompt edit, an upstream
-model version change, or a new tool granted to an agent can invalidate a control
-within hours. OpenAISF replaces the bridge letter with a signed evidence stream
-and an expiry date.
+**The Statement of Applicability.** Controls declare their own scope over system
+class, autonomy level, data class and risk classification, so the reader never
+decides whether a control applies to them. A typical internal non-agentic LLM
+application resolves to **35 controls of 118**; tier 1 resolves to **four**, of
+which one is mandatory. Both figures are enforced by tests that fail the build
+if they rise.
 
-Four specific differences from incumbent assurance:
+**Evidence, in two planes.** The *control plane* states what is configured. The
+*data plane* reports what happened to live traffic. Tier 3 and above require
+both, and the pair is what makes a false claim detectable without an assessor.
 
-| | Incumbent | OpenAISF |
-|---|---|---|
-| Sampling | An assessor tests a sample of the period | Population-level: every request crossing the enforcement point |
-| Latency | Report issued after the period closes; the gap is bridged by unaudited assertion | Freshness declared per control; lapse is automatic |
-| Verifier | The relying party requests the report and trusts it | The relying party verifies the log without contacting the subject |
-| Post-market monitoring | EU AI Act Art. 72 requires it but produces no third-party-checkable artefact | The monitoring is the conformance evidence, signed |
+**The lease.** Each control declares a freshness window, capped by tier. Past the
+window a control is stale; past the grace period the lease expires. No lease
+outlives its tier ceiling — 365 days at tier 1 down to 30 at tier 4 — so a
+subject cannot construct a statement that never needs renewing.
+
+**The transparency log.** Append-only and hash-chained. Verification needs the
+statement, a public key and a clock: no account, no relationship with the
+subject, no registry that could be captured. Modifying a past entry invalidates
+every entry after it.
+
+### 6. Tiers
+
+| | Who | Assurance | Time to first badge |
+|---|---|---|---|
+| **T1** | Prototypes, research code, no production users | Self-asserted | Minutes |
+| **T2** | Production traffic, non-high-risk use | Self-asserted; data plane where a gateway exists | Days |
+| **T3** | Regulated sectors, EU AI Act high-risk, public sector | Control **and** data plane; independent certifier | Weeks |
+| **T4** | Frontier labs, GPAI with systemic risk, high-autonomy agents at scale | Continuous, independently witnessed | Months |
+
+Tiers compose downward: a T3 system built on a T1-conformant component inherits
+only T1 assurance for that component. Assurance cannot be laundered upward
+through a dependency.
 
 ---
 
-## 3. How conformance is decided
+## Part III — How to use it
 
-Three rules determine every result.
+### 7. Install
 
-### 3.1 A missing signal is a failure
+```bash
+git clone https://github.com/OpenAISF-org/openaisf && cd openaisf
+python -m venv .venv && ./.venv/bin/pip install -e '.[dev]'
+```
 
-A control whose required evidence was not produced fails. It does not pass by
-absence of contradiction.
+Runtime dependencies are `pyyaml` and `jsonschema`. That is the entire list,
+deliberately, because this runs inside other organisations' CI. Signing is an
+optional extra; the MCP server is standard library only.
 
-A compliant system and a non-functioning evidence pipeline produce identical
-silence. Treating silence as an absence of findings passes both.
+### 8. Work out what applies to you
 
-### 3.2 Declared configuration is checked against observed enforcement
+Describe the system once, in a scoping file:
 
-Evidence has two planes:
+```yaml
+# system.yaml
+system_id: urn:openaisf:system:acme-support-agent
+roles: [deployer]
+system_class: [llm, agentic]
+autonomy: tool_use
+data_class: [internal, personal]
+eu_risk: [limited]
 
-- **Control plane** — the policy is configured. Declared, signed, versioned.
-- **Data plane** — the policy was enforced. Counters and decisions drawn from
-  live traffic.
+inherits: {}     # controls an upstream certified component already proves
+exclusions: {}   # controls that apply but are deliberately not implemented
+```
 
-Tier 3 and above require both. Where a control plane record declares a policy
-enabled and the corresponding data plane record shows live traffic with zero
-enforcement decisions, the control fails:
+```bash
+openaisf scope --context system.yaml --tier T2
+```
+
+```
+Statement of Applicability — urn:openaisf:system:acme-support-agent at T2
+
+  applies            51
+  inherited           0
+  excluded            0
+  not applicable     67
+  ---------------------
+  in scope           51  of 118 in the catalog
+```
+
+The SoA is not a document written for an auditor. It **is** the check plan, and
+the next command executes it.
+
+### 9. Collect evidence
+
+Evidence comes from infrastructure you already run — AI gateways, observability
+platforms, guardrail services, CI — through out-of-tree adapters. The
+specification names no vendor as required.
+
+`tools/adapters/gateway_adapter.py` is the reference implementation and
+documents the contract by example:
+
+1. Read from an enforcement point you do not control; emit records validating
+   against `schema/evidence.schema.json`.
+2. One record per (control, plane, window). Never infer one plane from the other
+   — having two is the entire point.
+3. **Sign at the producer**, before transmission or aggregation. An aggregator
+   signature attests only that the aggregator received something.
+4. **Never invent an observation.** If the source cannot answer, omit the record
+   and let the control fail as a missing signal. Emitting a plausible zero is
+   fabrication, and `D19-C03` exists to catch exactly that.
+
+```bash
+python tools/adapters/gateway_adapter.py summary.json ./evidence \
+    --key producer.pem --key-id gateway-prod
+```
+
+From tier 3 upward an unsigned record is treated as absent, and the check states
+which of three things went wrong: unsigned, signed with a scheme that proves
+integrity but not authorship, or a signature that does not verify.
+
+### 10. Check, publish, verify
+
+```bash
+openaisf check --context system.yaml --evidence ./evidence --tier T2
+```
+
+Exit code 0 means conformant. When it is not, the output says why in terms of
+the system rather than the paperwork:
 
 ```
 D07-C01  [fail]  declared enabled, but 184203 requests crossed the enforcement
@@ -144,317 +298,85 @@ D07-C01  [fail]  declared enabled, but 184203 requests crossed the enforcement
 lease: revoked
 ```
 
-This determination requires no assessor. A contradiction between the two planes
-is **not resolvable by attestation**: a signed statement from an accountable
-person does not override telemetry.
-
-Contradiction is classified as a **disqualifying failure**. It blocks conformance
-even where the control is only recommended at that tier, and it revokes the lease
-rather than degrading it. Obligation level governs whether a shortfall affects
-conformance. It does not govern the treatment of a false statement.
-
-### 3.3 Freshness expires
-
-Each control declares a freshness window, capped by tier. Past the window a
-control is stale; past the grace period the lease expires.
-
-No lease outlives its tier ceiling — 365 days at tier 1, 30 days at tier 4 —
-regardless of evidence freshness. A subject cannot construct a statement that
-never requires renewal.
-
----
-
-## 4. Verification without the subject's cooperation
-
-Conformance statements are signed and published to an append-only,
-hash-chained transparency log.
+Then sign a statement, append it to a log, and let anyone verify it:
 
 ```bash
-openaisf verify --log <log> --system <system-id> --key <public-key>
+openaisf publish --context system.yaml --evidence ./evidence \
+                 --log openaisf-log.jsonl --key signer.key
+openaisf verify  --log openaisf-log.jsonl --system urn:… --key signer.pub
+openaisf badge   --log openaisf-log.jsonl --system urn:…
 ```
 
-Verification requires the statement, the signer's public key, and a clock. It
-does not require an account, a relationship with the subject, or a central
-registry. The statement carries its own `stale_after` and `expires_at`, so the
-lease state is computed against the verifier's clock at the moment of reading:
+Every command accepts `--json` for CI. `openaisf export assessment-results`
+emits OSCAL 1.1.2 for GRC pipelines, and `openaisf mcp` runs the MCP server.
 
-```
-✗ TruCert · OpenAISF-T2 · expired
+### 11. Adopting it in an organisation
 
-This badge no longer asserts conformance. Nobody revoked it;
-the lease simply ran out.
-```
+A staged path that produces something useful at every step.
 
-Log entries are hash-chained. Modifying a past entry invalidates every entry
-after it and verification fails. The log operator cannot forge history or make an
-expired statement appear current. Refusal to publish is the operator's only
-available action and it is externally visible.
+1. **Scope one real system at T1.** Four controls, one mandatory. This exists to
+   prove the loop runs end to end, not to produce assurance.
+2. **Point one adapter at your gateway.** Whatever is already in the request
+   path. This is where evidence stops being a document.
+3. **Run `check` in CI at T2 and let it fail.** The failures are the work queue,
+   and they are stated as system defects rather than as missing paperwork.
+4. **Publish, and hand a customer the verify command.** The procurement
+   conversation changes here, because they stop asking you for a PDF.
+5. **Ask your model provider for their badge.** Inherited controls are the cost
+   lever: you import what they already proved instead of re-proving it.
 
-**Assurance decay propagates downstream.** A control recorded as inherited from
-an upstream component resolves against that component's lease. A stale upstream
-lease makes the dependent control stale; an expired or revoked one fails it.
-Assurance cannot be inherited above the upstream's verified tier.
+### 12. Contributing
 
----
-
-## 5. What the framework provides, by role
-
-### 5.1 Executive and board
-
-A single portfolio view of lease state across every AI system in scope, computed
-from the same evidence the engineering check consumes. The board view and the
-conformance run are the same query, so the board view cannot report conformance
-while the check fails.
-
-Evidence covers a continuous period rather than a sampled one, which is the form
-in which a regulator or customer request is answerable. EU AI Act market
-surveillance and GPAI penalty powers became applicable on 2 August 2026;
-Annex III high-risk obligations apply from 2 December 2027.
-
-**Limitation.** The framework establishes that controls are operating. It does
-not establish that the selected controls are the correct ones for the risk. That
-determination remains a management judgement.
-
-### 5.2 Security and risk
-
-The agentic controls are structured as a five-stage chain across domains D07, D15
-and D16: bound the authority an agent holds, detect departure from those bounds,
-contain, recover, and prove that the first four work.
-
-The proving stage is not optional. Simulated rogue-agent behaviour is injected on
-a declared cadence; detectors must fire; the framework records **mean time to
-detect** and **mean time to contain** as measured values. Drills that fail are
-recorded as failures rather than repeated until they pass.
-
-This addresses a measured gap: approximately 58–59% of enterprises report
-monitoring their AI agents and only 37–40% report containment capability.
-
-Domain D15 specifies detection methods that have no classical equivalent,
-because an agent declares intent before acting:
-
-- **Intent–action divergence** — declared plan compared against actions taken.
-- **Business-purpose divergence** — activity outside the authorised purpose
-  recorded under D01-C03, independent of whether it was permitted.
-- **Manifest violation** at the attempt, not at the success.
-- **Swarm and velocity signatures** — agent identity creation and call rates
-  outside human-plausible bounds.
-- **Egress anomaly**, explicitly covering reputable public services.
-- **Canaries and honeytokens** — near-zero false positive rate, binary in
-  evidence.
-- **Provenance break** — untrusted content reaching a privileged context, the
-  precondition for injection, detectable when the injection is not.
-- **Replay sufficiency** — whether the retained trace can reconstruct why an
-  agent acted.
-
-### 5.3 Procurement and third-party risk
-
-`openaisf verify` operates on any published badge without the vendor's
-involvement. The result reflects the vendor's current lease state rather than
-their state at the time a document was issued.
-
-Inherited assurance is the cost mechanism. A control proven by an upstream
-certified component is imported by reference and only the delta is assessed. A
-deployer building on a certified model inherits most of the model-layer catalog.
-
-Downstream degradation creates the corresponding incentive: a provider whose
-badge lapses degrades every dependent within one freshness window.
-
-### 5.4 Engineering
-
-Controls carry a machine-evaluable scope predicate. Applicability is computed
-rather than read.
-
-| System | T1 | T2 | T3 |
-|---|---:|---:|---:|
-| Internal non-agentic LLM application | 4 | 35 | — |
-| Agentic, tool-using, handling personal data | 4 | 51 | 77 |
-
-118 controls exist; a typical tier-2 system resolves to 35 and tier 1 to four, of
-which one is mandatory. These figures are asserted by tests that fail the build
-if they increase.
-
-Evidence originates from infrastructure already in use — AI gateways,
-observability platforms, guardrail services, CI — through out-of-tree adapters.
-The specification names no vendor as required.
-
-Two constraints that affect implementation:
-
-**No control requires prevention of prompt injection.** Prompt injection is
-unsolved at the model layer; adaptive attacks defeat published defences at rates
-above 85–90%, a position stated by OpenAI, Anthropic and Google DeepMind.
-Controls bound consequence, require detection, and require containment.
-
-**Remediation means changing the system, not the evidence.** The MCP server
-cannot write evidence, sign statements or publish, for this reason.
-
-### 5.5 Audit, assessment and policy
-
-The crosswalk is constructed in the inverse of the usual direction. Mapping
-outward from a framework's own controls demonstrates what was found and cannot
-demonstrate what was missed.
-
-Each in-scope regime is inventoried to its atomic requirements. The coverage
-engine walks that inventory and requires every requirement to be either covered
-by named controls or excluded with a stated reason. There is no third state, and
-an unresolved requirement fails the build.
-
-| Regime | Requirements | Covered | Excluded |
-|---|---:|---:|---:|
-| CSA AI Controls Matrix v1.1.1 | 247 | 156 | 91 |
-| MITRE ATLAS 2026.07 | 178 | 136 | 42 |
-| EU AI Act 2024/1689 | 84 | 84 | — |
-| NIST AI RMF 1.0 | 72 | 72 | — |
-| ISO/IEC 42001:2023 Annex A | 38 | 38 | — |
-| MCP-38 threat taxonomy | 38 | 38 | — |
-| OWASP Top 10 for LLM Applications 2025 | 10 | 10 | — |
-| OWASP Top 10 for LLM Applications 2026 | 10 | 10 | — |
-| **Total** | **677** | **544** | **133** |
-
-The 133 exclusions divide into two groups, each entry carrying a written reason:
-
-- **91 CSA AICM entries** — datacentre security, endpoint management,
-  cryptography and human resources security. The AICM extends the Cloud Controls
-  Matrix and restates a general cloud security baseline. These are satisfied
-  through the organisation's existing information security regime and imported as
-  inherited assurance under D17-C02.
-- **42 MITRE ATLAS techniques** — adversary reconnaissance and resource
-  development performed outside the defender's systems, plus six entries that
-  describe impacts rather than techniques. No implementable control prevents an
-  adversary reading public research or acquiring infrastructure.
-
-Control D19-C05 fails the conformance run where an exclusion is contradicted by
-the subject's own telemetry.
-
-**Originality is computed, not asserted.** Regimes are classified as requirement
-catalogs (ISO, NIST, EU AI Act, CSA AICM) or threat catalogs (OWASP, ATLAS,
-MCP-38). A mapping to a threat catalog establishes relevance to a known attack
-and cannot establish that a requirement already exists. Two or more full-strength
-mappings classify a control as adopted; one as derived; zero as
-OpenAISF-original. **36 of 118 controls are OpenAISF-original** by that
-computation.
-
-OSCAL 1.1.2 Assessment Results and Component Definition are exported for GRC and
-FedRAMP pipelines.
-
----
-
-## 6. What the framework does not claim
-
-**It does not guarantee that no AI agent behaves adversarially.** No framework
-can. It requires that agent authority is bounded, that departure from those
-bounds is detected by detectors proven by drill to fire, that a departure can be
-contained by an exercised and timed kill-switch, that damage is recoverable, and
-that all four capabilities are proven on a defined cadence.
-
-**It is not the first machine-readable AI compliance work.** OSCAL, the OSCAL AI
-compliance evidence proposal, Policy Cards, AIP and DEMM-Bench are prior art and
-are cited in the RFC. The distinguishing property is a conformance state that
-expires without intervention.
-
-**It does not characterise incumbent assurance as inadequate in general.** SOC 2
-Type II, ISO/IEC 42001 and the EU AI Act's post-market monitoring obligations are
-substantive. The differences are the four in §2.
-
----
-
-## 7. Installation and use
+Read [CONTRIBUTING.md](CONTRIBUTING.md) first — it states what makes a good
+control and what will be refused. Two gates are hard:
 
 ```bash
-pip install -e .
+python -m pytest                      # 170 tests
+openaisf coverage                     # must exit 0 — no unresolved requirement
 ```
 
-```
-openaisf scope    --context <file> --tier T2                    resolve applicability
-openaisf check    --context <file> --evidence <dir> --tier T2   evaluate conformance
-openaisf publish  --context <file> --evidence <dir> --log <f>   sign and append
-openaisf verify   --log <f> --system <id> --key <pub>           verify any badge
-openaisf badge    --log <f> --system <id>                       render badge state
-openaisf coverage                                               crosswalk coverage
-openaisf export   assessment-results | component-definition     OSCAL output
-openaisf mcp                                                    MCP server (stdio)
-```
+The most valuable contributions, in order:
 
-Exit code 0 indicates conformance. Every command accepts `--json`.
+1. An exclusion in the crosswalk that should not be excluded.
+2. A control that requires an unachievable outcome, or that is not falsifiable.
+3. A factual error in any published figure.
 
-`examples/` contains a working end-to-end example, including a variant
-constructed to trigger the two-plane contradiction rule.
-
-**Dependencies.** Runtime dependencies are `pyyaml` and `jsonschema`. Signing is
-an optional extra. The MCP server uses the standard library only. The dependency
-list is deliberately minimal because the tooling runs inside other
-organisations' CI.
-
-**Tests.** 170. `python -m pytest`.
+Arguing that the framework is too strict is welcome. Bring the system you are
+trying to certify.
 
 ---
 
-## 8. Framework architecture: three roles
-
-| Name | Definition | Held by |
-|---|---|---|
-| **OpenAISF** | The open standard: catalog, applicability model, evidence interface, lease format, crosswalk | Open. Created by Maarten Loose |
-| **Certifier** | A role defined by the standard: independence requirements, signing duties, mandatory log participation, public disclosure of every certification issued, suspended, expired and revoked. Aligned to ISO/IEC 42006 | Any party meeting the requirements |
-| **TruCert** | TruSecure's implementation of the Certifier role, and its commercial assurance product | TruSecure |
-
-A system can reach any tier, including tier 4, self-assessed, with no certifier
-involved and no fee. The Certifier requirements are published before any
-certifier operates, so the role precedes its first occupant.
-
-**Declared interest.** The creator holds a commercial interest in TruSecure. The
-structural mitigation is that the catalog, crosswalk, SoA schema, evidence
-schemas, log format and CLI contain no reference to TruSecure other than
-attribution. A dependency of any specification artefact on TruSecure would be a
-defect.
-
----
-
-## 9. Attribution and licence
-
-**Specification** (`schema/`, `spec/`, `rfc/`) — CC-BY-4.0.
-**Tooling** (`src/`, `tools/`, `tests/`) — Apache-2.0.
-
-Attribution is a licence condition. Derivative works must carry:
-
-> Based on OpenAISF, created by Maarten Loose.
-
-Every conformance report, badge and transparency log entry produced by the
-reference implementation carries the attribution line.
-
-**Creator.** Maarten Loose — [LinkedIn](https://www.linkedin.com/) ·
-[TruSecure](https://www.trusecure.co)
-
-**Third-party material.** OpenAISF references external regimes by identifier and
-reproduces none of their normative text. The ISO/IEC 42001 and CSA AICM
-inventories contain no source-authored text. See
-[ATTRIBUTIONS.md](ATTRIBUTIONS.md) for the per-regime position, the required
-notices, and the open legal actions.
-
----
-
-## 10. Documents
+## Documents
 
 | | |
 |---|---|
-| [rfc/RFC-OpenAISF-v1.0.md](rfc/RFC-OpenAISF-v1.0.md) | The specification |
-| [spec/catalog/](spec/catalog/) | 112 controls, one file per domain |
-| [CHANGELOG.md](CHANGELOG.md) | Changes from v0.1, including which v0.1 claims were incorrect |
-| [ATTRIBUTIONS.md](ATTRIBUTIONS.md) | Intellectual property position and required notices |
-| [GOVERNANCE.md](GOVERNANCE.md) | Decision-making, and what is deliberately immutable |
+| **[openaisf.org](https://openaisf.org)** | The case for adopting it, with the numbers |
+| [rfc/RFC-OpenAISF-v1.0.md](rfc/RFC-OpenAISF-v1.0.md) | The normative specification |
+| [spec/catalog/](spec/catalog/) | 118 controls, one file per domain |
+| [CHANGELOG.md](CHANGELOG.md) | What changed, including which v0.1 claims were wrong |
+| [ATTRIBUTIONS.md](ATTRIBUTIONS.md) | How this references other standards without reproducing them |
+| [GOVERNANCE.md](GOVERNANCE.md) | Who decides, and what is deliberately immutable |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Control authoring requirements and rejection criteria |
 | [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) | |
 
 The website is a separate repository:
-[openaisf/website](https://github.com/openaisf/website) → [openaisf.org](https://openaisf.org).
+[openaisf/website](https://github.com/openaisf/website).
 
-## 11. Comments
+## Attribution
 
-This is a Request for Comments. Open an issue. The most useful submissions, in
-order of value:
+Specification (`schema/`, `spec/`, `rfc/`) — **CC-BY-4.0**.
+Tooling (`src/`, `tools/`, `tests/`) — **Apache-2.0**.
 
-1. An exclusion in §5.5 that should not be excluded.
-2. A control that requires an unachievable outcome, or that is not falsifiable.
-3. A factual error in any figure published here.
+Attribution is a licence condition, not a courtesy. Derivative works must carry:
 
----
+> Based on OpenAISF, created by Maarten Loose.
 
-*OpenAISF — created by Maarten Loose.*
+Every conformance report, badge and log entry the reference implementation
+produces carries that line.
+
+**Maarten Loose** — creator and author of OpenAISF.<br>
+[LinkedIn](https://www.linkedin.com/in/mloose/) · [TruSecure](https://www.trusecure.co)
+
+OpenAISF references external regimes by identifier and reproduces none of their
+normative text. See [ATTRIBUTIONS.md](ATTRIBUTIONS.md) for the per-regime
+position and required notices.
