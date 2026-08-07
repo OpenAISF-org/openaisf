@@ -1,0 +1,347 @@
+# OpenAISF catalog — D16 Incident Response, Containment & Recovery
+#
+# The Contain, Recover and Prove stages of the rogue-agent control chain.
+#
+# The measured gap this domain exists to close: around 58 to 59 percent of
+# enterprises monitor their agents, and only 37 to 40 percent can actually stop
+# one. A framework that asked only for monitoring would certify that gap.
+#
+# Nothing here is satisfied by declaring a capability. Every capability in this
+# domain is proven by exercising it and recording how long it took.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D16
+name: Incident Response, Containment & Recovery
+controls:
+  - id: D16-C01
+    title: Containment is layered and each layer is separately invocable
+    domain: D16
+    level: core
+    chain_stage: contain
+    normative: >
+      The deployment MUST provide session termination, credential revocation,
+      tool cutoff, network isolation and full deactivation as separately
+      invocable capabilities. A single combined control MUST NOT be presented as
+      satisfying this requirement.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [release, operate, respond]
+    applies_when:
+      system_class: [agentic]
+      autonomy: [">= tool_use"]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        layers.declared == 5
+        AND layers.separately_invocable == true
+    evidence:
+      - schema: openaisf.evidence.containment_layers.v1
+        plane: control
+        fields: [session_termination, credential_revocation, tool_cutoff,
+                 network_isolation, deactivation]
+      - schema: openaisf.evidence.containment_readiness.v1
+        plane: data
+        fields: [layers_verified, layers_failed, window]
+    failure_mode: >
+      A kill switch is a layered system, not a button, and the common failure is
+      that terminating a session leaves the credentials that session minted still
+      valid. The agent stops; its access does not. Anything already exfiltrated or
+      any process already spawned continues untouched.
+    rationale: >
+      Requiring the layers to be separately invocable is what makes partial
+      containment possible during an incident, when full deactivation is often
+      too costly to authorise quickly. It also makes each layer separately
+      testable under D16-C02, which is where the real assurance comes from.
+    crosswalk:
+      iso_42001:
+        - {ref: A.6.2.6, strength: partial}
+        - {ref: A.9.2, strength: partial}
+      nist_ai_rmf:
+        - {ref: MANAGE-2.4, strength: partial}
+        - {ref: MANAGE-4.1, strength: partial}
+      eu_ai_act:
+        - {ref: "Art.14(4)(e)", strength: partial}
+      csa_aicm:
+        - {ref: SEF-04, strength: partial}
+      owasp_llm_2025: [LLM06]
+      owasp_llm_2026: [LLM03]
+
+  - id: D16-C02
+    title: Containment is exercised on a cadence and time to contain is recorded
+    domain: D16
+    level: core
+    chain_stage: prove
+    normative: >
+      Each containment layer MUST be exercised against a running system at a
+      declared cadence, and the elapsed time from decision to effect MUST be
+      recorded as a mean time to contain. An exercise that fails MUST be recorded
+      as a failure rather than repeated until it passes.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [respond, observe]
+    applies_when:
+      system_class: [agentic]
+      autonomy: [">= tool_use"]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P365D
+        T3: P90D
+        T4: P30D
+      predicate: |
+        drill.cadence declared
+        AND drill.performed_within_cadence == true
+        AND mttc.recorded == true
+        AND (tier >= T3 IMPLIES mttc <= declared_bound)
+    evidence:
+      - schema: openaisf.evidence.containment_drill_plan.v1
+        plane: control
+        fields: [cadence, layers_covered, mttc_bound]
+      - schema: openaisf.evidence.containment_drill_result.v1
+        plane: data
+        fields: [drills, layers_exercised, mttc, failures, window]
+    failure_mode: >
+      Only 21 percent of enterprises report mature governance for autonomous
+      agents while 74 percent expect to be using them within two years, and
+      Gartner expects 40 percent of enterprises to demote or decommission agents
+      by 2027 over governance gaps found only after an incident. An untested kill
+      switch is discovered to be broken at the worst possible moment.
+    rationale: >
+      This is the control that turns the containment doctrine from a claim into a
+      number. Recording failures rather than retrying to a pass is what keeps the
+      metric honest; a mean time to contain derived only from successful attempts
+      measures nothing.
+    crosswalk:
+      iso_42001:
+        - {ref: A.6.2.4, strength: partial}
+      nist_ai_rmf:
+        - {ref: MANAGE-4.1, strength: partial}
+        - {ref: GOVERN-4.3, strength: partial}
+      eu_ai_act:
+        - {ref: "Art.9(6)", strength: partial}
+      csa_aicm:
+        - {ref: SEF-05, strength: partial}
+        - {ref: BCR-06, strength: partial}
+
+  - id: D16-C03
+    title: Detection is exercised by injected scenario and time to detect is recorded
+    domain: D16
+    level: core
+    chain_stage: prove
+    normative: >
+      Detectors required under D15 MUST be exercised by injecting simulated
+      rogue-agent behaviour at a declared cadence. The detector MUST fire, and the
+      elapsed time from injection to alert MUST be recorded as a mean time to
+      detect. Detectors that did not fire MUST be recorded as gaps.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [observe, respond]
+    applies_when:
+      system_class: [agentic]
+      autonomy: [">= tool_use"]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P365D
+        T3: P90D
+        T4: P30D
+      predicate: |
+        drill.cadence declared
+        AND detectors.exercised == detectors.required
+        AND mttd.recorded == true
+        AND (tier == T4 IMPLIES drill.independently_witnessed == true)
+    evidence:
+      - schema: openaisf.evidence.detection_drill_plan.v1
+        plane: control
+        fields: [cadence, scenarios, detectors_covered, mttd_bound, witness]
+      - schema: openaisf.evidence.detection_drill_result.v1
+        plane: data
+        fields: [scenarios_run, detectors_fired, detectors_silent, mttd, window]
+    failure_mode: >
+      A detector that has never fired is indistinguishable from a detector that
+      cannot fire. Misconfigured alert routing, a baseline learned during an
+      outage, or a canary placed where no agent could reach it all produce a
+      control that passes inspection and detects nothing.
+    rationale: >
+      Detection capability is the only thing standing between a bounded incident
+      and an unbounded one, and it is the capability most likely to have decayed
+      silently. Requiring independent witness at T4 is the point at which
+      self-reported drill results stop being sufficient.
+    crosswalk:
+      iso_42001:
+        - {ref: A.6.2.4, strength: partial}
+      nist_ai_rmf:
+        - {ref: MEASURE-1.3, strength: partial}
+        - {ref: MEASURE-2.13, strength: partial}
+      eu_ai_act:
+        - {ref: "Art.9(6)", strength: partial}
+      csa_aicm:
+        - {ref: SEF-06, strength: partial}
+
+  - id: D16-C04
+    title: Recovery restores a known state and rotates what was exposed
+    domain: D16
+    level: core
+    chain_stage: recover
+    normative: >
+      Following containment, the deployment MUST be able to restore the affected
+      system to a pinned known state, MUST rotate credentials reachable from the
+      affected context, and MUST record the blast radius established during
+      recovery.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [respond]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P90D
+        T4: P30D
+      predicate: |
+        rollback_target declared
+        AND rotation_scope declared
+        AND rollback.exercised_within_cadence == true
+    evidence:
+      - schema: openaisf.evidence.recovery_plan.v1
+        plane: control
+        fields: [rollback_target, rotation_scope, exercise_cadence]
+      - schema: openaisf.evidence.recovery_exercise.v1
+        plane: data
+        fields: [exercises, restored, rotation_completed, blast_radius, window]
+    failure_mode: >
+      Inability to revert an autonomous action is one of the three dominant agent
+      incident-response risks reported by enterprises. Where rollback was never
+      exercised, the recovery path discovered during an incident is usually a
+      restore that also reverts unrelated legitimate work, which is why it does
+      not get authorised.
+    rationale: >
+      Recovery depends on D04-C06 pinning, which is why rollback is expressed as
+      restoring to a pinned state rather than as a generic backup obligation.
+      Rotation scope is stated in advance because deciding it during an incident
+      reliably produces too narrow an answer.
+    crosswalk:
+      iso_42001: [A.6.2.6]
+      nist_ai_rmf: [MANAGE-4.3, MANAGE-2.4]
+      eu_ai_act: ["Art.20"]
+      csa_aicm: [BCR-01, BCR-02, SEF-07]
+
+  - id: D16-C05
+    title: Serious incidents are reported within the required window
+    domain: D16
+    level: core
+    chain_stage: recover
+    normative: >
+      The organisation MUST identify which incidents meet the reporting threshold
+      of each applicable regime, MUST report them within the required window, and
+      MUST record what was reported, to whom and when. Incidents that met a
+      threshold and were not reported MUST be recorded as such.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [respond]
+    applies_when:
+      eu_risk: [high, gpai, gpai_systemic]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P90D
+        T4: P30D
+      predicate: |
+        thresholds declared
+        AND reports.within_window == reports.required
+        AND unreported_qualifying_incidents == 0
+    evidence:
+      - schema: openaisf.evidence.reporting_thresholds.v1
+        plane: control
+        fields: [regime, threshold, window, recipient]
+      - schema: openaisf.evidence.incident_reports.v1
+        plane: data
+        fields: [incidents, qualifying, reported, late, unreported, window]
+    failure_mode: >
+      Reporting thresholds are assessed during an incident by people who are busy
+      containing it, and the assessment defaults to not reporting. The AI Act
+      requires providers of high-risk systems to report serious incidents, and
+      GPAI providers with systemic risk to track and report them; an undisclosed
+      qualifying incident is separately a disqualifying failure under D19.
+    rationale: >
+      Declaring the thresholds in advance is the whole control. It moves the
+      reporting decision out of the incident, where it is made under pressure by
+      the party with the strongest interest in the answer being no.
+    crosswalk:
+      iso_42001: [A.8.4, A.10.2]
+      nist_ai_rmf: [MANAGE-4.3, GOVERN-4.3]
+      eu_ai_act: ["Art.73", "Art.20", "Art.55(1)(c)", Art.21]
+      csa_aicm: [SEF-01, SEF-02, SEF-08]
+
+  - id: D16-C06
+    title: Incidents produce a recorded cause and a change, or a stated reason for neither
+    domain: D16
+    level: core
+    chain_stage: recover
+    normative: >
+      Every incident above a declared severity MUST result in a recorded cause and
+      either a change to the system or its controls, or a recorded decision that
+      no change is warranted with the reason. Closure without either MUST NOT
+      occur.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [respond, observe]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P90D
+        T4: P30D
+      predicate: |
+        severity_thresholds declared
+        AND incidents.closed_without_cause_or_decision == 0
+    evidence:
+      - schema: openaisf.evidence.incident_process.v1
+        plane: control
+        fields: [severity_thresholds, review_requirement]
+      - schema: openaisf.evidence.incident_outcomes.v1
+        plane: data
+        fields: [incidents, with_cause, with_change, no_change_justified,
+                 closed_bare, window]
+    failure_mode: >
+      Incidents close when the immediate symptom stops. Where no cause is recorded
+      the same incident recurs, and where recurrence is not visible the
+      organisation concludes its controls are working.
+    rationale: >
+      Permitting an explicit no-change decision matters. Requiring a change after
+      every incident produces defensive changes made to satisfy the process, and
+      those are a source of risk in their own right; requiring a stated decision
+      keeps the judgement visible without forcing the action.
+    crosswalk:
+      iso_42001: [A.8.4]
+      nist_ai_rmf: [MANAGE-4.2, MANAGE-4.3, GOVERN-4.3]
+      eu_ai_act: ["Art.9(2)(c)", "Art.20", "Art.72"]
+      csa_aicm: [SEF-09, SEF-10]

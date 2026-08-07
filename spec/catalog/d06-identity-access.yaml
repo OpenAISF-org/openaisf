@@ -1,0 +1,270 @@
+# OpenAISF catalog — D06 Identity, Access & Delegation
+#
+# Non-human identities already outnumber human users by roughly 45 to 1 in
+# enterprises and 144 to 1 in cloud-native estates. Agents are a third identity
+# class: not human, not service account, because their authentication carries a
+# delegation chain neither category captures.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D06
+name: Identity, Access & Delegation
+controls:
+  - id: D06-C01
+    title: Every agent holds its own identity, distinct from any human or service account
+    domain: D06
+    level: core
+    normative: >
+      An agent MUST authenticate using an identity issued to that agent, not a
+      borrowed human credential and not a shared service account. The identity
+      MUST be enumerable, attributable to a responsible owner, and revocable
+      independently of other identities.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [release, operate]
+    applies_when:
+      system_class: [agentic]
+      autonomy: [">= tool_use"]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        agents.with_own_identity == agents.total
+        AND agents.using_human_credentials == 0
+        AND agents.using_shared_service_accounts == 0
+    evidence:
+      - schema: openaisf.evidence.agent_identity_policy.v1
+        plane: control
+        fields: [issuer, scheme, owner_field]
+      - schema: openaisf.evidence.agent_identity_audit.v1
+        plane: data
+        fields: [agents, own_identity, borrowed, shared, window]
+    failure_mode: >
+      An agent acting on a borrowed human credential is indistinguishable in every
+      log from the human. Attribution fails, revocation removes the human's access
+      along with the agent's, and the delegation chain that D07-C03 depends on has
+      no first link to record.
+    rationale: >
+      This is the precondition for the whole agentic half of the catalog. A
+      capability manifest is bound to an identity, a budget is scoped to an
+      identity, a kill switch revokes an identity. Where the agent has none, every
+      one of those controls is enforcing against the wrong subject.
+    crosswalk:
+      iso_42001: [A.3.2, A.9.4]
+      nist_ai_rmf: [GOVERN-2.1, MANAGE-2.2]
+      eu_ai_act: ["Art.14(1)"]
+      csa_aicm: [IAM-01, IAM-03, IAM-05]
+      mcp_38: [MCP-01]
+      mitre_atlas: [AML.T0012, AML.T0073, AML.T0074]
+
+  - id: D06-C02
+    title: Authorisation is evaluated at every action, not only at registration
+    domain: D06
+    level: core
+    normative: >
+      Authorisation MUST be evaluated at the point of each action an agent takes,
+      against the identity performing it and the resource being reached.
+      Registration or initial consent MUST NOT be treated as standing
+      authorisation for subsequent actions.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [release, operate]
+    applies_when:
+      system_class: [agentic]
+      autonomy: [">= tool_use"]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        authorisation.evaluated_per_action == true
+        AND (actions.total > 0 IMPLIES authorisation.decisions > 0)
+    evidence:
+      - schema: openaisf.evidence.authorisation_policy.v1
+        plane: control
+        fields: [evaluation_point, policy_engine]
+      - schema: openaisf.evidence.authorisation_decisions.v1
+        plane: data
+        fields: [actions, decisions, denied, window]
+    failure_mode: >
+      The missing layer in agent identity is runtime authorisation that checks
+      every action rather than only registration. Where authorisation is granted
+      once at connection, a compromised session inherits the full grant for its
+      lifetime and nothing re-examines whether each individual action was ever
+      intended.
+    rationale: >
+      Per-action evaluation is what makes the capability manifest in D07-C01
+      enforceable rather than advisory, and it produces the decision stream that
+      D15-C02 detects violations in. Registration-time authorisation cannot
+      distinguish the agent's tenth call from its ten-thousandth.
+    crosswalk:
+      iso_42001:
+        - {ref: A.9.4, strength: partial}
+      nist_ai_rmf:
+        - {ref: MANAGE-2.2, strength: partial}
+      csa_aicm:
+        - {ref: IAM-06, strength: partial}
+        - {ref: IAM-07, strength: partial}
+      mcp_38: [MCP-04, MCP-05]
+
+  - id: D06-C03
+    title: The originating human principal is resolvable at every hop
+    domain: D06
+    level: core
+    normative: >
+      Every action taken by an agent MUST be traceable to the human principal on
+      whose authority the chain began, at any depth of delegation. Where the
+      principal cannot be resolved, the action MUST be denied at T4 and recorded
+      as a finding at T3.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [operate, observe]
+    applies_when:
+      system_class: [agentic]
+      autonomy: [">= planning"]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        principal_propagation.enabled == true
+        AND (tier == T4 IMPLIES unresolved_principal_actions == 0)
+    evidence:
+      - schema: openaisf.evidence.principal_propagation.v1
+        plane: control
+        fields: [scheme, hops_supported, deny_on_unresolved]
+      - schema: openaisf.evidence.principal_resolution.v1
+        plane: data
+        fields: [actions, resolved, unresolved, denied, window]
+    failure_mode: >
+      No deployed protocol can cryptographically prove which human principal
+      authorised which specific agent to perform which action at the third or
+      fourth hop. Where the chain is not carried explicitly, the authority
+      exercised at depth is authority nobody issued and nobody can later disclaim.
+    rationale: >
+      Attribution is the property that makes every accountability control in D01
+      reach the actions that actually happened. Denying rather than logging at T4
+      is the point at which an unattributable action stops being an audit gap and
+      becomes an unacceptable risk.
+    crosswalk:
+      iso_42001:
+        - {ref: A.3.2, strength: partial}
+        - {ref: A.6.2.8, strength: partial}
+      nist_ai_rmf:
+        - {ref: GOVERN-2.1, strength: partial}
+        - {ref: MEASURE-2.8, strength: partial}
+      csa_aicm:
+        - {ref: IAM-10, strength: partial}
+        - {ref: LOG-07, strength: partial}
+      mcp_38: [MCP-04, MCP-06]
+
+  - id: D06-C04
+    title: Non-human identities are lifecycle-managed and expire
+    domain: D06
+    level: core
+    normative: >
+      Identities issued to agents and AI services MUST have a recorded owner, a
+      declared maximum lifetime, and an automatic expiry. Identities that are
+      unused for a declared period MUST be disabled.
+    rfc2119: MUST
+    roles: [operator, deployer]
+    lifecycle: [operate, retire]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P30D
+        T4: P7D
+      predicate: |
+        identities.with_owner == identities.total
+        AND identities.past_max_lifetime == 0
+        AND dormant_identities.disabled == true
+    evidence:
+      - schema: openaisf.evidence.nhi_policy.v1
+        plane: control
+        fields: [max_lifetime, dormancy_period, owner_required]
+      - schema: openaisf.evidence.nhi_inventory.v1
+        plane: data
+        fields: [total, ownerless, expired, dormant_active, window]
+    failure_mode: >
+      Non-human identities outnumber humans by 45 to 1 on average and 144 to 1 in
+      cloud-native estates, and they are created faster than any joiner-mover-
+      leaver process handles. Agent identities created for an experiment persist
+      for years with their original grants intact and no owner to ask.
+    rationale: >
+      Expiry by default inverts the usual problem: instead of needing to find and
+      remove stale identities, the estate cleans itself and anything still needed
+      is deliberately renewed. It is the only approach that scales at a 144 to 1
+      ratio.
+    crosswalk:
+      iso_42001: [A.3.2]
+      nist_ai_rmf: [GOVERN-1.7, MANAGE-2.4]
+      csa_aicm: [IAM-02, IAM-12, IAM-15]
+      mitre_atlas: [AML.T0021, AML.T0012]
+
+  - id: D06-C05
+    title: Human access to AI systems and their data is least-privilege and reviewed
+    domain: D06
+    level: core
+    normative: >
+      Human access to model configuration, prompts, training data, traces and
+      conformance evidence MUST be granted on least privilege and reviewed at a
+      declared interval. Access to conformance evidence MUST be separable from
+      access to modify the system it describes.
+    rfc2119: MUST
+    roles: [deployer, operator, provider]
+    lifecycle: [operate]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P90D
+        T4: P30D
+      predicate: |
+        access_review.performed_within_interval == true
+        AND evidence_write_access.separated_from_system_write == true
+    evidence:
+      - schema: openaisf.evidence.access_policy.v1
+        plane: control
+        fields: [roles, review_interval, separation_of_duty]
+      - schema: openaisf.evidence.access_review.v1
+        plane: data
+        fields: [reviewed, revoked, exceptions, window]
+    failure_mode: >
+      Where the same people who can change a system can also change the evidence
+      about it, the evidence stops being independent of the claim. This is the
+      identity-layer form of the producer-integrity problem in D19-C02, and it is
+      the one an ordinary access review would catch if it were looking for it.
+    rationale: >
+      The separation-of-duty requirement is the part specific to this framework.
+      Ordinary least privilege is already required everywhere; separating evidence
+      from system authority is what stops conformance being self-certified in the
+      most literal sense.
+    crosswalk:
+      iso_42001: [A.4.6, A.9.2]
+      nist_ai_rmf: [GOVERN-2.1, GOVERN-3.2]
+      csa_aicm: [IAM-13, IAM-16, IAM-17]
+      mitre_atlas: [AML.T0012, AML.T0055]

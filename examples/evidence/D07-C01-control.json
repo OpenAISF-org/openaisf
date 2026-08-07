@@ -1,0 +1,27 @@
+{
+  "openaisf_evidence": "1.0",
+  "subject": {
+    "system_id": "urn:openaisf:system:acme-support-agent",
+    "artefact_digest": "sha256:1f0c9a2b3d4e5f60"
+  },
+  "control": "D07-C01",
+  "plane": "control",
+  "window": {
+    "from": "2026-08-06T13:16:54+00:00",
+    "to": "2026-08-07T13:16:54+00:00"
+  },
+  "observations": {
+    "enabled": true,
+    "default_policy": "deny",
+    "manifest_signed": true
+  },
+  "producer": {
+    "adapter": "openaisf-adapter-reference-gateway",
+    "version": "1.0.0"
+  },
+  "signature": {
+    "scheme": "sha256-digest",
+    "value": "319013a1ebd4d95197e25eb24997f7a9cbaa00c921c4d2a8ee710b4497ed0a39",
+    "key_id": "reference-gateway"
+  }
+}

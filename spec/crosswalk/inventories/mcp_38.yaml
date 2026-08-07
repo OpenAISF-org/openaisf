@@ -1,0 +1,105 @@
+# MCP-38: A Comprehensive Threat Taxonomy for Model Context Protocol Systems (v1.0)
+# Shen, Toyoda and Leung — arXiv:2603.18063.
+# 38 empirically validated threats in five risk categories:
+#   I   Semantic Manipulation & Poisoning
+#   II  Prompt Injection & Boundary Breaking
+#   III Identity, Trust & Supply Chain
+#   IV  Access Control & Logic Drift
+#   V   Data Exfiltration & Resource Abuse
+# Threat identifiers and names only.
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+regime: mcp_38
+name: MCP-38 Threat Taxonomy for Model Context Protocol Systems
+version: "1.0"
+source: "https://arxiv.org/abs/2603.18063"
+licence: "CC-BY-4.0"
+licence_url: "https://creativecommons.org/licenses/by/4.0/"
+attribution: >
+  MCP-38: A Comprehensive Threat Taxonomy for Model Context Protocol Systems
+  (v1.0), Yi Ting Shen, Kentaroh Toyoda and Alex Leung, arXiv:2603.18063,
+  licensed CC BY 4.0. Threat names are reproduced under that licence.
+regime_kind: threat
+reproduction: descriptive
+declared_total: 38
+requirements:
+  # Category I — Semantic Manipulation & Poisoning
+  - ref: MCP-10
+    text_summary: Tool description poisoning steering LLM tool selection
+  - ref: MCP-11
+    text_summary: Full schema poisoning via nested inputSchema description fields
+  - ref: MCP-12
+    text_summary: Resource content poisoning through external fetched content
+  - ref: MCP-13
+    text_summary: Tool shadowing and name spoofing causing preferential invocation
+  - ref: MCP-14
+    text_summary: Cross-server tool shadowing overriding trusted tools
+  - ref: MCP-15
+    text_summary: Preference manipulation attack biasing LLM tool selection
+  # Category II — Prompt Injection & Boundary Breaking
+  - ref: MCP-07
+    text_summary: Command injection through unvalidated LLM output to a shell
+  - ref: MCP-08
+    text_summary: File system exposure and path traversal beyond the sandbox
+  - ref: MCP-09
+    text_summary: Traditional web vulnerabilities including SSRF and XSS
+  - ref: MCP-17
+    text_summary: Parasitic toolchain and connector chaining to compose exfiltration
+  - ref: MCP-19
+    text_summary: Direct prompt injection through user-controlled input
+  - ref: MCP-20
+    text_summary: Indirect prompt injection through data consumed by MCP tools
+  - ref: MCP-37
+    text_summary: Sandbox escape from improperly isolated code-execution tools
+  # Category III — Identity, Trust & Supply Chain
+  - ref: MCP-01
+    text_summary: Identity spoofing and improper server authentication
+  - ref: MCP-02
+    text_summary: Credential theft and token theft from agent-accessible stores
+  - ref: MCP-03
+    text_summary: Replay attacks and session hijacking without nonce or binding
+  - ref: MCP-16
+    text_summary: Rug pull and dynamic behaviour change after initial approval
+  - ref: MCP-18
+    text_summary: Shadow MCP servers registered without user knowledge
+  - ref: MCP-26
+    text_summary: Supply chain compromise through malicious server packages
+  - ref: MCP-27
+    text_summary: Missing integrity verification of tool manifests after approval
+  - ref: MCP-28
+    text_summary: Man-in-the-middle and transport tampering of JSON-RPC messages
+  - ref: MCP-29
+    text_summary: Protocol gaps and weak transport security enabling spoofing
+  - ref: MCP-30
+    text_summary: Insecure stdio descriptor handling allowing stream injection
+  - ref: MCP-31
+    text_summary: MCP endpoint and DNS rebinding redirecting established trust
+  # Category IV — Access Control & Logic Drift
+  - ref: MCP-04
+    text_summary: Privilege escalation and confused deputy through MCP proxies
+  - ref: MCP-05
+    text_summary: Excessive permissions and overexposure beyond required scope
+  - ref: MCP-06
+    text_summary: Improper multitenancy and isolation failure across sessions
+  - ref: MCP-21
+    text_summary: Overreliance on probabilistic LLM safeguards for security logic
+  - ref: MCP-22
+    text_summary: Insecure human-in-the-loop bypass via misleading descriptions
+  - ref: MCP-23
+    text_summary: Consent and approval fatigue conditioning users to approve
+  - ref: MCP-35
+    text_summary: Planning and agent logic drift toward attacker-supplied sub-goals
+  - ref: MCP-36
+    text_summary: Multi-agent context hijacking poisoning downstream reasoning
+  # Category V — Data Exfiltration & Resource Abuse
+  - ref: MCP-24
+    text_summary: Data exfiltration via tool output to attacker-controlled endpoints
+  - ref: MCP-25
+    text_summary: Privacy inversion through aggregation of non-sensitive outputs
+  - ref: MCP-32
+    text_summary: Unrestricted network access and lateral movement from a server
+  - ref: MCP-33
+    text_summary: Resource exhaustion and denial of wallet through crafted chains
+  - ref: MCP-34
+    text_summary: Tool manifest reconnaissance mapping target capabilities
+  - ref: MCP-38
+    text_summary: Invisible agent activity leaving no recoverable audit evidence

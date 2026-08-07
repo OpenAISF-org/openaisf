@@ -1,0 +1,440 @@
+# OpenAISF catalog — D05 Security & Adversarial Resistance
+#
+# Governed by principle P2. Prompt injection is unsolved at the model layer:
+# published defences are defeated by adaptive attacks at rates above 85 to 90
+# percent, and OpenAI, Anthropic and Google DeepMind all concede the point. No
+# control in this domain requires prevention of injection or jailbreak.
+#
+# What they require instead is that the architecture does not depend on the
+# model refusing, that measurement is real, and that a successful attack reaches
+# nothing worth having.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D05
+name: Security & Adversarial Resistance
+controls:
+  - id: D05-C01
+    title: Untrusted content is isolated from privileged context
+    domain: D05
+    level: core
+    normative: >
+      Content originating outside the trust boundary MUST be marked as untrusted
+      for the whole of its life in the system, and MUST NOT be able to reach a
+      context that carries authority to act. Security decisions MUST NOT depend on
+      the model distinguishing instructions from data.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [build, release, operate]
+    applies_when:
+      system_class: [llm, agentic]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        trust_boundary declared
+        AND untrusted_content.tracked == true
+        AND privileged_context.accepts_untrusted == false
+    evidence:
+      - schema: openaisf.evidence.trust_boundary.v1
+        plane: control
+        fields: [sources, marking_scheme, privileged_contexts]
+      - schema: openaisf.evidence.provenance_tracking.v1
+        plane: data
+        fields: [evaluated, untrusted_reaching_privileged, blocked, window]
+    failure_mode: >
+      Large language models process input as a single token sequence and there is
+      no reliable mechanism to enforce privilege boundaries between a system
+      prompt, a user query and retrieved content. Any defence expressed as a
+      prompt instruction can itself be overridden, which is why the model layer
+      cannot be the place this is solved.
+    rationale: >
+      This is the architectural form of the containment doctrine. It does not ask
+      anyone to stop injection; it asks that the system be built so a successful
+      injection lands somewhere without authority. That reframing is the only one
+      the evidence supports, and it is also the only one a team can actually
+      implement and demonstrate.
+    crosswalk:
+      iso_42001:
+        - {ref: A.6.2.2, strength: partial}
+        - {ref: A.6.2.6, strength: partial}
+      nist_ai_rmf:
+        - {ref: MEASURE-2.7, strength: partial}
+        - {ref: MANAGE-2.2, strength: partial}
+      eu_ai_act:
+        - {ref: "Art.15(5)", strength: partial}
+      csa_aicm:
+        - {ref: AIS-03, strength: partial}
+      owasp_llm_2025: [LLM01]
+      owasp_llm_2026: [LLM01]
+      mitre_atlas: [AML.T0051, AML.T0051.000, AML.T0051.001, AML.T0051.002, AML.T0093, AML.T0094, AML.T0080.000, AML.T0080.001, AML.T0092, AML.T0061]
+      mcp_38: [MCP-19, MCP-20, MCP-21]
+
+  - id: D05-C02
+    title: Model output is treated as untrusted by every downstream consumer
+    domain: D05
+    level: core
+    normative: >
+      Output from a model MUST be validated, encoded or sanitised according to the
+      context that consumes it before use. Model output MUST NOT be passed to an
+      interpreter, query engine, shell, browser or rendering surface without
+      handling appropriate to that sink.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [build, operate]
+    applies_when:
+      system_class: [llm, agentic]
+    tiers:
+      T1: recommended
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T1: P90D
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        sinks.enumerated == true
+        AND sinks.without_handling == 0
+    evidence:
+      - schema: openaisf.evidence.output_sinks.v1
+        plane: control
+        fields: [sink, handling, encoding]
+      - schema: openaisf.evidence.output_handling.v1
+        plane: data
+        fields: [outputs, handled, unhandled_sinks, window]
+    failure_mode: >
+      CVE-2025-6514 demonstrated command injection where unvalidated model output
+      reached a shell-invoking tool, giving remote code execution. The same
+      pattern produces cross-site scripting through rendered responses and
+      injection through generated queries; ATLAS tracks generated malicious
+      commands and response rendering as distinct techniques.
+    rationale: >
+      This is ordinary output-handling discipline applied to a novel source, and
+      it is the one control in this domain that classical application security
+      already knows how to do. Enumerating sinks rather than sanitising centrally
+      is deliberate: correct handling depends entirely on the consumer, and a
+      single sanitiser at the model boundary is wrong for every sink at once.
+    crosswalk:
+      iso_42001: [A.6.2.2]
+      nist_ai_rmf: [MEASURE-2.7]
+      eu_ai_act: ["Art.15(1)"]
+      csa_aicm: [AIS-01, AIS-02]
+      owasp_llm_2025: [LLM05]
+      owasp_llm_2026: [LLM10]
+      mitre_atlas: [AML.T0077, AML.T0102, AML.T0050, AML.T0067, AML.T0067.000, AML.T0011.003, AML.T0100]
+      mcp_38: [MCP-07, MCP-09]
+
+  - id: D05-C03
+    title: No security property depends on the confidentiality of the system prompt
+    domain: D05
+    level: core
+    normative: >
+      The system MUST NOT rely on instructions, context or configuration held in
+      the prompt remaining hidden. Credentials, authorisation logic and access
+      decisions MUST NOT be expressed in prompt content.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [build, release]
+    applies_when:
+      system_class: [llm, agentic]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: asserted
+      planes: [control]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+    evidence:
+      - schema: openaisf.evidence.prompt_secrets_scan.v1
+        plane: control
+        fields: [scanned, secrets_found, authz_logic_found]
+    failure_mode: >
+      System prompt extraction is a documented and reliable technique, and the
+      2026 OWASP list renamed and expanded the risk to hidden context exposure
+      precisely because the problem is broader than the system prompt itself.
+      Treating prompt content as confidential is a bet that has repeatedly lost.
+    rationale: >
+      Written as a prohibition rather than a defence because there is no reliable
+      defence. Assuming the prompt is public costs nothing when it is not, and
+      costs everything less when it is. This is the cheapest possible application
+      of principle P2.
+    crosswalk:
+      iso_42001: [A.6.2.2]
+      nist_ai_rmf: [MEASURE-2.7]
+      csa_aicm: [AIS-04, CEK-01]
+      owasp_llm_2025: [LLM07]
+      owasp_llm_2026: [LLM08]
+      mitre_atlas: [AML.T0056, AML.T0069, AML.T0069.000, AML.T0069.001, AML.T0069.002, AML.T0084.000, AML.T0084.002]
+
+  - id: D05-C04
+    title: Exposure to extraction, inversion and membership inference is assessed
+    domain: D05
+    level: core
+    normative: >
+      Where a model is reachable through an inference interface, the organisation
+      MUST assess its exposure to model extraction, model inversion and training
+      data membership inference, and MUST record the mitigations applied.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [evaluate, operate]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.extraction_assessment.v1
+        plane: control
+        fields: [interface, extraction, inversion, membership_inference, mitigations]
+    failure_mode: >
+      An inference API is a slow but complete read primitive over the training
+      corpus and the model itself. ATLAS catalogues exfiltration via the inference
+      API with membership inference, inversion and extraction as sub-techniques,
+      all reachable without any access beyond ordinary use.
+    rationale: >
+      Verified by attestation rather than telemetry because the exposure is a
+      property of the interface design, not of observable traffic. A system with
+      no rate limits and unbounded query volume is exposed whether or not anyone
+      has yet exploited it, which is a judgement a person has to make.
+    crosswalk:
+      iso_42001: [A.6.2.4]
+      nist_ai_rmf: [MEASURE-2.7, MEASURE-2.10]
+      eu_ai_act: ["Art.15(5)"]
+      csa_aicm: [MDS-06, MDS-07]
+      owasp_llm_2025: [LLM02]
+      owasp_llm_2026: [LLM02]
+      mitre_atlas: [AML.T0024, AML.T0024.000, AML.T0024.001, AML.T0024.002, AML.T0040, AML.T0044]
+
+  - id: D05-C05
+    title: Adversarial robustness is measured against adaptive attacks, not fixed suites
+    domain: D05
+    level: core
+    normative: >
+      Adversarial testing MUST include attacks adapted to the deployed defences.
+      A result obtained only against a fixed public benchmark MUST NOT be reported
+      as a robustness measure, and reported figures MUST state the attack budget
+      under which they were obtained.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [evaluate]
+    applies_when:
+      system_class: [llm, agentic, classical_ml, cv, biometric]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P90D
+        T4: P30D
+      predicate: |
+        testing.includes_adaptive == true
+        AND results.state_attack_budget == true
+        AND results.bound_to_artefact_digest == true
+    evidence:
+      - schema: openaisf.evidence.adversarial_test_plan.v1
+        plane: control
+        fields: [attack_classes, adaptive, budget]
+      - schema: openaisf.evidence.adversarial_result.v1
+        plane: data
+        fields: [artefact_digest, attack_success_rate, budget, window]
+    failure_mode: >
+      Layered defences reduce attack success from around 73 percent to under 9
+      percent against fixed benchmarks while adaptive attacks still defeat the
+      same defences at over 85 percent, and one 2026 evaluation defeated all
+      twelve published defences at over 90 percent. A benchmark figure reported
+      without an adaptive result is therefore not merely optimistic; it is
+      measuring a different thing.
+    rationale: >
+      This control exists because the alternative is that every conformant system
+      publishes a robustness number that is off by an order of magnitude. Stating
+      the attack budget is what makes two figures comparable, and binding to the
+      artefact digest is what stops a result outliving the model it described.
+    crosswalk:
+      iso_42001: [A.6.2.4]
+      nist_ai_rmf: [MEASURE-2.7, MEASURE-1.1, MEASURE-1.3]
+      eu_ai_act: ["Art.15(4)", "Art.15(5)", "Art.55(1)(a)"]
+      csa_aicm: [MDS-08, TVM-03]
+      owasp_llm_2025: [LLM01]
+      owasp_llm_2026: [LLM01]
+      mitre_atlas: [AML.T0043, AML.T0043.000, AML.T0043.001, AML.T0043.002, AML.T0043.003,
+                    AML.T0015, AML.T0054, AML.T0042, AML.T0031]
+
+  - id: D05-C06
+    title: Execution environments for model-directed code are isolated from the host
+    domain: D05
+    level: core
+    normative: >
+      Where a system executes code produced or selected by a model, execution MUST
+      occur in an environment isolated from the host and from other tenants, with
+      no ambient credentials and no path to the control plane.
+    rfc2119: MUST
+    roles: [operator, deployer]
+    lifecycle: [release, operate]
+    applies_when:
+      system_class: [agentic]
+      autonomy: [">= tool_use"]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        isolation.declared == true
+        AND ambient_credentials.present == false
+        AND escape_attempts.detected_and_reviewed == true
+    evidence:
+      - schema: openaisf.evidence.isolation_policy.v1
+        plane: control
+        fields: [mechanism, tenancy, ambient_credentials]
+      - schema: openaisf.evidence.isolation_events.v1
+        plane: data
+        fields: [executions, escape_attempts, tenancy_violations, window]
+    failure_mode: >
+      The Hugging Face intrusion escalated from code execution on a processing
+      worker to node-level access to cloud and cluster credentials. ATLAS tracks
+      escape to host and sandbox evasion as techniques in their own right, and
+      MCP-38 lists sandbox escape as a validated threat backed by CVE-2025-6514.
+    rationale: >
+      Isolation is the control that decides whether an injection is an incident or
+      a footnote. The prohibition on ambient credentials matters as much as the
+      isolation itself, because an isolated sandbox holding a cloud credential is
+      not isolated in any sense that matters.
+    crosswalk:
+      iso_42001: [A.4.5, A.6.2.5]
+      nist_ai_rmf: [MANAGE-2.2]
+      eu_ai_act: ["Art.15(1)"]
+      csa_aicm: [I&S-06, IAM-14]
+      mitre_atlas: [AML.T0105, AML.T0097, AML.T0050, AML.T0072, AML.T0037, AML.T0075, AML.T0089, AML.T0112, AML.T0112.001]
+      mcp_38: [MCP-37, MCP-06, MCP-08]
+
+  - id: D05-C07
+    title: Authentication material used by AI components is protected and short-lived
+    domain: D05
+    level: core
+    normative: >
+      Session tokens, API keys and other authentication material used by or
+      reachable from AI components MUST be bound to a principal, MUST have a
+      declared maximum lifetime, and MUST be revocable independently of the
+      session that holds them.
+    rfc2119: MUST
+    roles: [operator, deployer]
+    lifecycle: [release, operate]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        tokens.bound_to_principal == true
+        AND tokens.max_lifetime declared
+        AND tokens.independently_revocable == true
+    evidence:
+      - schema: openaisf.evidence.token_policy.v1
+        plane: control
+        fields: [binding, max_lifetime, revocation]
+      - schema: openaisf.evidence.token_audit.v1
+        plane: data
+        fields: [issued, max_observed_lifetime, revocations, window]
+    failure_mode: >
+      MCP sessions lack built-in nonce mechanisms, token binding and cryptographic
+      freshness guarantees, so captured tokens and authorisation codes can be
+      replayed. Where a token outlives the session and is not independently
+      revocable, containment under D16 terminates the session and leaves the
+      attacker's access intact.
+    rationale: >
+      Independent revocability is the requirement that connects this to
+      containment. It is routinely absent, and its absence is only discovered
+      during an incident, at the point where it is unfixable.
+    crosswalk:
+      iso_42001: [A.4.5]
+      nist_ai_rmf: [MANAGE-2.2]
+      csa_aicm: [IAM-08, IAM-09, CEK-04]
+      mitre_atlas: [AML.T0091, AML.T0091.000, AML.T0091.001, AML.T0113, AML.T0012, AML.T0090]
+      mcp_38: [MCP-03, MCP-02, MCP-28, MCP-29, MCP-30, MCP-31]
+
+  - id: D05-C08
+    title: Known AI-specific vulnerabilities are tracked and remediated on a clock
+    domain: D05
+    level: core
+    normative: >
+      The organisation MUST track vulnerabilities affecting the AI components it
+      uses, including model serving stacks, agent frameworks, tool servers and
+      inference libraries, and MUST remediate them within declared timeframes by
+      severity.
+    rfc2119: MUST
+    roles: [deployer, operator, provider]
+    lifecycle: [operate, observe]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        vulnerability_feed declared
+        AND remediation_sla declared
+        AND overdue_critical == 0
+    evidence:
+      - schema: openaisf.evidence.vuln_policy.v1
+        plane: control
+        fields: [sources, sla_by_severity]
+      - schema: openaisf.evidence.vuln_state.v1
+        plane: data
+        fields: [open, overdue, critical_overdue, window]
+    failure_mode: >
+      AI serving and agent tooling moves faster than the patch discipline applied
+      to it, and remote code execution flaws that bypass documented safety
+      controls have shipped in widely used libraries. Treating these as ordinary
+      application dependencies is what leaves them unpatched.
+    rationale: >
+      Deliberately conventional. The novelty in this domain is elsewhere; this
+      control exists because AI components are frequently excluded from the
+      vulnerability management programme that already covers everything else the
+      organisation runs.
+    crosswalk:
+      iso_42001: [A.6.2.6]
+      nist_ai_rmf: [MANAGE-2.3, MEASURE-3.1]
+      eu_ai_act: ["Art.15(1)", "Art.55(1)(d)"]
+      csa_aicm: [TVM-01, TVM-02, TVM-05]
+      owasp_llm_2025: [LLM03]
+      owasp_llm_2026: [LLM04]
+      mitre_atlas: [AML.T0049, AML.T0078, AML.T0106, AML.T0107]

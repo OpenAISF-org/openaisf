@@ -1,0 +1,209 @@
+# OpenAISF catalog — D09 Robustness, Reliability & Fallback
+#
+# How the system behaves when it is wrong, degraded or overloaded. Accuracy is
+# a property of a benchmark; reliability is a property of a deployment.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D09
+name: Robustness, Reliability & Fallback
+controls:
+  - id: D09-C01
+    title: Declared accuracy is stated with its metric, dataset and conditions
+    domain: D09
+    level: core
+    normative: >
+      Where an accuracy or performance level is declared to users or in
+      documentation, it MUST be accompanied by the metric used, the dataset it was
+      measured on, and the deployment conditions assumed. A bare figure MUST NOT
+      be published.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [evaluate, release]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.accuracy_declaration.v1
+        plane: control
+        fields: [metric, dataset, conditions, value, artefact_digest]
+    failure_mode: >
+      A single accuracy figure quoted without conditions is read by deployers as a
+      guarantee for their context. The deployer then relies on it in their own
+      risk assessment, and the assumption propagates into decisions the provider
+      never contemplated.
+    rationale: >
+      The AI Act requires accuracy levels and metrics to be declared in the
+      instructions for use, which only means something if the conditions travel
+      with the number. This control is what makes D13 and D02 downstream of a
+      claim that can be checked.
+    crosswalk:
+      iso_42001: [A.6.2.7, A.8.2]
+      nist_ai_rmf: [MEASURE-2.5, MEASURE-2.3]
+      eu_ai_act: ["Art.15(3)", "Art.13(3)"]
+      csa_aicm: [MDS-12]
+
+  - id: D09-C02
+    title: The system degrades to a defined safe behaviour rather than failing open
+    domain: D09
+    level: core
+    normative: >
+      For each dependency whose failure the system can survive, a defined
+      degraded behaviour MUST be specified and implemented. Where a safety-
+      relevant control is unavailable, the system MUST refuse rather than proceed
+      unprotected.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [build, release, operate]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        degraded_modes declared
+        AND safety_control_unavailable_proceeds == 0
+    evidence:
+      - schema: openaisf.evidence.degradation_policy.v1
+        plane: control
+        fields: [dependency, degraded_behaviour, fail_closed_controls]
+      - schema: openaisf.evidence.degradation_events.v1
+        plane: data
+        fields: [events, degraded_correctly, proceeded_unprotected, window]
+    failure_mode: >
+      Guardrails, classifiers and policy engines are usually deployed as
+      additional services, and services fail. Where the failure mode is to pass
+      traffic through unfiltered, the control's availability becomes the
+      determinant of whether it applies, and outages become the only times it
+      does not.
+    rationale: >
+      Fail-closed on safety controls and graceful degradation elsewhere is the
+      distinction that matters. Requiring everything to fail closed makes systems
+      brittle enough that operators disable the controls; requiring it only where
+      safety depends on it is both achievable and defensible.
+    crosswalk:
+      iso_42001: [A.6.2.6]
+      nist_ai_rmf: [MEASURE-2.6, MANAGE-2.2]
+      eu_ai_act: ["Art.15(4)"]
+      csa_aicm: [BCR-03, BCR-04]
+      owasp_llm_2025: [LLM10]
+      owasp_llm_2026: [LLM06]
+      mitre_atlas: [AML.T0029, AML.T0046]
+
+  - id: D09-C03
+    title: Ungrounded output is constrained where correctness matters
+    domain: D09
+    level: core
+    normative: >
+      Where output is relied upon for a decision, the system MUST constrain
+      unsupported assertions by grounding, citation to retrievable sources,
+      abstention, or explicit uncertainty. Citations MUST be verified to resolve
+      to the content they claim.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [build, operate]
+    applies_when:
+      system_class: [llm, agentic]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        grounding_strategy declared
+        AND citations.verified_resolvable == true
+    evidence:
+      - schema: openaisf.evidence.grounding_policy.v1
+        plane: control
+        fields: [strategy, abstention_policy, citation_verification]
+      - schema: openaisf.evidence.grounding_metrics.v1
+        plane: data
+        fields: [responses, grounded, abstained, unresolvable_citations, window]
+    failure_mode: >
+      Misinformation rose from ninth to seventh place in the 2026 OWASP list on
+      the strength of the incident record rather than the community vote. ATLAS
+      tracks published hallucinated entities and trusted output component
+      manipulation, including fabricated citations, as distinct techniques: a
+      citation that does not resolve is more damaging than no citation, because it
+      transfers the reader's trust to something that was never checked.
+    rationale: >
+      Verifying that citations resolve is cheap, mechanical and catches the
+      specific failure that most reliably converts a plausible wrong answer into
+      an acted-upon one. Abstention is listed as an acceptable strategy because
+      for some systems it is the correct one.
+    crosswalk:
+      iso_42001: [A.6.2.4]
+      nist_ai_rmf: [MEASURE-2.9, MEASURE-2.5]
+      eu_ai_act: ["Art.15(1)", "Art.13(1)"]
+      csa_aicm: [MDS-13]
+      owasp_llm_2025: [LLM09]
+      owasp_llm_2026: [LLM07]
+      mitre_atlas: [AML.T0060, AML.T0062, AML.T0067, AML.T0067.000]
+
+  - id: D09-C04
+    title: Load and rate behaviour is bounded at the interface
+    domain: D09
+    level: core
+    normative: >
+      Inference interfaces MUST enforce rate and concurrency limits per
+      authenticated principal, and MUST bound the resource cost of a single
+      request. Limits MUST be enforced at the interface rather than relied upon
+      downstream.
+    rfc2119: MUST
+    roles: [provider, operator]
+    lifecycle: [release, operate]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        limits.declared_per_principal == true
+        AND (traffic.requests > 0 IMPLIES limiter.decisions > 0)
+    evidence:
+      - schema: openaisf.evidence.rate_policy.v1
+        plane: control
+        fields: [per_principal_limits, concurrency, max_request_cost]
+      - schema: openaisf.evidence.rate_enforcement.v1
+        plane: data
+        fields: [requests, throttled, rejected, window]
+    failure_mode: >
+      Unbounded consumption climbed from tenth to sixth in the 2026 OWASP list,
+      reframed around cost asymmetry and the resource drain of reasoning models.
+      A single crafted request to a reasoning model can cost orders of magnitude
+      more than an ordinary one, which makes request count a poor proxy for load.
+    rationale: >
+      Bounding the cost of an individual request, not only the rate, is what makes
+      this effective against reasoning-model economics. The same limiter produces
+      the evidence D20 needs for consumption accounting.
+    crosswalk:
+      iso_42001: [A.4.5]
+      nist_ai_rmf: [MANAGE-2.1, MEASURE-2.6]
+      eu_ai_act: ["Art.15(1)"]
+      csa_aicm: [I&S-03, AIS-06]
+      owasp_llm_2025: [LLM10]
+      owasp_llm_2026: [LLM06]
+      mitre_atlas: [AML.T0034, AML.T0034.000, AML.T0034.001, AML.T0029, AML.T0047, AML.T0096, AML.T0114]

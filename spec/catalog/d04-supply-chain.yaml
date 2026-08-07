@@ -1,0 +1,323 @@
+# OpenAISF catalog — D04 Model & Supply-Chain Integrity
+#
+# The AI supply chain differs from the software supply chain in one way that
+# matters: a model is an opaque artefact whose behaviour cannot be reviewed by
+# reading it. Integrity therefore has to be established by provenance and
+# signature rather than by inspection.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D04
+name: Model & Supply-Chain Integrity
+controls:
+  - id: D04-C01
+    title: Every model in use has recorded provenance and a verified signature
+    domain: D04
+    level: core
+    normative: >
+      For every model used, the organisation MUST record its origin, version and
+      digest, and MUST verify a signature or equivalent provenance attestation
+      before first use. A model whose provenance cannot be verified MUST NOT be
+      promoted beyond a sand-run containment tier.
+    rfc2119: MUST
+    roles: [provider, deployer, supplier]
+    lifecycle: [source, release]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        models.with_recorded_provenance == models.total
+        AND models.signature_verified == models.total
+    evidence:
+      - schema: openaisf.evidence.model_inventory.v1
+        plane: control
+        fields: [model, origin, version, digest, signature_scheme]
+      - schema: openaisf.evidence.model_verification.v1
+        plane: data
+        fields: [loaded, verified, unverified, window]
+    failure_mode: >
+      Namespace hijacking on public model hubs lets an attacker register a
+      deleted username and publish poisoned versions of well-known models under a
+      path that consumers already trust. ATLAS records supply chain compromise,
+      published poisoned artefacts and reputation inflation as separate
+      techniques, all of which defeat trust based on repository path alone.
+    rationale: >
+      A model cannot be reviewed by reading it, so the only available integrity
+      statement is about where it came from and whether it changed in transit.
+      Tying failure to containment tier rather than to outright prohibition keeps
+      experimentation possible without letting an unverified artefact acquire
+      production authority.
+    crosswalk:
+      iso_42001: [A.7.5, A.10.3]
+      nist_ai_rmf: [MANAGE-3.1, MANAGE-3.2, GOVERN-6.1]
+      eu_ai_act: ["Art.25", "Art.53(1)(b)"]
+      csa_aicm: [MDS-01, STA-07, CCC-01]
+      owasp_llm_2025: [LLM03]
+      owasp_llm_2026: [LLM04]
+      mitre_atlas: [AML.T0010, AML.T0010.003, AML.T0002.001, AML.T0115, AML.T0115.001, AML.T0111, AML.T0010.000, AML.T0002.002]
+
+  - id: D04-C02
+    title: An AI bill of materials is produced and kept current
+    domain: D04
+    level: core
+    normative: >
+      The organisation MUST produce a machine-readable bill of materials for each
+      AI system listing models, datasets, agent tools, tool servers, inference
+      libraries and their versions, and MUST regenerate it on every release.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [build, release]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        bom.present == true
+        AND bom.regenerated_on_release == true
+        AND bom.digest_matches_deployed == true
+    evidence:
+      - schema: openaisf.evidence.ai_bom.v1
+        plane: control
+        fields: [format, components, generated_on]
+      - schema: openaisf.evidence.bom_currency.v1
+        plane: data
+        fields: [releases, boms_generated, drift_detected, window]
+    failure_mode: >
+      When a compromised dataset, model or tool server is disclosed, the first
+      question is which systems consumed it. Without a bill of materials that
+      question takes days to answer, and the answer is usually incomplete.
+    rationale: >
+      The requirement that the bill of materials match what is actually deployed
+      is what distinguishes this from a document produced once at procurement.
+      Drift between the declared and deployed component set is itself the finding.
+    crosswalk:
+      iso_42001: [A.4.2, A.6.2.7, A.4.4]
+      nist_ai_rmf: [MAP-4.1, MAP-4.2, GOVERN-1.6]
+      eu_ai_act: ["Art.11", "Annex.IV"]
+      csa_aicm: [CCC-02, STA-08]
+      owasp_llm_2025: [LLM03]
+      owasp_llm_2026: [LLM04]
+      mitre_atlas: [AML.T0010.001, AML.T0010.004]
+
+  - id: D04-C03
+    title: Unsafe model serialisation formats are prohibited
+    domain: D04
+    level: core
+    normative: >
+      Models MUST be loaded from formats that do not execute code on
+      deserialisation. Where a format permitting code execution must be used, the
+      artefact MUST be scanned and loaded only inside an isolated environment, and
+      the exception MUST be recorded with an owner.
+    rfc2119: MUST
+    roles: [provider, deployer, operator]
+    lifecycle: [source, build, release]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        format_policy declared
+        AND loads_of_executable_formats_outside_isolation == 0
+    evidence:
+      - schema: openaisf.evidence.format_policy.v1
+        plane: control
+        fields: [permitted_formats, exceptions, exception_owners]
+      - schema: openaisf.evidence.model_loads.v1
+        plane: data
+        fields: [loads, by_format, unsafe_outside_isolation, window]
+    failure_mode: >
+      Pickle-based model formats execute arbitrary code on load, and remote code
+      execution has been demonstrated that bypasses the library flag intended to
+      prevent it. Loading a model is therefore an execution event, not a read,
+      and treating it as a read is what turns a download into a compromise.
+    rationale: >
+      This is one of the few places where a specific technical prohibition is
+      worth putting in a vendor-neutral standard, because the distinction between
+      executing and non-executing formats is objective and the cost of the safe
+      option is close to zero.
+    crosswalk:
+      iso_42001: [A.6.2.5]
+      nist_ai_rmf: [MANAGE-2.2, MEASURE-2.7]
+      eu_ai_act: ["Art.15(5)"]
+      csa_aicm: [MDS-03, AIS-05]
+      owasp_llm_2025: [LLM03]
+      owasp_llm_2026: [LLM04]
+      mitre_atlas: [AML.T0011, AML.T0011.000, AML.T0011.001, AML.T0018.002]
+
+  - id: D04-C04
+    title: Agent tools and tool servers are vetted before registration
+    domain: D04
+    level: core
+    normative: >
+      A tool or tool server MUST be vetted against a declared policy before it is
+      made available to an agent, covering its origin, its declared capability,
+      and the trust placed in its metadata. Registration MUST be an explicit act
+      with a recorded approver.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [build, release]
+    applies_when:
+      system_class: [agentic]
+      autonomy: [">= tool_use"]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        registration.explicit == true
+        AND tools.unvetted_available == 0
+    evidence:
+      - schema: openaisf.evidence.tool_registry.v1
+        plane: control
+        fields: [tool, origin, approver, approved_on, declared_capability]
+      - schema: openaisf.evidence.tool_availability.v1
+        plane: data
+        fields: [available, vetted, unvetted, window]
+    failure_mode: >
+      Tool description poisoning is the most prevalent client-side vulnerability
+      in the MCP ecosystem: malicious instructions embedded in tool metadata steer
+      an agent into unsafe calls without modifying any code. A comparison of seven
+      major MCP clients found most of them inadequately validate this. MCP
+      adoption grew more than 400 percent in 2025 with the majority of deployments
+      outside any formal security review.
+    rationale: >
+      Registration is the last point at which a human can look at a tool before an
+      agent starts trusting its description. Making it explicit rather than
+      automatic is the entire control; everything else follows from someone having
+      been required to look.
+    crosswalk:
+      iso_42001: [A.10.2, A.10.3]
+      nist_ai_rmf: [GOVERN-6.1, MANAGE-3.1]
+      eu_ai_act: ["Art.25"]
+      csa_aicm: [STA-09, CCC-03]
+      owasp_llm_2025: [LLM03]
+      owasp_llm_2026: [LLM04]
+      mitre_atlas: [AML.T0010.005, AML.T0011.002, AML.T0110, AML.T0110.000, AML.T0110.001, AML.T0115.002]
+      mcp_38: [MCP-10, MCP-11, MCP-13, MCP-18, MCP-26, MCP-15]
+
+  - id: D04-C05
+    title: Post-approval change to a dependency is detected
+    domain: D04
+    level: core
+    normative: >
+      The organisation MUST detect change to a model, tool definition or tool
+      server after it was approved, including silent change by an upstream party,
+      and MUST treat undeclared change as a finding requiring re-approval.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [operate, observe]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        integrity_monitoring.enabled == true
+        AND undeclared_changes.reviewed == true
+    evidence:
+      - schema: openaisf.evidence.integrity_baseline.v1
+        plane: control
+        fields: [component, digest, approved_on]
+      - schema: openaisf.evidence.integrity_drift.v1
+        plane: data
+        fields: [checked, changed, undeclared, reviewed, window]
+    failure_mode: >
+      MCP provides no mechanism for a client to verify that a tool's manifest or
+      implementation has not been modified since initial authorisation, which
+      makes the rug pull a structural rather than incidental risk: a server can
+      silently replace tool descriptions after approval. Agent drift after a
+      silent vendor update is separately one of the three dominant agent
+      incident-response risks reported by enterprises.
+    rationale: >
+      Approval is a point-in-time act and dependencies are not static, which is
+      the same mismatch the conformance lease exists to fix one level up. Detecting
+      undeclared change is what makes the original approval mean anything a week
+      later.
+    crosswalk:
+      iso_42001: [A.6.2.6, A.10.3]
+      nist_ai_rmf: [MANAGE-3.1, MANAGE-3.2, MEASURE-2.4]
+      eu_ai_act: ["Art.72"]
+      csa_aicm: [CCC-05, STA-10, LOG-06]
+      mitre_atlas: [AML.T0109, AML.T0081, AML.T0110.002, AML.T0076, AML.T0018.003]
+      mcp_38: [MCP-16, MCP-27]
+
+  - id: D04-C06
+    title: Deployed artefacts are pinned and reproducible from their declared source
+    domain: D04
+    level: core
+    normative: >
+      Every deployed model, prompt, tool definition and configuration MUST be
+      pinned to a specific version by digest. Deployment from a mutable reference
+      MUST NOT occur at T3 or above.
+    rfc2119: MUST
+    roles: [provider, deployer, operator]
+    lifecycle: [release, operate]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        deployments.pinned == deployments.total
+        AND deployments.from_mutable_reference == 0
+    evidence:
+      - schema: openaisf.evidence.pinning_policy.v1
+        plane: control
+        fields: [components, pinning_scheme]
+      - schema: openaisf.evidence.deployment_record.v1
+        plane: data
+        fields: [deployments, pinned, mutable, window]
+    failure_mode: >
+      Deployment from a mutable tag means the artefact evaluated is not
+      necessarily the artefact serving. Every evaluation result, robustness figure
+      and conformance claim then refers to something that may no longer be
+      running, and nobody can tell when it stopped being true.
+    rationale: >
+      Pinning is what allows an evaluation result to be bound to an artefact
+      digest in D08, and what lets D16 roll back to a known state. It is
+      infrastructure for the rest of the catalog more than a control in its own
+      right.
+    crosswalk:
+      iso_42001: [A.6.2.5, A.6.2.3]
+      nist_ai_rmf: [MEASURE-2.3, MANAGE-2.2]
+      eu_ai_act: ["Art.11", "Art.16"]
+      csa_aicm: [CCC-06, CCC-07]
+      mitre_atlas: [AML.T0018, AML.T0018.001]

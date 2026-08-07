@@ -1,0 +1,205 @@
+# Regulation (EU) 2024/1689 (Artificial Intelligence Act) obligation inventory.
+#
+# Granularity policy: lettered sub-obligations are enumerated where the
+# regulation itself splits a duty into discrete lettered items that are
+# separately auditable (Art. 5(1), 9(2), 10(2), 14(4), 50, 53(1), 55(1)).
+# Elsewhere the article or paragraph is the atomic unit. Recitals are not
+# obligations and are not inventoried.
+#
+# Timeline note: Art. 50, the GPAI penalty regime and national market
+# surveillance powers became applicable on 2 August 2026. Chapter III
+# high-risk obligations were deferred to 2 December 2027 by the 2025 Digital
+# Omnibus amendments.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+regime: eu_ai_act
+name: EU Artificial Intelligence Act — Regulation (EU) 2024/1689
+version: "2024/1689 as amended 2025"
+source: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj"
+licence: "EU-legislation-free-reuse"
+licence_url: "https://eur-lex.europa.eu/content/legal-notice/legal-notice.html"
+attribution: >
+  Article references are to Regulation (EU) 2024/1689. EU legislation may be
+  reused for commercial and non-commercial purposes subject to acknowledgement
+  of the source (Commission Decision 2011/833/EU). Descriptors are OpenAISF's
+  own summaries and are not the text of the Regulation.
+regime_kind: requirement
+reproduction: authored
+declared_total: 84
+requirements:
+  # Chapter II — Prohibited AI practices (Art. 5)
+  - ref: Art.5(1)(a)
+    text_summary: Prohibition of subliminal or manipulative techniques
+  - ref: Art.5(1)(b)
+    text_summary: Prohibition of exploiting vulnerabilities of persons or groups
+  - ref: Art.5(1)(c)
+    text_summary: Prohibition of social scoring leading to detrimental treatment
+  - ref: Art.5(1)(d)
+    text_summary: Prohibition of individual crime prediction based on profiling
+  - ref: Art.5(1)(e)
+    text_summary: Prohibition of untargeted scraping of facial images
+  - ref: Art.5(1)(f)
+    text_summary: Prohibition of emotion inference in workplace and education
+  - ref: Art.5(1)(g)
+    text_summary: Prohibition of biometric categorisation for sensitive attributes
+  - ref: Art.5(1)(h)
+    text_summary: Restriction of real-time remote biometric identification
+  # Chapter III Section 2 — Requirements for high-risk AI systems (Art. 8-15)
+  - ref: Art.8
+    text_summary: Compliance with the requirements for high-risk AI systems
+  - ref: Art.9(1)
+    text_summary: A risk management system is established and maintained
+  - ref: Art.9(2)(a)
+    text_summary: Identification of known and reasonably foreseeable risks
+  - ref: Art.9(2)(b)
+    text_summary: Estimation and evaluation of risks in intended use and misuse
+  - ref: Art.9(2)(c)
+    text_summary: Evaluation of risks emerging from post-market monitoring data
+  - ref: Art.9(2)(d)
+    text_summary: Adoption of appropriate risk management measures
+  - ref: Art.9(5)
+    text_summary: Residual risk is judged acceptable and communicated
+  - ref: Art.9(6)
+    text_summary: Testing to identify the most appropriate risk measures
+  - ref: Art.9(9)
+    text_summary: Specific consideration of impacts on minors and vulnerable groups
+  - ref: Art.10(2)(a)
+    text_summary: Data governance covering relevant design choices
+  - ref: Art.10(2)(b)
+    text_summary: Data collection processes and the origin of the data
+  - ref: Art.10(2)(c)
+    text_summary: Data preparation operations such as labelling and cleaning
+  - ref: Art.10(2)(d)
+    text_summary: Formulation of assumptions about what the data measures
+  - ref: Art.10(2)(e)
+    text_summary: Assessment of availability, quantity and suitability of datasets
+  - ref: Art.10(2)(f)
+    text_summary: Examination for possible biases affecting health, safety or rights
+  - ref: Art.10(2)(g)
+    text_summary: Measures to detect, prevent and mitigate identified biases
+  - ref: Art.10(2)(h)
+    text_summary: Identification of data gaps and how they are addressed
+  - ref: Art.10(3)
+    text_summary: Datasets are relevant, representative and as error-free as possible
+  - ref: Art.10(5)
+    text_summary: Conditions for processing special category data for bias detection
+  - ref: Art.11
+    text_summary: Technical documentation is drawn up before placing on the market
+  - ref: Art.12(1)
+    text_summary: Automatic recording of events over the system lifetime
+  - ref: Art.12(3)
+    text_summary: Logging capabilities appropriate to the intended purpose
+  - ref: Art.13(1)
+    text_summary: Transparency enabling deployers to interpret system output
+  - ref: Art.13(3)
+    text_summary: Instructions for use contain the prescribed information
+  - ref: Art.14(1)
+    text_summary: Design enabling effective human oversight during use
+  - ref: Art.14(4)(a)
+    text_summary: Overseer can understand capacities and limitations of the system
+  - ref: Art.14(4)(b)
+    text_summary: Overseer remains aware of automation bias
+  - ref: Art.14(4)(c)
+    text_summary: Overseer can correctly interpret the system output
+  - ref: Art.14(4)(d)
+    text_summary: Overseer can decide not to use, disregard or reverse the output
+  - ref: Art.14(4)(e)
+    text_summary: Overseer can intervene or interrupt the system through a stop function
+  - ref: Art.14(5)
+    text_summary: Separate verification by two persons for certain biometric systems
+  - ref: Art.15(1)
+    text_summary: Appropriate accuracy, robustness and cybersecurity are achieved
+  - ref: Art.15(3)
+    text_summary: Accuracy levels and metrics are declared in the instructions
+  - ref: Art.15(4)
+    text_summary: Resilience to errors, faults and inconsistencies including feedback loops
+  - ref: Art.15(5)
+    text_summary: Resilience to attacks including data poisoning, adversarial examples and model evasion
+  # Chapter III Section 3 — Obligations of providers, deployers and other parties
+  - ref: Art.16
+    text_summary: General obligations of providers of high-risk AI systems
+  - ref: Art.17
+    text_summary: A quality management system is put in place and documented
+  - ref: Art.18
+    text_summary: Documentation is kept at the disposal of national authorities
+  - ref: Art.19
+    text_summary: Automatically generated logs are kept for the prescribed period
+  - ref: Art.20
+    text_summary: Corrective actions and duty to inform on non-conformity
+  - ref: Art.21
+    text_summary: Cooperation with competent authorities on request
+  - ref: Art.22
+    text_summary: Authorised representatives appointed by third-country providers
+  - ref: Art.23
+    text_summary: Obligations of importers of high-risk AI systems
+  - ref: Art.24
+    text_summary: Obligations of distributors of high-risk AI systems
+  - ref: Art.25
+    text_summary: Allocation of responsibilities along the AI value chain
+  - ref: Art.26(1)
+    text_summary: Deployers take technical and organisational measures per instructions
+  - ref: Art.26(2)
+    text_summary: Deployers assign human oversight to competent and supported persons
+  - ref: Art.26(3)
+    text_summary: Deployers ensure input data is relevant and representative
+  - ref: Art.26(5)
+    text_summary: Deployers monitor operation and inform the provider of risks
+  - ref: Art.26(6)
+    text_summary: Deployers keep automatically generated logs under their control
+  - ref: Art.26(7)
+    text_summary: Deployers inform workers and their representatives before use
+  - ref: Art.26(11)
+    text_summary: Deployers inform affected persons of decisions taken about them
+  - ref: Art.27
+    text_summary: Fundamental rights impact assessment for certain deployers
+  # Chapter III Sections 4-5 — Conformity, marking and registration
+  - ref: Art.43
+    text_summary: The applicable conformity assessment procedure is followed
+  - ref: Art.47
+    text_summary: An EU declaration of conformity is drawn up and kept
+  - ref: Art.48
+    text_summary: CE marking is affixed to the high-risk AI system
+  - ref: Art.49
+    text_summary: Registration in the EU database before placing on the market
+  # Chapter IV — Transparency obligations (Art. 50)
+  - ref: Art.50(1)
+    text_summary: Natural persons are informed they are interacting with an AI system
+  - ref: Art.50(2)
+    text_summary: Synthetic audio, image, video or text is marked machine-readably
+  - ref: Art.50(3)
+    text_summary: Disclosure of emotion recognition or biometric categorisation
+  - ref: Art.50(4)
+    text_summary: Disclosure of deep fake and AI-generated public interest text
+  # Chapter V — General-purpose AI models
+  - ref: Art.51
+    text_summary: Classification of general-purpose AI models with systemic risk
+  - ref: Art.53(1)(a)
+    text_summary: Technical documentation of the general-purpose AI model
+  - ref: Art.53(1)(b)
+    text_summary: Information and documentation supplied to downstream providers
+  - ref: Art.53(1)(c)
+    text_summary: A policy to comply with Union copyright law
+  - ref: Art.53(1)(d)
+    text_summary: A sufficiently detailed public summary of training content
+  - ref: Art.54
+    text_summary: Authorised representatives of third-country GPAI providers
+  - ref: Art.55(1)(a)
+    text_summary: Model evaluation including adversarial testing for systemic risk
+  - ref: Art.55(1)(b)
+    text_summary: Assessment and mitigation of systemic risks at Union level
+  - ref: Art.55(1)(c)
+    text_summary: Tracking, documenting and reporting serious incidents
+  - ref: Art.55(1)(d)
+    text_summary: Adequate cybersecurity for the model and its physical infrastructure
+  # Chapter IX — Post-market monitoring and incident reporting
+  - ref: Art.72
+    text_summary: A post-market monitoring system and plan are established
+  - ref: Art.73
+    text_summary: Serious incidents are reported to market surveillance authorities
+  # Annexes with substantive documentation content
+  - ref: Annex.IV
+    text_summary: Technical documentation content for high-risk AI systems
+  - ref: Annex.XI
+    text_summary: GPAI model documentation including known energy consumption
+  - ref: Annex.XII
+    text_summary: Transparency information supplied to downstream providers

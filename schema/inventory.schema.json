@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openaisf.org/schema/inventory.schema.json",
+  "title": "OpenAISF External Requirement Inventory",
+  "type": "object",
+  "required": ["regime", "name", "version", "requirements",
+               "licence", "reproduction", "attribution", "regime_kind"],
+  "additionalProperties": false,
+  "properties": {
+    "regime": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+    "name": {"type": "string", "minLength": 3},
+    "version": {"type": "string"},
+    "source": {"type": "string"},
+    "licence": {
+      "type": "string",
+      "description": "SPDX identifier where one applies, or a short name for bespoke terms.",
+      "minLength": 3
+    },
+    "licence_url": {"type": "string"},
+    "attribution": {
+      "type": "string",
+      "description": "The notice that must accompany any redistribution of this inventory.",
+      "minLength": 10
+    },
+    "regime_kind": {
+      "description": "requirement: the regime imposes obligations, so a mapping to it can evidence that something is already required. threat: the regime catalogues attacks and imposes no obligations, so a mapping to it establishes relevance only and can never be full strength.",
+      "enum": ["requirement", "threat"]
+    },
+    "reproduction": {
+      "description": "How much of the source this inventory contains. reference-only means identifiers and factual designations with no source-authored text; descriptive means short source-authored names are reproduced under a licence that permits it; authored means OpenAISF wrote the descriptors itself.",
+      "enum": ["reference-only", "descriptive", "authored"]
+    },
+    "declared_total": {"type": "integer", "minimum": 1},
+    "requirements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["ref", "text_summary"],
+        "additionalProperties": false,
+        "properties": {
+          "ref": {"type": "string", "minLength": 1},
+          "text_summary": {"type": "string", "minLength": 10},
+          "atomic": {"type": "boolean", "default": true},
+          "note": {"type": "string"}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,252 @@
+# OpenAISF catalog — D08 Evaluation, Red-Teaming & Assurance
+#
+# An evaluation result that is not bound to an artefact digest describes
+# something that may no longer be running. Everything in this domain is written
+# to make results traceable to what they measured.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D08
+name: Evaluation, Red-Teaming & Assurance
+controls:
+  - id: D08-C01
+    title: Evaluation results are bound to the exact artefact they measured
+    domain: D08
+    level: core
+    normative: >
+      Every evaluation result MUST record the digest of the model, prompt and
+      configuration it was produced against, together with the dataset and metric
+      versions used. A result whose artefact digest does not match what is
+      deployed MUST NOT be presented as describing the deployed system.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [evaluate, release]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        results.with_artefact_digest == results.total
+        AND deployed_artefact.has_matching_result == true
+    evidence:
+      - schema: openaisf.evidence.eval_suite.v1
+        plane: control
+        fields: [suite, datasets, metrics, versions]
+      - schema: openaisf.evidence.eval_result.v1
+        plane: data
+        fields: [artefact_digest, suite_version, results, run_on, window]
+    failure_mode: >
+      Evaluation results routinely outlive the artefact they described. A prompt
+      change, a model version bump or a configuration edit invalidates the result
+      silently, and the number continues to be quoted in documentation, sales
+      material and conformity assessments long after it stopped being true.
+    rationale: >
+      Binding to a digest is what makes every other evaluation control meaningful,
+      and it is what lets the conformance run detect that a system has been
+      changed without being re-evaluated. It depends on D04-C06 pinning, which is
+      why that control is infrastructure rather than paperwork.
+    crosswalk:
+      iso_42001: [A.6.2.4]
+      nist_ai_rmf: [MEASURE-2.1, MEASURE-2.3, MEASURE-1.1]
+      eu_ai_act: ["Art.9(6)", "Art.15(3)"]
+      csa_aicm: [MDS-09, A&A-05]
+
+  - id: D08-C02
+    title: Safety-relevant behaviour is evaluated before release and on change
+    domain: D08
+    level: core
+    normative: >
+      Before release and on any change to the model, prompt or tool set, the
+      system MUST be evaluated against a suite covering the safety-relevant
+      behaviours identified in D02, and the result MUST gate the release.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [evaluate, release]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P30D
+        T4: P7D
+      predicate: |
+        suite.covers_identified_risks == true
+        AND releases.gated_on_result == releases.total
+        AND releases.ungated == 0
+    evidence:
+      - schema: openaisf.evidence.safety_suite.v1
+        plane: control
+        fields: [behaviours_covered, thresholds, risk_references]
+      - schema: openaisf.evidence.release_gate.v1
+        plane: data
+        fields: [releases, gated, passed, overridden, window]
+    failure_mode: >
+      Evaluation that runs after release, or whose failure does not block, is
+      measurement rather than assurance. The most common pattern is a suite that
+      runs nightly and reports into a dashboard nobody blocks on, which detects
+      regressions on a timescale longer than the deployment cadence.
+    rationale: >
+      Gating is the whole control. Recording overrides rather than forbidding them
+      is deliberate: releases sometimes must ship over a known failure, and a
+      process that forbids it produces undocumented workarounds instead of
+      recorded exceptions.
+    crosswalk:
+      iso_42001: [A.6.2.4, A.6.2.5]
+      nist_ai_rmf: [MEASURE-2.5, MEASURE-2.6, MANAGE-1.1]
+      eu_ai_act: ["Art.9(6)", "Art.43", Art.47, Art.48, Art.49]
+      csa_aicm: [MDS-10, A&A-06]
+      owasp_llm_2025: [LLM09]
+      owasp_llm_2026: [LLM07]
+
+  - id: D08-C03
+    title: Red-team findings are triaged and tracked to disposition
+    domain: D08
+    level: core
+    normative: >
+      Adversarial testing MUST be performed by people or processes not responsible
+      for building the system, and every finding MUST be tracked to a recorded
+      disposition of fixed, mitigated, accepted or rejected, with an owner.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [evaluate]
+    applies_when:
+      eu_risk: [high, gpai, gpai_systemic]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P180D
+        T4: P90D
+      predicate: |
+        testers.independent_of_builders == true
+        AND findings.without_disposition == 0
+    evidence:
+      - schema: openaisf.evidence.redteam_programme.v1
+        plane: control
+        fields: [cadence, independence, scope]
+      - schema: openaisf.evidence.redteam_findings.v1
+        plane: data
+        fields: [findings, fixed, mitigated, accepted, rejected, open, window]
+    failure_mode: >
+      Red teams run by the building team find the failures that team already
+      anticipated. Findings without tracked disposition accumulate in a document
+      and are rediscovered by the next exercise, which is how the same issue
+      appears in three consecutive reports.
+    rationale: >
+      Independence and disposition tracking are the two properties that separate a
+      red team from a demonstration. Neither requires an external vendor, which is
+      why the control asks for independence from the builders rather than from the
+      organisation.
+    crosswalk:
+      iso_42001: [A.6.2.4]
+      nist_ai_rmf: [MEASURE-1.3, MEASURE-2.7, MANAGE-1.3, MEASURE-4.2]
+      eu_ai_act: ["Art.55(1)(a)", "Art.9(6)"]
+      csa_aicm: [TVM-04, A&A-01]
+      mitre_atlas: [AML.T0042, AML.T0017, AML.T0017.000]
+
+  - id: D08-C04
+    title: Capability thresholds are defined and tested for frontier systems
+    domain: D08
+    level: expansion
+    normative: >
+      Where a model may reach capabilities that would materially change its risk
+      profile, the provider MUST define the thresholds in advance, MUST test
+      against them before release and at declared intervals, and MUST state what
+      happens if a threshold is crossed.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [evaluate, release, observe]
+    applies_when:
+      eu_risk: [gpai_systemic]
+    tiers:
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T4: P90D
+      predicate: |
+        thresholds.defined_in_advance == true
+        AND thresholds.tested_within_interval == true
+        AND crossing_response declared
+    evidence:
+      - schema: openaisf.evidence.capability_thresholds.v1
+        plane: control
+        fields: [capability, threshold, response_on_crossing]
+      - schema: openaisf.evidence.threshold_test.v1
+        plane: data
+        fields: [artefact_digest, capability, measured, crossed, window]
+    failure_mode: >
+      Thresholds defined after a capability is observed are defined by whoever has
+      an interest in the answer. Frontier safety policies that became more
+      qualitative over time did so at the point where a quantitative threshold
+      would have triggered an obligation.
+    rationale: >
+      Defining the response in advance is what makes the threshold binding. A
+      threshold with no stated consequence is a measurement, and this control is
+      deliberately restricted to systemic-risk GPAI because applying it more
+      widely would be theatre.
+    crosswalk:
+      eu_ai_act: ["Art.55(1)(a)", "Art.55(1)(b)", "Art.51"]
+      nist_ai_rmf: [MEASURE-3.1, MEASURE-3.2, MANAGE-2.3]
+      iso_42001: [A.5.2]
+
+  - id: D08-C05
+    title: Evaluation coverage gaps are stated rather than implied
+    domain: D08
+    level: core
+    normative: >
+      The evaluation suite MUST record which identified risks it does not cover
+      and why. A risk identified under D02 with no corresponding evaluation and no
+      recorded reason MUST be a finding.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [evaluate]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P90D
+        T4: P30D
+      predicate: |
+        risks.with_evaluation_or_stated_gap == risks.total
+    evidence:
+      - schema: openaisf.evidence.coverage_map.v1
+        plane: control
+        fields: [risk, evaluation, gap_reason]
+      - schema: openaisf.evidence.coverage_state.v1
+        plane: data
+        fields: [risks, evaluated, gaps_stated, gaps_unstated, window]
+    failure_mode: >
+      An evaluation suite reports on what it measures and is silent about what it
+      does not, so a reader cannot distinguish a risk that was tested and passed
+      from one that was never tested at all. Both appear as an absence of
+      failures.
+    rationale: >
+      This is the same inversion the crosswalk coverage engine applies to
+      regimes, at the level of a single system. Iterating over identified risks
+      rather than over available tests is the only way to see what is missing.
+    crosswalk:
+      iso_42001:
+        - {ref: A.6.2.4, strength: partial}
+      nist_ai_rmf:
+        - {ref: MEASURE-1.1, strength: partial}
+        - {ref: MEASURE-1.2, strength: partial}
+        - {ref: MEASURE-4.1, strength: partial}
+      csa_aicm:
+        - {ref: MDS-11, strength: partial}

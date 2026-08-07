@@ -1,0 +1,382 @@
+# MITRE ATLAS adversarial technique inventory.
+# GENERATED FILE — do not edit by hand.
+# Regenerate with: python tools/gen_atlas_inventory.py
+# Source: https://raw.githubusercontent.com/mitre-atlas/atlas-data/main/dist/v6/ATLAS-2026.07.yaml
+#
+# COPYRIGHT POSITION. The ATLAS dataset is Copyright 2021-2026 MITRE and
+# is licensed under the Apache License, Version 2.0, which permits use,
+# reproduction and distribution with attribution and retention of the
+# licence notice. Technique identifiers and names are reproduced under
+# that licence. No endorsement by MITRE is implied.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+regime: mitre_atlas
+name: MITRE ATLAS — Adversarial Threat Landscape for AI Systems
+version: "2026.07"
+source: "https://atlas.mitre.org/"
+licence: "Apache-2.0"
+licence_url: "https://www.apache.org/licenses/LICENSE-2.0"
+attribution: >
+  MITRE ATLAS, Copyright 2021-2026 MITRE, licensed under the Apache
+  License, Version 2.0. Technique identifiers and names are reproduced
+  under that licence. MITRE does not endorse OpenAISF.
+regime_kind: threat
+reproduction: descriptive
+declared_total: 178
+requirements:
+  - ref: AML.T0000
+    text_summary: "Search Open Technical Databases"
+  - ref: AML.T0000.000
+    text_summary: "Journals and Conference Proceedings"
+  - ref: AML.T0000.001
+    text_summary: "Pre-Print Repositories"
+  - ref: AML.T0000.002
+    text_summary: "Technical Blogs"
+  - ref: AML.T0001
+    text_summary: "Search Open AI Vulnerability Analysis"
+  - ref: AML.T0002
+    text_summary: "Acquire Public AI Artifacts"
+  - ref: AML.T0002.000
+    text_summary: "Datasets technique"
+  - ref: AML.T0002.001
+    text_summary: "Models technique"
+  - ref: AML.T0002.002
+    text_summary: "AI Agent Configuration"
+  - ref: AML.T0003
+    text_summary: "Search Victim-Owned Websites"
+  - ref: AML.T0004
+    text_summary: "Search Application Repositories"
+  - ref: AML.T0005
+    text_summary: "Create Proxy AI Model"
+  - ref: AML.T0005.000
+    text_summary: "Train Proxy via Gathered AI Artifacts"
+  - ref: AML.T0005.001
+    text_summary: "Train Proxy via Replication"
+  - ref: AML.T0005.002
+    text_summary: "Use Pre-Trained Model"
+  - ref: AML.T0006
+    text_summary: "Active Scanning"
+  - ref: AML.T0007
+    text_summary: "Discover AI Artifacts"
+  - ref: AML.T0008
+    text_summary: "Acquire Infrastructure"
+  - ref: AML.T0008.000
+    text_summary: "AI Development Workspaces"
+  - ref: AML.T0008.001
+    text_summary: "Consumer Hardware"
+  - ref: AML.T0008.002
+    text_summary: "Domains technique"
+  - ref: AML.T0008.003
+    text_summary: "Physical Countermeasures"
+  - ref: AML.T0008.004
+    text_summary: "Serverless"
+  - ref: AML.T0008.005
+    text_summary: "AI Service Proxies"
+  - ref: AML.T0010
+    text_summary: "AI Supply Chain Compromise"
+  - ref: AML.T0010.000
+    text_summary: "Hardware technique"
+  - ref: AML.T0010.001
+    text_summary: "AI Software"
+  - ref: AML.T0010.002
+    text_summary: "Data technique"
+  - ref: AML.T0010.003
+    text_summary: "Model technique"
+  - ref: AML.T0010.004
+    text_summary: "Container Registry"
+  - ref: AML.T0010.005
+    text_summary: "AI Agent Tool"
+  - ref: AML.T0011
+    text_summary: "User Execution"
+  - ref: AML.T0011.000
+    text_summary: "Unsafe AI Artifacts"
+  - ref: AML.T0011.001
+    text_summary: "Malicious Package"
+  - ref: AML.T0011.002
+    text_summary: "Poisoned AI Agent Tool"
+  - ref: AML.T0011.003
+    text_summary: "Malicious Link"
+  - ref: AML.T0012
+    text_summary: "Valid Accounts"
+  - ref: AML.T0013
+    text_summary: "Discover AI Model Ontology"
+  - ref: AML.T0014
+    text_summary: "Discover AI Model Family"
+  - ref: AML.T0015
+    text_summary: "Evade AI Model"
+  - ref: AML.T0016
+    text_summary: "Obtain Capabilities"
+  - ref: AML.T0016.000
+    text_summary: "Adversarial AI Attack Implementations"
+  - ref: AML.T0016.001
+    text_summary: "Software Tools"
+  - ref: AML.T0016.002
+    text_summary: "Generative AI"
+  - ref: AML.T0017
+    text_summary: "Develop Capabilities"
+  - ref: AML.T0017.000
+    text_summary: "Adversarial AI Attacks"
+  - ref: AML.T0018
+    text_summary: "Manipulate AI Model"
+  - ref: AML.T0018.000
+    text_summary: "Poison AI Model"
+  - ref: AML.T0018.001
+    text_summary: "Modify AI Model Architecture"
+  - ref: AML.T0018.002
+    text_summary: "Embed Malware"
+  - ref: AML.T0018.003
+    text_summary: "Modify Prompt Construction Logic"
+  - ref: AML.T0020
+    text_summary: "Training Data Poisoning"
+  - ref: AML.T0021
+    text_summary: "Establish Accounts"
+  - ref: AML.T0024
+    text_summary: "Exfiltration via AI Inference API"
+  - ref: AML.T0024.000
+    text_summary: "Infer Training Data Membership"
+  - ref: AML.T0024.001
+    text_summary: "Invert AI Model"
+  - ref: AML.T0024.002
+    text_summary: "Extract AI Model"
+  - ref: AML.T0025
+    text_summary: "Exfiltration via Cyber Means"
+  - ref: AML.T0029
+    text_summary: "Denial of AI Service"
+  - ref: AML.T0031
+    text_summary: "Erode AI Model Integrity"
+  - ref: AML.T0034
+    text_summary: "Cost Harvesting"
+  - ref: AML.T0034.000
+    text_summary: "Excessive Queries"
+  - ref: AML.T0034.001
+    text_summary: "Resource-Intensive Queries"
+  - ref: AML.T0034.002
+    text_summary: "Agentic Resource Consumption"
+  - ref: AML.T0035
+    text_summary: "AI Artifact Collection"
+  - ref: AML.T0036
+    text_summary: "Data from Information Repositories"
+  - ref: AML.T0037
+    text_summary: "Data from Local System"
+  - ref: AML.T0040
+    text_summary: "AI Model Inference API Access"
+  - ref: AML.T0041
+    text_summary: "Physical Environment Access"
+  - ref: AML.T0042
+    text_summary: "Verify Attack"
+  - ref: AML.T0043
+    text_summary: "Craft Adversarial Data"
+  - ref: AML.T0043.000
+    text_summary: "White-Box Optimization"
+  - ref: AML.T0043.001
+    text_summary: "Black-Box Optimization"
+  - ref: AML.T0043.002
+    text_summary: "Black-Box Transfer"
+  - ref: AML.T0043.003
+    text_summary: "Manual Modification"
+  - ref: AML.T0043.004
+    text_summary: "Insert Backdoor Trigger"
+  - ref: AML.T0044
+    text_summary: "Full AI Model Access"
+  - ref: AML.T0046
+    text_summary: "Spamming AI System with Chaff Data"
+  - ref: AML.T0047
+    text_summary: "AI-Enabled Product or Service"
+  - ref: AML.T0048
+    text_summary: "External Harms"
+  - ref: AML.T0048.000
+    text_summary: "Financial Harm"
+  - ref: AML.T0048.001
+    text_summary: "Reputational Harm"
+  - ref: AML.T0048.002
+    text_summary: "Societal Harm"
+  - ref: AML.T0048.003
+    text_summary: "User Harm technique"
+  - ref: AML.T0048.004
+    text_summary: "AI Intellectual Property Theft"
+  - ref: AML.T0049
+    text_summary: "Exploit Public-Facing Application"
+  - ref: AML.T0050
+    text_summary: "Command and Scripting Interpreter"
+  - ref: AML.T0051
+    text_summary: "LLM Prompt Injection"
+  - ref: AML.T0051.000
+    text_summary: "Direct technique"
+  - ref: AML.T0051.001
+    text_summary: "Indirect technique"
+  - ref: AML.T0051.002
+    text_summary: "Triggered technique"
+  - ref: AML.T0052
+    text_summary: "Phishing technique"
+  - ref: AML.T0052.000
+    text_summary: "Spearphishing via Social Engineering LLM"
+  - ref: AML.T0052.001
+    text_summary: "Deepfake-Assisted Phishing"
+  - ref: AML.T0053
+    text_summary: "AI Agent Tool Invocation"
+  - ref: AML.T0054
+    text_summary: "LLM Jailbreak"
+  - ref: AML.T0055
+    text_summary: "Unsecured Credentials"
+  - ref: AML.T0056
+    text_summary: "Extract LLM System Prompt"
+  - ref: AML.T0057
+    text_summary: "LLM Data Leakage"
+  - ref: AML.T0059
+    text_summary: "Erode Dataset Integrity"
+  - ref: AML.T0060
+    text_summary: "Publish Hallucinated Entities"
+  - ref: AML.T0061
+    text_summary: "LLM Prompt Self-Replication"
+  - ref: AML.T0062
+    text_summary: "Discover LLM Hallucinations"
+  - ref: AML.T0063
+    text_summary: "Discover AI Model Outputs"
+  - ref: AML.T0064
+    text_summary: "Gather RAG-Indexed Targets"
+  - ref: AML.T0065
+    text_summary: "LLM Prompt Crafting"
+  - ref: AML.T0066
+    text_summary: "Retrieval Content Crafting"
+  - ref: AML.T0067
+    text_summary: "LLM Trusted Output Components Manipulation"
+  - ref: AML.T0067.000
+    text_summary: "Citations technique"
+  - ref: AML.T0068
+    text_summary: "LLM Prompt Obfuscation"
+  - ref: AML.T0069
+    text_summary: "Discover LLM System Information"
+  - ref: AML.T0069.000
+    text_summary: "Special Character Sets"
+  - ref: AML.T0069.001
+    text_summary: "System Instruction Keywords"
+  - ref: AML.T0069.002
+    text_summary: "System Prompt"
+  - ref: AML.T0070
+    text_summary: "RAG Poisoning"
+  - ref: AML.T0071
+    text_summary: "False RAG Entry Injection"
+  - ref: AML.T0072
+    text_summary: "Reverse Shell"
+  - ref: AML.T0073
+    text_summary: "Impersonation"
+  - ref: AML.T0074
+    text_summary: "Masquerading"
+  - ref: AML.T0075
+    text_summary: "Cloud Service Discovery"
+  - ref: AML.T0076
+    text_summary: "Corrupt AI Model"
+  - ref: AML.T0077
+    text_summary: "LLM Response Rendering"
+  - ref: AML.T0078
+    text_summary: "Drive-by Compromise"
+  - ref: AML.T0079
+    text_summary: "Stage Capabilities"
+  - ref: AML.T0080
+    text_summary: "AI Agent Context Poisoning"
+  - ref: AML.T0080.000
+    text_summary: "Memory technique"
+  - ref: AML.T0080.001
+    text_summary: "Thread technique"
+  - ref: AML.T0081
+    text_summary: "Modify AI Agent Configuration"
+  - ref: AML.T0082
+    text_summary: "RAG Credential Harvesting"
+  - ref: AML.T0083
+    text_summary: "Credentials from AI Agent Configuration"
+  - ref: AML.T0084
+    text_summary: "Discover AI Agent Configuration"
+  - ref: AML.T0084.000
+    text_summary: "Embedded Knowledge"
+  - ref: AML.T0084.001
+    text_summary: "Tool Definitions"
+  - ref: AML.T0084.002
+    text_summary: "Activation Triggers"
+  - ref: AML.T0084.003
+    text_summary: "Call Chains"
+  - ref: AML.T0085
+    text_summary: "Data from AI Services"
+  - ref: AML.T0085.000
+    text_summary: "RAG Databases"
+  - ref: AML.T0085.001
+    text_summary: "AI Agent Tools"
+  - ref: AML.T0086
+    text_summary: "Exfiltration via AI Agent Tool Invocation"
+  - ref: AML.T0087
+    text_summary: "Gather Victim Identity Information"
+  - ref: AML.T0088
+    text_summary: "Generate Deepfakes"
+  - ref: AML.T0089
+    text_summary: "Process Discovery"
+  - ref: AML.T0090
+    text_summary: "OS Credential Dumping"
+  - ref: AML.T0091
+    text_summary: "Use Alternate Authentication Material"
+  - ref: AML.T0091.000
+    text_summary: "Application Access Token"
+  - ref: AML.T0091.001
+    text_summary: "Web Session Cookie"
+  - ref: AML.T0092
+    text_summary: "Manipulate User LLM Chat History"
+  - ref: AML.T0093
+    text_summary: "Prompt Infiltration via Public-Facing Application"
+  - ref: AML.T0094
+    text_summary: "Delay Execution of LLM Instructions"
+  - ref: AML.T0095
+    text_summary: "Search Open Websites/Domains"
+  - ref: AML.T0095.000
+    text_summary: "Code Repositories"
+  - ref: AML.T0096
+    text_summary: "AI Service API"
+  - ref: AML.T0097
+    text_summary: "Virtualization/Sandbox Evasion"
+  - ref: AML.T0098
+    text_summary: "AI Agent Tool Credential Harvesting"
+  - ref: AML.T0099
+    text_summary: "AI Agent Tool Data Poisoning"
+  - ref: AML.T0100
+    text_summary: "AI Agent Clickbait"
+  - ref: AML.T0101
+    text_summary: "Data Destruction via AI Agent Tool Invocation"
+  - ref: AML.T0102
+    text_summary: "Generate Malicious Commands"
+  - ref: AML.T0103
+    text_summary: "Deploy AI Agent"
+  - ref: AML.T0105
+    text_summary: "Escape to Host"
+  - ref: AML.T0106
+    text_summary: "Exploitation for Credential Access"
+  - ref: AML.T0107
+    text_summary: "Exploitation for Defense Evasion"
+  - ref: AML.T0108
+    text_summary: "AI Agent technique"
+  - ref: AML.T0109
+    text_summary: "AI Supply Chain Rug Pull"
+  - ref: AML.T0110
+    text_summary: "AI Agent Tool Poisoning"
+  - ref: AML.T0110.000
+    text_summary: "Definition and Instructions"
+  - ref: AML.T0110.001
+    text_summary: "Implementation"
+  - ref: AML.T0110.002
+    text_summary: "Runtime Response"
+  - ref: AML.T0111
+    text_summary: "AI Supply Chain Reputation Inflation"
+  - ref: AML.T0112
+    text_summary: "Machine Compromise"
+  - ref: AML.T0112.000
+    text_summary: "Local AI Agent"
+  - ref: AML.T0112.001
+    text_summary: "AI Artifacts"
+  - ref: AML.T0113
+    text_summary: "Steal Web Session Cookie"
+  - ref: AML.T0114
+    text_summary: "AI Service Web Interface"
+  - ref: AML.T0115
+    text_summary: "Publish Poisoned AI Artifacts"
+  - ref: AML.T0115.000
+    text_summary: "Datasets technique"
+  - ref: AML.T0115.001
+    text_summary: "Models technique"
+  - ref: AML.T0115.002
+    text_summary: "AI Agent Tools"

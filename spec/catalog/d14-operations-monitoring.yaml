@@ -1,0 +1,263 @@
+# OpenAISF catalog — D14 Operations, Monitoring & Drift
+#
+# Article 72 of the AI Act already requires post-market monitoring. What it does
+# not produce is an artefact a third party can check without an inspection.
+# This domain turns the obligation into the evidence stream the lease consumes.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D14
+name: Operations, Monitoring & Drift
+controls:
+  - id: D14-C01
+    title: A post-market monitoring plan exists and produces signed evidence
+    domain: D14
+    level: core
+    normative: >
+      The provider MUST operate a monitoring system that collects and reviews
+      data on the system's performance in the field throughout its lifetime, and
+      the resulting observations MUST be emitted as signed evidence rather than
+      held only in an internal report.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [observe]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        monitoring_plan declared
+        AND observations.signed == true
+        AND observations.within_freshness == true
+    evidence:
+      - schema: openaisf.evidence.monitoring_plan.v1
+        plane: control
+        fields: [signals, review_cadence, owner]
+      - schema: openaisf.evidence.monitoring_observations.v1
+        plane: data
+        fields: [signals_collected, reviews_performed, findings, window]
+    failure_mode: >
+      Post-market monitoring exists as an obligation in the AI Act and as a
+      paragraph in most quality manuals, and produces nothing a regulator or a
+      customer can verify without an inspection. The obligation is satisfied and
+      the assurance value is zero.
+    rationale: >
+      This is the control where the framework's central claim becomes concrete:
+      the monitoring is the conformance evidence. Requiring signature and
+      freshness turns Article 72 from a promise into the heartbeat that keeps a
+      lease alive.
+    crosswalk:
+      iso_42001: [A.6.2.6]
+      nist_ai_rmf: [MEASURE-2.4, MANAGE-4.1, MANAGE-4.2]
+      eu_ai_act: ["Art.72", "Art.26(5)", "Art.9(2)(c)"]
+      csa_aicm: [LOG-11, A&A-02]
+
+  - id: D14-C02
+    title: Output quality is scored in production, not only in evaluation
+    domain: D14
+    level: core
+    normative: >
+      The deployment MUST score the quality of production output against declared
+      criteria on a sampled or continuous basis, and MUST alert on sustained
+      degradation. Availability and latency metrics MUST NOT be presented as
+      quality measurement.
+    rfc2119: MUST
+    roles: [deployer, provider]
+    lifecycle: [observe]
+    applies_when:
+      system_class: [llm, agentic, classical_ml, recommender]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P30D
+        T4: P7D
+      predicate: |
+        quality_criteria declared
+        AND scoring.performed_on_production == true
+        AND degradation_alerting.enabled == true
+    evidence:
+      - schema: openaisf.evidence.quality_scoring.v1
+        plane: control
+        fields: [criteria, sampling, alert_thresholds]
+      - schema: openaisf.evidence.quality_scores.v1
+        plane: data
+        fields: [scored, passing, degraded, alerts, window]
+    failure_mode: >
+      A model can return a grammatically clean, entirely hallucinated response and
+      the application monitoring will record a 200 with acceptable latency. Tracing
+      tools capture what happened and stop there; whether the response was any good
+      is the question they do not answer, and it is the only one that matters here.
+    rationale: >
+      Naming the distinction between service health and output quality explicitly
+      is necessary because most organisations believe they have this covered and
+      have instead instrumented the transport. The evidence for this control comes
+      from observability platforms that already collect the traces and need only be
+      asked to score them.
+    crosswalk:
+      iso_42001: [A.6.2.6]
+      nist_ai_rmf: [MEASURE-2.4, MEASURE-4.3, MEASURE-2.5]
+      eu_ai_act: ["Art.72", "Art.15(1)"]
+      csa_aicm: [LOG-12, MDS-06]
+      owasp_llm_2025: [LLM09]
+      owasp_llm_2026: [LLM07]
+
+  - id: D14-C03
+    title: Drift in inputs, outputs and model behaviour is detected
+    domain: D14
+    level: core
+    normative: >
+      The deployment MUST monitor for drift in input distribution, output
+      distribution and model behaviour relative to a recorded baseline, and MUST
+      raise a finding when drift exceeds a declared bound. The baseline MUST be
+      re-recorded whenever the artefact changes.
+    rfc2119: MUST
+    roles: [deployer, provider]
+    lifecycle: [observe]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P30D
+        T4: P7D
+      predicate: |
+        baseline.recorded == true
+        AND baseline.artefact_digest == deployed.artefact_digest
+        AND drift_bounds declared
+    evidence:
+      - schema: openaisf.evidence.drift_policy.v1
+        plane: control
+        fields: [baseline_digest, dimensions, bounds]
+      - schema: openaisf.evidence.drift_measurements.v1
+        plane: data
+        fields: [dimension, measured, bound, breaches, window]
+    failure_mode: >
+      Model behaviour changes silently after a provider-side update, and this is
+      one of the three dominant agent incident-response risks reported by
+      enterprises. Where the baseline was recorded against an older artefact,
+      drift measurement compares the new model to a description of a model that no
+      longer exists and reports no change.
+    rationale: >
+      Binding the baseline to the artefact digest is what makes drift measurement
+      mean anything after a version bump. It is the same binding as D08-C01, and it
+      is what allows D04-C05 to distinguish an undeclared upstream change from
+      ordinary variation.
+    crosswalk:
+      iso_42001: [A.6.2.6]
+      nist_ai_rmf: [MEASURE-2.4, MEASURE-3.1, MANAGE-3.2]
+      eu_ai_act: ["Art.72", "Art.15(4)"]
+      csa_aicm: [LOG-13, MDS-07]
+      mitre_atlas: [AML.T0031, AML.T0059]
+
+  - id: D14-C04
+    title: Telemetry is complete enough to answer the questions the controls require
+    domain: D14
+    level: core
+    normative: >
+      The deployment MUST record, for each control verified by emitted evidence,
+      the signals that control's predicate depends on. A control whose required
+      signal is not collected MUST fail rather than pass by absence of
+      contradiction.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [operate, observe]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        required_signals.enumerated == true
+        AND required_signals.collected == required_signals.enumerated
+        AND controls_passing_without_signal == 0
+    evidence:
+      - schema: openaisf.evidence.signal_map.v1
+        plane: control
+        fields: [control_id, required_signals, source]
+      - schema: openaisf.evidence.signal_coverage.v1
+        plane: data
+        fields: [required, collected, missing, window]
+    failure_mode: >
+      A conformance run that treats a missing signal as an absence of evidence
+      rather than as a failure will pass a system that has stopped emitting
+      anything at all. Silence is the state both a perfectly compliant system and
+      a completely broken pipeline produce.
+    rationale: >
+      This is the control that stops the whole evidence model degrading into
+      pass-by-silence. It belongs in D14 rather than D19 because the remedy is
+      operational — collect the signal — rather than a question about the
+      integrity of evidence that does exist.
+    crosswalk:
+      iso_42001:
+        - {ref: A.6.2.8, strength: partial}
+      nist_ai_rmf:
+        - {ref: MEASURE-1.1, strength: partial}
+        - {ref: MEASURE-2.13, strength: partial}
+      csa_aicm:
+        - {ref: LOG-14, strength: partial}
+        - {ref: LOG-15, strength: partial}
+
+  - id: D14-C05
+    title: Logs are retained, protected and time-synchronised
+    domain: D14
+    level: core
+    normative: >
+      Logs and traces required by this framework MUST be retained for a declared
+      period, protected against modification and deletion by the systems they
+      describe, and time-synchronised to the source used under D19-C04.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [operate, observe]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P30D
+        T4: P7D
+      predicate: |
+        retention declared
+        AND logs.writable_by_subject == false
+        AND clock.synchronised == true
+    evidence:
+      - schema: openaisf.evidence.log_protection.v1
+        plane: control
+        fields: [retention, immutability, time_source]
+      - schema: openaisf.evidence.log_integrity.v1
+        plane: data
+        fields: [records, tamper_events, clock_skew, window]
+    failure_mode: >
+      Where an agent can write to the store that records what it did, the record
+      is not evidence. This is a routine configuration in deployments that give an
+      agent broad filesystem or cloud access precisely so it can be useful.
+    rationale: >
+      Conventional log protection, included because the AI-specific case has a
+      twist: the subject of the log frequently has more system access than the
+      humans do. The prohibition is on write access by the described system, not
+      merely on general tampering.
+    crosswalk:
+      iso_42001: [A.6.2.8]
+      nist_ai_rmf: [MEASURE-2.8]
+      eu_ai_act: ["Art.12(1)", "Art.12(3)", "Art.19", "Art.26(6)", Art.18]
+      csa_aicm: [LOG-01, LOG-04, LOG-16]
+      mcp_38: [MCP-38]

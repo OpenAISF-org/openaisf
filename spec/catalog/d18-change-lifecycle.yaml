@@ -1,0 +1,204 @@
+# OpenAISF catalog — D18 Change, Versioning & Decommissioning
+#
+# Conformance is a state, so anything that changes the system changes the state.
+# This domain governs the transitions the rest of the catalog assumes exist.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D18
+name: Change, Versioning & Decommissioning
+controls:
+  - id: D18-C01
+    title: Every element that changes system behaviour is versioned
+    domain: D18
+    level: core
+    normative: >
+      Models, prompts, tool definitions, retrieval corpora, guardrail
+      configuration and routing rules MUST each be versioned, and the combination
+      deployed MUST be identifiable by a single reference.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [build, release, operate]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        versioned_elements.declared == true
+        AND deployed_combination.identifiable == true
+    evidence:
+      - schema: openaisf.evidence.version_scheme.v1
+        plane: control
+        fields: [elements, scheme, composite_reference]
+      - schema: openaisf.evidence.deployed_versions.v1
+        plane: data
+        fields: [composite_ref, elements, window]
+    failure_mode: >
+      Prompt and guardrail configuration are routinely changed outside the release
+      process because they look like content rather than code. A system whose
+      behaviour is determined by an unversioned prompt cannot be rolled back, and
+      no evaluation result describes it for longer than the next edit.
+    rationale: >
+      The composite reference is what everything else binds to: evaluation results,
+      system cards, drift baselines and rollback targets all need a single name for
+      the thing that was running. Versioning the model alone is insufficient
+      because the model is often the element that changes least.
+    crosswalk:
+      iso_42001: [A.6.2.3, A.6.2.5]
+      nist_ai_rmf: [MANAGE-2.2, MEASURE-2.3]
+      eu_ai_act: ["Art.11", "Art.16"]
+      csa_aicm: [CCC-08, CCC-09]
+
+  - id: D18-C02
+    title: Change is approved against its risk, and material change re-triggers assessment
+    domain: D18
+    level: core
+    normative: >
+      Change MUST be approved against declared criteria proportionate to its risk.
+      A material change to intended purpose, model, data or autonomy level MUST
+      re-trigger risk classification under D02-C07 and re-resolution of the
+      Statement of Applicability.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [build, release]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        approval_criteria declared
+        AND material_changes.retriggered_assessment == material_changes.total
+    evidence:
+      - schema: openaisf.evidence.change_policy.v1
+        plane: control
+        fields: [criteria, material_change_definition, approvers]
+      - schema: openaisf.evidence.change_records.v1
+        plane: data
+        fields: [changes, material, reassessed, unreassessed, window]
+    failure_mode: >
+      Scope expands through a series of changes each individually too small to
+      trigger review. A tool is added, then an autonomy level raised, then a data
+      class admitted, and the system that emerges would never have been approved
+      as a single proposal.
+    rationale: >
+      Tying material change to re-resolution of the SoA is what makes scope creep
+      mechanically visible. It is also why D02-C07 requires classification to be
+      machine-readable: a change cannot re-trigger an assessment that only exists
+      as prose in a document.
+    crosswalk:
+      iso_42001: [A.6.2.2, A.6.2.5]
+      nist_ai_rmf: [MANAGE-1.1, MAP-3.3, GOVERN-1.5]
+      eu_ai_act: ["Art.9(2)(c)", "Art.43"]
+      csa_aicm: [CCC-04, CCC-05, GRC-12]
+
+  - id: D18-C03
+    title: Decommissioning removes access, data and downstream dependence
+    domain: D18
+    level: core
+    normative: >
+      On decommissioning, the organisation MUST revoke the system's identities and
+      credentials, dispose of or migrate its data according to the retention
+      policy, notify parties inheriting assurance from it, and record the
+      disposition of the model artefact.
+    rfc2119: MUST
+    roles: [provider, deployer, operator]
+    lifecycle: [retire]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P180D
+        T3: P90D
+        T4: P30D
+      predicate: |
+        decommission_procedure declared
+        AND decommissioned.with_credentials_revoked == decommissioned.total
+        AND decommissioned.dependents_notified == decommissioned.total
+    evidence:
+      - schema: openaisf.evidence.decommission_policy.v1
+        plane: control
+        fields: [steps, notification_list, artefact_disposition]
+      - schema: openaisf.evidence.decommission_records.v1
+        plane: data
+        fields: [decommissioned, credentials_revoked, data_disposed,
+                 dependents_notified, window]
+    failure_mode: >
+      Decommissioning usually means switching off the endpoint. The service
+      account survives, the retrieval index survives, the traces survive, and any
+      downstream system inheriting assurance from the decommissioned component
+      continues to claim it indefinitely.
+    rationale: >
+      Notifying dependents is the requirement specific to this framework and it
+      follows directly from D17-C02. A component that stops existing cannot keep
+      proving a control for somebody else, and the inheriting party has no other
+      way to find out.
+    crosswalk:
+      iso_42001: [A.6.2.6, A.7.2]
+      nist_ai_rmf: [GOVERN-1.7, MANAGE-2.4]
+      csa_aicm: [CCC-06, DSP-24, IAM-18]
+
+  - id: D18-C04
+    title: Conformance state is re-established after change, not assumed to persist
+    domain: D18
+    level: core
+    normative: >
+      A change to a versioned element MUST invalidate the conformance evidence
+      that depended on the previous version, and the lease MUST reflect the
+      unproven state until fresh evidence is produced.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [release, observe]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        evidence.bound_to_version == true
+        AND changes_with_stale_evidence_still_valid == 0
+    evidence:
+      - schema: openaisf.evidence.version_binding_policy.v1
+        plane: control
+        fields: [elements, invalidation_scope]
+      - schema: openaisf.evidence.post_change_state.v1
+        plane: data
+        fields: [changes, evidence_invalidated, refreshed, still_stale, window]
+    failure_mode: >
+      Where evidence is not bound to a version, a badge earned by one
+      configuration continues to assert conformance for a materially different
+      one. This is the point-in-time failure the whole framework exists to fix,
+      reappearing inside a system that has adopted it.
+    rationale: >
+      Without this control the conformance lease measures only elapsed time, not
+      continued truth. A system could change every element it has and remain
+      valid simply by continuing to emit evidence on schedule, which would make
+      the freshness window a formality.
+    crosswalk:
+      iso_42001:
+        - {ref: A.6.2.5, strength: partial}
+      nist_ai_rmf:
+        - {ref: MEASURE-2.3, strength: partial}
+        - {ref: MANAGE-2.2, strength: partial}
+      csa_aicm:
+        - {ref: CCC-07, strength: partial}

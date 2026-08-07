@@ -1,43 +1,33 @@
-# Contributor Covenant Code of Conduct
+# Code of Conduct
 
-## Our Pledge
+**OpenAISF — created by Maarten Loose.**
 
-We as members, contributors, and leaders pledge to make participation in the
-OpenAISF community a harassment-free experience for everyone, regardless of
-age, body size, visible or invisible disability, ethnicity, sex
-characteristics, gender identity and expression, level of experience,
-education, socio-economic status, nationality, personal appearance, race,
-religion, or sexual identity and orientation.
+## Standard of conduct
 
-We pledge to act and interact in ways that contribute to an open, welcoming,
-diverse, inclusive, and healthy community.
+Participants are expected to conduct disagreement on the substance of the work
+rather than on the person making the argument.
 
-## Our Standards
+Technical disagreement is expected and welcome. Stating that a control is
+incorrect, an exclusion unjustified or a published figure inaccurate is a
+contribution, not a conflict.
 
-Examples of behavior that contributes to a positive environment:
+## Not acceptable
 
-* Demonstrating empathy and kindness toward other people
-* Being respectful of differing opinions, viewpoints, and experiences
-* Giving and gracefully accepting constructive feedback
-* Accepting responsibility and apologizing to those affected by our mistakes
-* Focusing on what is best for the overall community
+Harassment, personal attacks, demeaning comments, publication of others'
+private information, and sustained disruption.
 
-Examples of unacceptable behavior:
+Knowingly misrepresenting evidence, conformance status, or another
+participant's position is also treated as a conduct matter in this project,
+given that the subject is verifiable claims.
 
-* The use of sexualized language or imagery, and sexual attention or advances
-* Trolling, insulting or derogatory comments, and personal or political attacks
-* Public or private harassment
-* Publishing others' private information without explicit permission
-* Other conduct which could reasonably be considered inappropriate
+## Scope
+
+Applies in project spaces and where someone is representing the project.
 
 ## Enforcement
 
-Instances of abusive, harassing, or otherwise unacceptable behavior may be
-reported to the project maintainers via the repository's issue tracker
-(confidentially, by requesting private handling). All complaints will be
-reviewed and investigated fairly.
+Report to the maintainer through the contact listed in the repository. Reports
+are handled confidentially. Available responses are a warning, removal of
+contributions, or exclusion from project spaces.
 
-This Code of Conduct is adapted from the [Contributor Covenant][cc],
-version 2.1.
-
-[cc]: https://www.contributor-covenant.org/version/2/1/code_of_conduct.html
+The project currently has a single maintainer and therefore no appeal body.

@@ -1,0 +1,551 @@
+# CSA AI Controls Matrix (AICM) — REFERENCE-ONLY inventory.
+# GENERATED FILE — do not edit by hand.
+# Regenerate with: python tools/gen_aicm_inventory.py <workbook.xlsx>
+#
+# COPYRIGHT POSITION. The AICM is a copyrighted work of the Cloud
+# Security Alliance, published on terms that permit free internal and
+# non-commercial use but require a CSA licence for commercial use or
+# for modified or derivative works. This file therefore contains NO
+# CSA-authored text: no control titles, no control specifications, no
+# domain names. It carries only control identifiers, which are factual
+# designations rather than protectable expression, and the domain code
+# derived from each identifier's own prefix.
+#
+# The enumeration is exhaustive, so it embodies no original selection
+# under Feist, and its order follows CSA's own numbering.
+#
+# This inventory lets OpenAISF account for coverage of the AICM. It is
+# not a substitute for it. Obtain the AICM from the Cloud Security
+# Alliance to read what any control requires.
+#
+# ACTION REQUIRED BEFORE COMMERCIAL LAUNCH: obtain a CSA commercial
+# licence covering use of AICM identifiers in a commercially offered
+# conformance product. See ATTRIBUTIONS.md.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+regime: csa_aicm
+name: CSA AI Controls Matrix v1.1.1
+version: "1.1.1"
+source: "https://cloudsecurityalliance.org/artifacts/ai-controls-matrix-v1-1"
+licence: "CSA proprietary — free internal use, licence required for commercial use"
+licence_url: "https://cloudsecurityalliance.org/artifacts/ccm-aicm-licensing-faq"
+attribution: >
+  Control identifiers refer to the CSA AI Controls Matrix v1.1.1,
+  copyright Cloud Security Alliance. No CSA text is reproduced.
+  Obtain the AICM from CSA to read it.
+regime_kind: requirement
+reproduction: reference-only
+declared_total: 247
+requirements:
+  # domain A&A
+  - ref: A&A-01
+    text_summary: "AICM control objective in domain A&A"
+  - ref: A&A-02
+    text_summary: "AICM control objective in domain A&A"
+  - ref: A&A-03
+    text_summary: "AICM control objective in domain A&A"
+  - ref: A&A-04
+    text_summary: "AICM control objective in domain A&A"
+  - ref: A&A-05
+    text_summary: "AICM control objective in domain A&A"
+  - ref: A&A-06
+    text_summary: "AICM control objective in domain A&A"
+  # domain AIS
+  - ref: AIS-01
+    text_summary: "AICM control objective in domain AIS"
+  - ref: AIS-02
+    text_summary: "AICM control objective in domain AIS"
+  - ref: AIS-03
+    text_summary: "AICM control objective in domain AIS"
+  - ref: AIS-04
+    text_summary: "AICM control objective in domain AIS"
+  - ref: AIS-05
+    text_summary: "AICM control objective in domain AIS"
+  - ref: AIS-06
+    text_summary: "AICM control objective in domain AIS"
+  - ref: AIS-07
+    text_summary: "AICM control objective in domain AIS"
+  - ref: AIS-08
+    text_summary: "AICM control objective in domain AIS"
+  - ref: AIS-09
+    text_summary: "AICM control objective in domain AIS"
+  - ref: AIS-10
+    text_summary: "AICM control objective in domain AIS"
+  - ref: AIS-11
+    text_summary: "AICM control objective in domain AIS"
+  - ref: AIS-12
+    text_summary: "AICM control objective in domain AIS"
+  - ref: AIS-13
+    text_summary: "AICM control objective in domain AIS"
+  - ref: AIS-14
+    text_summary: "AICM control objective in domain AIS"
+  - ref: AIS-15
+    text_summary: "AICM control objective in domain AIS"
+  # domain BCR
+  - ref: BCR-01
+    text_summary: "AICM control objective in domain BCR"
+  - ref: BCR-02
+    text_summary: "AICM control objective in domain BCR"
+  - ref: BCR-03
+    text_summary: "AICM control objective in domain BCR"
+  - ref: BCR-04
+    text_summary: "AICM control objective in domain BCR"
+  - ref: BCR-05
+    text_summary: "AICM control objective in domain BCR"
+  - ref: BCR-06
+    text_summary: "AICM control objective in domain BCR"
+  - ref: BCR-07
+    text_summary: "AICM control objective in domain BCR"
+  - ref: BCR-08
+    text_summary: "AICM control objective in domain BCR"
+  - ref: BCR-09
+    text_summary: "AICM control objective in domain BCR"
+  - ref: BCR-10
+    text_summary: "AICM control objective in domain BCR"
+  - ref: BCR-11
+    text_summary: "AICM control objective in domain BCR"
+  # domain CCC
+  - ref: CCC-01
+    text_summary: "AICM control objective in domain CCC"
+  - ref: CCC-02
+    text_summary: "AICM control objective in domain CCC"
+  - ref: CCC-03
+    text_summary: "AICM control objective in domain CCC"
+  - ref: CCC-04
+    text_summary: "AICM control objective in domain CCC"
+  - ref: CCC-05
+    text_summary: "AICM control objective in domain CCC"
+  - ref: CCC-06
+    text_summary: "AICM control objective in domain CCC"
+  - ref: CCC-07
+    text_summary: "AICM control objective in domain CCC"
+  - ref: CCC-08
+    text_summary: "AICM control objective in domain CCC"
+  - ref: CCC-09
+    text_summary: "AICM control objective in domain CCC"
+  # domain CEK
+  - ref: CEK-01
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-02
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-03
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-04
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-05
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-06
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-07
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-08
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-09
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-10
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-11
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-12
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-13
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-14
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-15
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-16
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-17
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-18
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-19
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-20
+    text_summary: "AICM control objective in domain CEK"
+  - ref: CEK-21
+    text_summary: "AICM control objective in domain CEK"
+  # domain DCS
+  - ref: DCS-01
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-02
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-03
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-04
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-05
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-06
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-07
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-08
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-09
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-10
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-11
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-12
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-13
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-14
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-15
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-16
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-17
+    text_summary: "AICM control objective in domain DCS"
+  - ref: DCS-18
+    text_summary: "AICM control objective in domain DCS"
+  # domain DSP
+  - ref: DSP-01
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-02
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-03
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-04
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-05
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-06
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-07
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-08
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-09
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-10
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-11
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-12
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-13
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-14
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-15
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-16
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-17
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-18
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-19
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-20
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-21
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-22
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-23
+    text_summary: "AICM control objective in domain DSP"
+  - ref: DSP-24
+    text_summary: "AICM control objective in domain DSP"
+  # domain GRC
+  - ref: GRC-01
+    text_summary: "AICM control objective in domain GRC"
+  - ref: GRC-02
+    text_summary: "AICM control objective in domain GRC"
+  - ref: GRC-03
+    text_summary: "AICM control objective in domain GRC"
+  - ref: GRC-04
+    text_summary: "AICM control objective in domain GRC"
+  - ref: GRC-05
+    text_summary: "AICM control objective in domain GRC"
+  - ref: GRC-06
+    text_summary: "AICM control objective in domain GRC"
+  - ref: GRC-07
+    text_summary: "AICM control objective in domain GRC"
+  - ref: GRC-08
+    text_summary: "AICM control objective in domain GRC"
+  - ref: GRC-09
+    text_summary: "AICM control objective in domain GRC"
+  - ref: GRC-10
+    text_summary: "AICM control objective in domain GRC"
+  - ref: GRC-11
+    text_summary: "AICM control objective in domain GRC"
+  - ref: GRC-12
+    text_summary: "AICM control objective in domain GRC"
+  - ref: GRC-13
+    text_summary: "AICM control objective in domain GRC"
+  - ref: GRC-14
+    text_summary: "AICM control objective in domain GRC"
+  - ref: GRC-15
+    text_summary: "AICM control objective in domain GRC"
+  # domain HRS
+  - ref: HRS-01
+    text_summary: "AICM control objective in domain HRS"
+  - ref: HRS-02
+    text_summary: "AICM control objective in domain HRS"
+  - ref: HRS-03
+    text_summary: "AICM control objective in domain HRS"
+  - ref: HRS-04
+    text_summary: "AICM control objective in domain HRS"
+  - ref: HRS-05
+    text_summary: "AICM control objective in domain HRS"
+  - ref: HRS-06
+    text_summary: "AICM control objective in domain HRS"
+  - ref: HRS-07
+    text_summary: "AICM control objective in domain HRS"
+  - ref: HRS-08
+    text_summary: "AICM control objective in domain HRS"
+  - ref: HRS-09
+    text_summary: "AICM control objective in domain HRS"
+  - ref: HRS-10
+    text_summary: "AICM control objective in domain HRS"
+  - ref: HRS-11
+    text_summary: "AICM control objective in domain HRS"
+  - ref: HRS-12
+    text_summary: "AICM control objective in domain HRS"
+  - ref: HRS-13
+    text_summary: "AICM control objective in domain HRS"
+  - ref: HRS-14
+    text_summary: "AICM control objective in domain HRS"
+  - ref: HRS-15
+    text_summary: "AICM control objective in domain HRS"
+  # domain IAM
+  - ref: IAM-01
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-02
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-03
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-04
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-05
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-06
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-07
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-08
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-09
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-10
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-11
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-12
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-13
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-14
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-15
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-16
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-17
+    text_summary: "AICM control objective in domain IAM"
+  - ref: IAM-18
+    text_summary: "AICM control objective in domain IAM"
+  # domain IPY
+  - ref: IPY-01
+    text_summary: "AICM control objective in domain IPY"
+  - ref: IPY-02
+    text_summary: "AICM control objective in domain IPY"
+  - ref: IPY-03
+    text_summary: "AICM control objective in domain IPY"
+  - ref: IPY-04
+    text_summary: "AICM control objective in domain IPY"
+  # domain I&S
+  - ref: I&S-01
+    text_summary: "AICM control objective in domain I&S"
+  - ref: I&S-02
+    text_summary: "AICM control objective in domain I&S"
+  - ref: I&S-03
+    text_summary: "AICM control objective in domain I&S"
+  - ref: I&S-04
+    text_summary: "AICM control objective in domain I&S"
+  - ref: I&S-05
+    text_summary: "AICM control objective in domain I&S"
+  - ref: I&S-06
+    text_summary: "AICM control objective in domain I&S"
+  - ref: I&S-07
+    text_summary: "AICM control objective in domain I&S"
+  - ref: I&S-08
+    text_summary: "AICM control objective in domain I&S"
+  - ref: I&S-09
+    text_summary: "AICM control objective in domain I&S"
+  # domain LOG
+  - ref: LOG-01
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-02
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-03
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-04
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-05
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-06
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-07
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-08
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-09
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-10
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-11
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-12
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-13
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-14
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-15
+    text_summary: "AICM control objective in domain LOG"
+  - ref: LOG-16
+    text_summary: "AICM control objective in domain LOG"
+  # domain MDS
+  - ref: MDS-01
+    text_summary: "AICM control objective in domain MDS"
+  - ref: MDS-02
+    text_summary: "AICM control objective in domain MDS"
+  - ref: MDS-03
+    text_summary: "AICM control objective in domain MDS"
+  - ref: MDS-04
+    text_summary: "AICM control objective in domain MDS"
+  - ref: MDS-05
+    text_summary: "AICM control objective in domain MDS"
+  - ref: MDS-06
+    text_summary: "AICM control objective in domain MDS"
+  - ref: MDS-07
+    text_summary: "AICM control objective in domain MDS"
+  - ref: MDS-08
+    text_summary: "AICM control objective in domain MDS"
+  - ref: MDS-09
+    text_summary: "AICM control objective in domain MDS"
+  - ref: MDS-10
+    text_summary: "AICM control objective in domain MDS"
+  - ref: MDS-11
+    text_summary: "AICM control objective in domain MDS"
+  - ref: MDS-12
+    text_summary: "AICM control objective in domain MDS"
+  - ref: MDS-13
+    text_summary: "AICM control objective in domain MDS"
+  # domain SEF
+  - ref: SEF-01
+    text_summary: "AICM control objective in domain SEF"
+  - ref: SEF-02
+    text_summary: "AICM control objective in domain SEF"
+  - ref: SEF-03
+    text_summary: "AICM control objective in domain SEF"
+  - ref: SEF-04
+    text_summary: "AICM control objective in domain SEF"
+  - ref: SEF-05
+    text_summary: "AICM control objective in domain SEF"
+  - ref: SEF-06
+    text_summary: "AICM control objective in domain SEF"
+  - ref: SEF-07
+    text_summary: "AICM control objective in domain SEF"
+  - ref: SEF-08
+    text_summary: "AICM control objective in domain SEF"
+  - ref: SEF-09
+    text_summary: "AICM control objective in domain SEF"
+  - ref: SEF-10
+    text_summary: "AICM control objective in domain SEF"
+  # domain STA
+  - ref: STA-01
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-02
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-03
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-04
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-05
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-06
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-07
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-08
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-09
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-10
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-11
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-12
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-13
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-14
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-15
+    text_summary: "AICM control objective in domain STA"
+  - ref: STA-16
+    text_summary: "AICM control objective in domain STA"
+  # domain TVM
+  - ref: TVM-01
+    text_summary: "AICM control objective in domain TVM"
+  - ref: TVM-02
+    text_summary: "AICM control objective in domain TVM"
+  - ref: TVM-03
+    text_summary: "AICM control objective in domain TVM"
+  - ref: TVM-04
+    text_summary: "AICM control objective in domain TVM"
+  - ref: TVM-05
+    text_summary: "AICM control objective in domain TVM"
+  - ref: TVM-06
+    text_summary: "AICM control objective in domain TVM"
+  - ref: TVM-07
+    text_summary: "AICM control objective in domain TVM"
+  - ref: TVM-08
+    text_summary: "AICM control objective in domain TVM"
+  - ref: TVM-09
+    text_summary: "AICM control objective in domain TVM"
+  - ref: TVM-10
+    text_summary: "AICM control objective in domain TVM"
+  - ref: TVM-11
+    text_summary: "AICM control objective in domain TVM"
+  - ref: TVM-12
+    text_summary: "AICM control objective in domain TVM"
+  - ref: TVM-13
+    text_summary: "AICM control objective in domain TVM"
+  # domain UEM
+  - ref: UEM-01
+    text_summary: "AICM control objective in domain UEM"
+  - ref: UEM-02
+    text_summary: "AICM control objective in domain UEM"
+  - ref: UEM-03
+    text_summary: "AICM control objective in domain UEM"
+  - ref: UEM-04
+    text_summary: "AICM control objective in domain UEM"
+  - ref: UEM-05
+    text_summary: "AICM control objective in domain UEM"
+  - ref: UEM-06
+    text_summary: "AICM control objective in domain UEM"
+  - ref: UEM-07
+    text_summary: "AICM control objective in domain UEM"
+  - ref: UEM-08
+    text_summary: "AICM control objective in domain UEM"
+  - ref: UEM-09
+    text_summary: "AICM control objective in domain UEM"
+  - ref: UEM-10
+    text_summary: "AICM control objective in domain UEM"
+  - ref: UEM-11
+    text_summary: "AICM control objective in domain UEM"
+  - ref: UEM-12
+    text_summary: "AICM control objective in domain UEM"
+  - ref: UEM-13
+    text_summary: "AICM control objective in domain UEM"
+  - ref: UEM-14
+    text_summary: "AICM control objective in domain UEM"

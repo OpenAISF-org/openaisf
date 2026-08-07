@@ -1,0 +1,107 @@
+# ISO/IEC 42001:2023 Annex A — REFERENCE-ONLY inventory.
+#
+# COPYRIGHT POSITION. ISO/IEC 42001:2023 is copyright ISO/IEC. ISO's licence
+# terms do not grant rights of reproduction, adaptation or derivative works.
+# This file therefore contains NO text authored by ISO: no control titles, no
+# normative text, no objective names. It contains only clause identifiers,
+# which are factual designations rather than protectable expression, together
+# with the objective number each falls under, which is a fact about the
+# standard's own numbering.
+#
+# The enumeration is exhaustive, so it embodies no original selection under
+# Feist, and its order follows ISO's numbering, which is functional.
+#
+# This inventory exists so that OpenAISF can account for coverage of the
+# standard. It is not a substitute for it and cannot be used in its place.
+# To read what any control requires, obtain ISO/IEC 42001:2023 from ISO.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+regime: iso_42001
+name: ISO/IEC 42001:2023 — AI management systems
+version: "2023"
+source: "https://www.iso.org/standard/42001"
+licence: "ISO copyright — all rights reserved"
+licence_url: "https://www.iso.org/terms-conditions-licence-agreement.html"
+attribution: >
+  Clause identifiers refer to ISO/IEC 42001:2023, copyright ISO/IEC.
+  No ISO text is reproduced. Obtain the standard from ISO to read it.
+regime_kind: requirement
+reproduction: reference-only
+declared_total: 38
+requirements:
+  - ref: A.2.2
+    text_summary: Annex A clause under objective A.2
+  - ref: A.2.3
+    text_summary: Annex A clause under objective A.2
+  - ref: A.2.4
+    text_summary: Annex A clause under objective A.2
+  - ref: A.3.2
+    text_summary: Annex A clause under objective A.3
+  - ref: A.3.3
+    text_summary: Annex A clause under objective A.3
+  - ref: A.4.2
+    text_summary: Annex A clause under objective A.4
+  - ref: A.4.3
+    text_summary: Annex A clause under objective A.4
+  - ref: A.4.4
+    text_summary: Annex A clause under objective A.4
+  - ref: A.4.5
+    text_summary: Annex A clause under objective A.4
+  - ref: A.4.6
+    text_summary: Annex A clause under objective A.4
+  - ref: A.5.2
+    text_summary: Annex A clause under objective A.5
+  - ref: A.5.3
+    text_summary: Annex A clause under objective A.5
+  - ref: A.5.4
+    text_summary: Annex A clause under objective A.5
+  - ref: A.5.5
+    text_summary: Annex A clause under objective A.5
+  - ref: A.6.1.2
+    text_summary: Annex A clause under objective A.6
+  - ref: A.6.1.3
+    text_summary: Annex A clause under objective A.6
+  - ref: A.6.2.2
+    text_summary: Annex A clause under objective A.6
+  - ref: A.6.2.3
+    text_summary: Annex A clause under objective A.6
+  - ref: A.6.2.4
+    text_summary: Annex A clause under objective A.6
+  - ref: A.6.2.5
+    text_summary: Annex A clause under objective A.6
+  - ref: A.6.2.6
+    text_summary: Annex A clause under objective A.6
+  - ref: A.6.2.7
+    text_summary: Annex A clause under objective A.6
+  - ref: A.6.2.8
+    text_summary: Annex A clause under objective A.6
+  - ref: A.7.2
+    text_summary: Annex A clause under objective A.7
+  - ref: A.7.3
+    text_summary: Annex A clause under objective A.7
+  - ref: A.7.4
+    text_summary: Annex A clause under objective A.7
+  - ref: A.7.5
+    text_summary: Annex A clause under objective A.7
+  - ref: A.7.6
+    text_summary: Annex A clause under objective A.7
+  - ref: A.8.2
+    text_summary: Annex A clause under objective A.8
+  - ref: A.8.3
+    text_summary: Annex A clause under objective A.8
+  - ref: A.8.4
+    text_summary: Annex A clause under objective A.8
+  - ref: A.8.5
+    text_summary: Annex A clause under objective A.8
+  - ref: A.9.2
+    text_summary: Annex A clause under objective A.9
+  - ref: A.9.3
+    text_summary: Annex A clause under objective A.9
+  - ref: A.9.4
+    text_summary: Annex A clause under objective A.9
+  - ref: A.10.2
+    text_summary: Annex A clause under objective A.10
+  - ref: A.10.3
+    text_summary: Annex A clause under objective A.10
+  - ref: A.10.4
+    text_summary: Annex A clause under objective A.10

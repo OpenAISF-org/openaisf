@@ -1,0 +1,483 @@
+# OpenAISF catalog — D03 Data Governance & Provenance
+#
+# The heaviest domain in the catalog, and the one that bridges to whatever data
+# governance the organisation already runs. OpenAISF does not invent a
+# classification scheme; it ingests the one already in use and makes data class
+# a scoping variable.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D03
+name: Data Governance & Provenance
+controls:
+  - id: D03-C01
+    title: Every dataset used has recorded origin and provenance
+    domain: D03
+    level: core
+    normative: >
+      For every dataset used to train, fine-tune, evaluate or retrieve, the
+      organisation MUST record its origin, how it was obtained, and the chain of
+      custody from that origin to use. A dataset whose provenance cannot be
+      stated MUST NOT be used at T3 or above.
+    rfc2119: MUST
+    roles: [provider, supplier]
+    lifecycle: [source, build]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P180D
+        T3: P90D
+        T4: P30D
+      predicate: |
+        datasets.with_provenance == datasets.total
+        AND datasets.unknown_origin == 0
+    evidence:
+      - schema: openaisf.evidence.dataset_inventory.v1
+        plane: control
+        fields: [dataset, origin, obtained_how, custody_chain]
+      - schema: openaisf.evidence.dataset_usage.v1
+        plane: data
+        fields: [datasets_used, with_provenance, unknown_origin, window]
+    failure_mode: >
+      The Hugging Face intrusion began in the data processing pipeline: a
+      malicious dataset abused a remote code loader and a template injection in a
+      dataset configuration to execute code on a worker. Treating a dataset as
+      inert data rather than as untrusted input from a named party is what makes
+      that possible.
+    rationale: >
+      Provenance is the precondition for every other data control. You cannot
+      assess licensing, quality, bias or poisoning exposure for a corpus whose
+      origin nobody recorded, and the absence is never noticed until a regulator
+      or an incident asks.
+    crosswalk:
+      iso_42001: [A.7.2, A.7.3, A.7.5, A.4.3]
+      nist_ai_rmf: [MAP-4.1, MEASURE-2.1]
+      eu_ai_act: ["Art.10(2)(a)", "Art.10(2)(b)"]
+      csa_aicm: [DSP-01, DSP-03]
+      mitre_atlas: [AML.T0002.000, AML.T0010.002]
+
+  - id: D03-C02
+    title: Lawful basis and licensing are established for every data source
+    domain: D03
+    level: core
+    normative: >
+      The organisation MUST record, for each dataset, the lawful basis for
+      processing any personal data it contains and the licence or right under
+      which the content is used, including a policy for compliance with
+      applicable copyright law.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [source]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.data_rights.v1
+        plane: control
+        fields: [dataset, lawful_basis, licence, copyright_policy]
+    failure_mode: >
+      Training corpora assembled by scraping accumulate rights problems that
+      surface years later, at which point the model cannot be untrained and the
+      only remedies are commercial. The AI Act now requires GPAI providers to hold
+      a copyright policy and publish a sufficiently detailed summary of training
+      content, which makes the omission externally visible.
+    rationale: >
+      Recorded at source rather than reconstructed later, because reconstructing
+      the licence position of a corpus after the fact is often impossible and
+      always more expensive than writing it down when it arrived.
+    crosswalk:
+      iso_42001: [A.7.3]
+      nist_ai_rmf: [GOVERN-1.1, MAP-4.1]
+      eu_ai_act: ["Art.53(1)(c)", "Art.53(1)(d)"]
+      csa_aicm: [DSP-02]
+
+  - id: D03-C03
+    title: Datasets are assessed as relevant, representative and sufficiently error-free
+    domain: D03
+    level: core
+    normative: >
+      Training, validation and testing datasets MUST be assessed for relevance,
+      representativeness of the intended population and deployment context, and
+      freedom from errors, to the extent achievable. Gaps and shortcomings MUST
+      be recorded rather than resolved by silence.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [source, build, evaluate]
+    applies_when:
+      system_class: [classical_ml, cv, biometric, recommender, llm]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.data_quality.v1
+        plane: control
+        fields: [dataset, relevance, representativeness, error_assessment, gaps]
+    failure_mode: >
+      Representativeness failures do not announce themselves in aggregate
+      accuracy. A model can perform well overall while failing systematically for
+      a subpopulation absent from the training data, and the deficit is only
+      visible if someone looked for it at dataset level.
+    rationale: >
+      Requiring gaps to be recorded rather than remediated is deliberate. Perfect
+      datasets do not exist, and a control demanding them would be unsatisfiable
+      under principle P2; a control demanding that known deficiencies be stated is
+      both achievable and far more useful downstream in D13.
+    crosswalk:
+      iso_42001: [A.7.4]
+      nist_ai_rmf: [MEASURE-2.1, MEASURE-2.2, MAP-2.3]
+      eu_ai_act: ["Art.10(2)(e)", "Art.10(2)(h)", "Art.10(3)", "Art.26(3)"]
+      csa_aicm: [DSP-05]
+
+  - id: D03-C04
+    title: Data preparation operations are documented and reproducible
+    domain: D03
+    level: core
+    normative: >
+      Data preparation operations, including labelling, cleaning, enrichment,
+      filtering and aggregation, MUST be documented in sufficient detail to
+      reproduce the prepared dataset from its stated origin.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [source, build]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P90D
+        T4: P30D
+      predicate: |
+        preparation.documented == true
+        AND preparation.reproducible_from_origin == true
+    evidence:
+      - schema: openaisf.evidence.preparation_pipeline.v1
+        plane: control
+        fields: [dataset, operations, code_reference]
+      - schema: openaisf.evidence.preparation_run.v1
+        plane: data
+        fields: [runs, reproduced, digest_matches, window]
+    failure_mode: >
+      Where preparation is a sequence of ad hoc scripts, the dataset actually used
+      to train differs from the dataset anybody can describe. Every later claim
+      about bias, licensing or quality then refers to an artefact that no longer
+      exists.
+    rationale: >
+      Reproducibility is what makes the other data controls auditable rather than
+      aspirational. It also produces the digest that D04 binds a model to, which
+      is what allows an evaluation result to be tied to the exact artefact it
+      described.
+    crosswalk:
+      iso_42001: [A.7.6]
+      nist_ai_rmf: [MEASURE-2.1, MAP-2.3]
+      eu_ai_act: ["Art.10(2)(c)", "Art.10(2)(d)"]
+      csa_aicm: [DSP-04]
+
+  - id: D03-C05
+    title: Datasets are examined for bias and mitigations are recorded
+    domain: D03
+    level: core
+    normative: >
+      Datasets MUST be examined for biases likely to affect health, safety or
+      fundamental rights, or to lead to prohibited discrimination. Identified
+      biases MUST have recorded detection, prevention or mitigation measures.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [source, evaluate]
+    applies_when:
+      eu_risk: [high, gpai, gpai_systemic]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.bias_examination.v1
+        plane: control
+        fields: [dataset, biases_examined, findings, mitigations]
+    failure_mode: >
+      Bias introduced at dataset level cannot be reliably removed downstream by
+      output filtering, and attempts to do so produce systems that behave
+      inconsistently for the affected group rather than fairly.
+    rationale: >
+      Placed in D03 rather than D13 because the examination has to happen where
+      the data is, before training. D13 measures the resulting model behaviour;
+      this control governs the input that determines it.
+    crosswalk:
+      iso_42001: [A.7.4]
+      nist_ai_rmf: [MEASURE-2.11]
+      eu_ai_act: ["Art.10(2)(f)", "Art.10(2)(g)"]
+      csa_aicm: [DSP-06]
+
+  - id: D03-C06
+    title: Personal and sensitive data is detected and handled at the boundary
+    domain: D03
+    level: core
+    normative: >
+      Data crossing into or out of a model context MUST be evaluated for personal
+      and sensitive content according to the organisation's classification scheme,
+      and handled per the policy for that class. The evaluation MUST run on live
+      traffic, not only on sampled or historic data.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [operate]
+    applies_when:
+      data_class: [personal, special_category, health, financial, children]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        boundary_policy.enabled == true
+        AND (traffic.requests > 0 IMPLIES boundary.evaluations > 0)
+    evidence:
+      - schema: openaisf.evidence.data_boundary_policy.v1
+        plane: control
+        fields: [classes_detected, action_per_class]
+      - schema: openaisf.evidence.boundary_enforcement.v1
+        plane: data
+        fields: [evaluated, detected, redacted, blocked, window]
+    failure_mode: >
+      Fifty-four percent of shadow-AI tools have been used to upload sensitive
+      company data, and patient data appears in eighteen percent of healthcare AI
+      data events. In almost none of these cases was a redaction capability
+      absent; it was present and not in the path of the traffic that mattered.
+    rationale: >
+      This is the clearest case for two-plane evidence in the whole catalog. A
+      declared redaction policy with a zero evaluation counter under live traffic
+      is the canonical D19-C03 contradiction, and it is common enough that the
+      control is written specifically to catch it.
+    crosswalk:
+      iso_42001: [A.7.2]
+      nist_ai_rmf: [MEASURE-2.10]
+      eu_ai_act: ["Art.10(5)"]
+      csa_aicm: [DSP-07, DSP-09, DSP-10]
+      owasp_llm_2025: [LLM02]
+      owasp_llm_2026: [LLM02]
+      mitre_atlas: [AML.T0057, AML.T0036]
+
+  - id: D03-C07
+    title: Data classification is inherited from the organisation's existing scheme
+    domain: D03
+    level: core
+    normative: >
+      The data classes used to scope AI controls MUST be derived from the
+      organisation's existing data classification scheme where one exists, and
+      the mapping between that scheme and the OpenAISF data classes MUST be
+      recorded. A parallel AI-only classification MUST NOT be maintained.
+    rfc2119: MUST
+    roles: [deployer, provider]
+    lifecycle: [conceive, operate]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: asserted
+      planes: [control]
+      freshness:
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.classification_mapping.v1
+        plane: control
+        fields: [org_scheme, openaisf_class, mapping, owner]
+    failure_mode: >
+      Where AI governance invents its own data taxonomy, the two schemes diverge
+      within months and staff must decide which applies. The usual resolution is
+      that neither is applied consistently, and lineage between them is lost.
+    rationale: >
+      This is the bridge to enterprise data governance and it is deliberately a
+      prohibition as much as a requirement. The value of data class as a scoping
+      variable comes entirely from it meaning the same thing here as it does in
+      the DLP policy and the records retention schedule.
+    crosswalk:
+      iso_42001:
+        - {ref: A.7.2, strength: partial}
+      nist_ai_rmf:
+        - {ref: MAP-4.1, strength: partial}
+      csa_aicm:
+        - {ref: DSP-08, strength: partial}
+
+  - id: D03-C08
+    title: Retention, deletion and residency are enforced for AI-held data
+    domain: D03
+    level: core
+    normative: >
+      Data held in prompts, completions, traces, caches, fine-tuning corpora and
+      retrieval indexes MUST be subject to declared retention periods, deletion on
+      expiry or request, and declared residency constraints. Deletion MUST reach
+      derived stores including vector indexes.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [operate, retire]
+    applies_when:
+      data_class: [personal, special_category, health, financial, children, confidential]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P30D
+        T4: P7D
+      predicate: |
+        retention_policy declared
+        AND deletion.reaches_derived_stores == true
+        AND residency.violations == 0
+    evidence:
+      - schema: openaisf.evidence.retention_policy.v1
+        plane: control
+        fields: [store, retention, residency, deletion_scope]
+      - schema: openaisf.evidence.deletion_run.v1
+        plane: data
+        fields: [requests, completed, derived_stores_covered, residency_violations, window]
+    failure_mode: >
+      Deletion routinely reaches the primary record and misses the embedding
+      derived from it. The vector store then continues to serve semantically
+      equivalent content indefinitely, which satisfies no deletion obligation
+      anywhere while appearing to.
+    rationale: >
+      Naming derived stores explicitly is the whole point of this control. Every
+      organisation already has a retention policy; almost none of them have
+      considered that a retrieval index is a copy.
+    crosswalk:
+      iso_42001: [A.7.2]
+      nist_ai_rmf: [MEASURE-2.10, GOVERN-1.7]
+      csa_aicm: [DSP-11, DSP-12, DSP-16]
+      owasp_llm_2025: [LLM08]
+      owasp_llm_2026: [LLM09]
+
+  - id: D03-C09
+    title: Retrieval corpora are governed as an attack surface
+    domain: D03
+    level: core
+    normative: >
+      Content admitted to a retrieval corpus MUST have recorded provenance, MUST
+      be treated as untrusted at inference time, and MUST be subject to a declared
+      admission policy. Credentials and secrets MUST NOT be admitted.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [build, operate]
+    applies_when:
+      system_class: [llm, agentic]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        admission_policy declared
+        AND corpus.secret_scan_performed == true
+        AND corpus.untrusted_at_inference == true
+    evidence:
+      - schema: openaisf.evidence.corpus_policy.v1
+        plane: control
+        fields: [sources, admission_policy, secret_scanning]
+      - schema: openaisf.evidence.corpus_admission.v1
+        plane: data
+        fields: [admitted, rejected, secrets_found, window]
+    failure_mode: >
+      Retrieval corpora are the highest-value injection target in a deployed
+      system because content enters them through routes nobody treats as a code
+      path. ATLAS catalogues RAG poisoning, false entry injection and credential
+      harvesting from RAG as distinct techniques, and MCP-38 lists resource
+      content poisoning as a category of its own.
+    rationale: >
+      Governing admission is more tractable than sanitising at inference, because
+      the corpus is a bounded set that changes slowly while inference traffic is
+      unbounded and adversarial. Scanning for secrets on admission also removes
+      the most damaging single class of retrieval leak.
+    crosswalk:
+      iso_42001: [A.7.3, A.7.5]
+      nist_ai_rmf: [MEASURE-2.7, MANAGE-2.2]
+      eu_ai_act: ["Art.15(5)"]
+      csa_aicm: [DSP-13, DSP-19]
+      owasp_llm_2025: [LLM08]
+      owasp_llm_2026: [LLM09]
+      mitre_atlas: [AML.T0070, AML.T0071, AML.T0066, AML.T0082, AML.T0064, AML.T0085.000]
+      mcp_38: [MCP-12]
+
+  - id: D03-C10
+    title: Training and fine-tuning inputs are protected against poisoning
+    domain: D03
+    level: core
+    normative: >
+      Data admitted to training or fine-tuning MUST pass a declared integrity
+      check appropriate to its source, and the resulting corpus MUST be pinned by
+      digest to the training run that consumed it.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [source, build]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P90D
+        T4: P30D
+      predicate: |
+        integrity_check declared
+        AND corpus.digest_pinned_to_run == true
+    evidence:
+      - schema: openaisf.evidence.corpus_integrity.v1
+        plane: control
+        fields: [source, check_type, threshold]
+      - schema: openaisf.evidence.training_run_binding.v1
+        plane: data
+        fields: [run_id, corpus_digest, checks_passed, window]
+    failure_mode: >
+      Poisoning introduced at training time survives every downstream control,
+      because the resulting behaviour is indistinguishable from a design choice.
+      ATLAS records training data poisoning, dataset integrity erosion and
+      published poisoned datasets as separate live techniques.
+    rationale: >
+      Pinning the corpus digest to the run is what makes a later poisoning finding
+      actionable. Without it, discovering that a source was compromised on a given
+      date does not tell you which models were affected.
+    crosswalk:
+      iso_42001: [A.7.4, A.7.5]
+      nist_ai_rmf: [MEASURE-2.7, MANAGE-3.2]
+      eu_ai_act: ["Art.15(5)"]
+      csa_aicm: [DSP-14, MDS-02]
+      owasp_llm_2025: [LLM04]
+      owasp_llm_2026: [LLM05]
+      mitre_atlas: [AML.T0020, AML.T0059, AML.T0115.000, AML.T0099, AML.T0018.000, AML.T0043.004]

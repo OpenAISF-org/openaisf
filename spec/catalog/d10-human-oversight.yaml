@@ -1,0 +1,206 @@
+# OpenAISF catalog — D10 Human Oversight & Intervention
+#
+# Oversight fails in a specific and well-documented way: it is assigned to
+# someone without the competence, the information or the authority to exercise
+# it, and it then degrades into a signature. Every control here targets one of
+# those three.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D10
+name: Human Oversight & Intervention
+controls:
+  - id: D10-C01
+    title: Oversight is designed into the system, not added around it
+    domain: D10
+    level: core
+    normative: >
+      The system MUST be designed so that a person overseeing it can understand
+      its capabilities and limitations, interpret its output, and act on that
+      interpretation. The oversight design MUST state what the overseer is
+      expected to detect and what information they are given to detect it.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [build, release]
+    applies_when:
+      eu_risk: [high, limited, gpai, gpai_systemic]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.oversight_design.v1
+        plane: control
+        fields: [expected_detections, information_provided, limitations_stated]
+    failure_mode: >
+      Oversight designed after the fact consists of showing the operator the
+      output and asking them to approve it. The operator has no basis to
+      disagree, because nothing in the interface tells them what the system is
+      bad at.
+    rationale: >
+      Stating what the overseer is expected to detect is the requirement that
+      makes oversight assessable. Without it, an oversight failure can always be
+      attributed to the individual rather than to a design that made detection
+      impossible.
+    crosswalk:
+      iso_42001: [A.9.2, A.9.3]
+      nist_ai_rmf: [MAP-2.2, MAP-3.5, GOVERN-3.2]
+      eu_ai_act: ["Art.14(1)", "Art.14(4)(a)", "Art.14(4)(c)"]
+      csa_aicm: [HRS-06]
+
+  - id: D10-C02
+    title: The overseer can override, disregard and reverse system output
+    domain: D10
+    level: core
+    normative: >
+      A person exercising oversight MUST be able to decide not to use the output,
+      to disregard it, and where the action has occurred to reverse it. The
+      override path MUST be available without requiring the cooperation of the
+      system being overridden.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [build, release, operate]
+    applies_when:
+      eu_risk: [high, gpai, gpai_systemic]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P30D
+        T4: P7D
+      predicate: |
+        override_path.exists == true
+        AND override_path.independent_of_subject == true
+    evidence:
+      - schema: openaisf.evidence.override_design.v1
+        plane: control
+        fields: [override_path, reversal_scope, independence]
+      - schema: openaisf.evidence.override_use.v1
+        plane: data
+        fields: [decisions, overridden, reversed, window]
+    failure_mode: >
+      An override implemented as a request to the system asking it to stop is not
+      an override. Where the path runs through the component being overridden, a
+      compromised or malfunctioning system can decline, and the control exists
+      only for the case where it was not needed.
+    rationale: >
+      Independence from the subject is the requirement that connects human
+      oversight to containment in D16. It is also what distinguishes a genuine
+      override from a user interface affordance.
+    crosswalk:
+      iso_42001: [A.9.2]
+      nist_ai_rmf: [MANAGE-2.4, MAP-3.5]
+      eu_ai_act: ["Art.14(4)(d)", "Art.14(4)(e)"]
+      csa_aicm: [HRS-07]
+      owasp_llm_2025: [LLM06]
+      owasp_llm_2026: [LLM03]
+
+  - id: D10-C03
+    title: Automation bias is actively countered, not merely acknowledged
+    domain: D10
+    level: core
+    normative: >
+      The oversight design MUST include measures to counter over-reliance on
+      system output, and the rate at which overseers accept output without
+      modification MUST be monitored. A sustained acceptance rate approaching
+      unity MUST be investigated rather than reported as success.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [release, operate, observe]
+    applies_when:
+      eu_risk: [high, gpai, gpai_systemic]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P90D
+        T4: P30D
+      predicate: |
+        countermeasures declared
+        AND acceptance_rate.monitored == true
+        AND acceptance_rate.threshold_investigations_performed == true
+    evidence:
+      - schema: openaisf.evidence.automation_bias_measures.v1
+        plane: control
+        fields: [measures, acceptance_threshold]
+      - schema: openaisf.evidence.oversight_behaviour.v1
+        plane: data
+        fields: [reviews, accepted_unmodified, modified, rejected, window]
+    failure_mode: >
+      Approval fatigue is a documented attack path in agent systems: high-
+      frequency requests condition operators to approve without reading, and
+      attackers embed critical operations among routine ones. The same mechanism
+      degrades ordinary oversight without any adversary at all.
+    rationale: >
+      Treating a near-total acceptance rate as a warning rather than a metric of
+      good performance is the inversion this control exists for. It is the only
+      observable that distinguishes oversight from rubber-stamping, and it is
+      already in the data every review workflow produces.
+    crosswalk:
+      iso_42001:
+        - {ref: A.9.2, strength: partial}
+      nist_ai_rmf:
+        - {ref: GOVERN-3.2, strength: partial}
+        - {ref: MEASURE-2.8, strength: partial}
+      eu_ai_act:
+        - {ref: "Art.14(4)(b)", strength: partial}
+      mcp_38: [MCP-23, MCP-22]
+
+  - id: D10-C04
+    title: Oversight decisions are recorded against a named person
+    domain: D10
+    level: core
+    normative: >
+      Where a decision requires human oversight, the record MUST identify the
+      person who exercised it, what they were shown, and what they decided.
+      Approval by a shared or system account MUST NOT be recorded as human
+      oversight.
+    rfc2119: MUST
+    roles: [deployer]
+    lifecycle: [operate, observe]
+    applies_when:
+      eu_risk: [high, gpai, gpai_systemic]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P30D
+        T4: P7D
+      predicate: |
+        oversight_records.identify_person == true
+        AND approvals_by_shared_account == 0
+    evidence:
+      - schema: openaisf.evidence.oversight_record_policy.v1
+        plane: control
+        fields: [required_fields, shared_account_prohibition]
+      - schema: openaisf.evidence.oversight_records.v1
+        plane: data
+        fields: [decisions, with_named_person, shared_account, window]
+    failure_mode: >
+      Oversight recorded against a service account or a team mailbox cannot be
+      audited, cannot be questioned, and provides no basis for the competence
+      requirement in D01-C05. It is also indistinguishable from an automated
+      approval, which is frequently what it has become.
+    rationale: >
+      This is D01-C01 applied to individual decisions and it pairs with the
+      approval evidence in D07-C04. Recording what the person was shown is what
+      allows a later reviewer to judge whether the decision was reasonable rather
+      than merely whether it was made.
+    crosswalk:
+      iso_42001: [A.6.2.8, A.9.2]
+      nist_ai_rmf: [GOVERN-2.1, MEASURE-2.8]
+      eu_ai_act: ["Art.14(5)", "Art.26(2)", "Art.12(1)"]
+      csa_aicm: [LOG-09, HRS-08]

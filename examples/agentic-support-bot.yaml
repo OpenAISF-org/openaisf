@@ -1,0 +1,14 @@
+# Example scoping file: a customer-support agent with tool access.
+# OpenAISF — created by Maarten Loose.
+system_id: urn:openaisf:system:acme-support-agent
+roles: [deployer]
+system_class: [llm, agentic]
+autonomy: tool_use
+data_class: [internal, personal]
+eu_risk: [limited]
+
+# Controls an upstream certified component already proves.
+inherits: {}
+
+# Controls that apply but are deliberately not implemented. Each needs a reason.
+exclusions: {}

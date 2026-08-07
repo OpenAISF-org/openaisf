@@ -1,0 +1,122 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://openaisf.org/schema/control.schema.json",
+  "title": "OpenAISF Control",
+  "type": "object",
+  "required": ["id", "title", "domain", "level", "normative", "rfc2119",
+               "roles", "lifecycle", "tiers", "verification", "crosswalk"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {"type": "string", "pattern": "^D(0[1-9]|1[0-9]|20)-(C|X)[0-9]{2}$"},
+    "title": {"type": "string", "minLength": 8},
+    "domain": {"type": "string", "pattern": "^D(0[1-9]|1[0-9]|20)$"},
+    "level": {"enum": ["core", "expansion"]},
+    "chain_stage": {"enum": ["bound", "detect", "contain", "recover", "prove"]},
+    "normative": {"type": "string", "minLength": 20},
+    "rfc2119": {"enum": ["MUST", "MUST NOT", "SHOULD", "SHOULD NOT", "MAY"]},
+    "roles": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"enum": ["provider", "deployer", "supplier", "operator"]}
+    },
+    "lifecycle": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {"enum": ["conceive", "source", "build", "evaluate", "release",
+                          "operate", "observe", "respond", "retire"]}
+    },
+    "applies_when": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "system_class": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"enum": ["llm", "agentic", "classical_ml", "cv", "biometric",
+                              "generative_media", "recommender", "rl"]}
+        },
+        "autonomy": {"type": "array", "items": {"type": "string"}},
+        "data_class": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"enum": ["public", "internal", "confidential", "personal",
+                              "special_category", "health", "financial", "children"]}
+        },
+        "eu_risk": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"enum": ["prohibited", "high", "limited", "minimal",
+                              "gpai", "gpai_systemic"]}
+        }
+      }
+    },
+    "tiers": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "T1": {"enum": ["required", "recommended", "not_applicable"]},
+        "T2": {"enum": ["required", "recommended", "not_applicable"]},
+        "T3": {"enum": ["required", "recommended", "not_applicable"]},
+        "T4": {"enum": ["required", "recommended", "not_applicable"]}
+      }
+    },
+    "verification": {
+      "type": "object",
+      "required": ["method"],
+      "additionalProperties": false,
+      "properties": {
+        "method": {"enum": ["emitted", "asserted", "attested", "assessed"]},
+        "planes": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"enum": ["control", "data"]}
+        },
+        "freshness": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "T1": {"type": "string", "pattern": "^P"},
+            "T2": {"type": "string", "pattern": "^P"},
+            "T3": {"type": "string", "pattern": "^P"},
+            "T4": {"type": "string", "pattern": "^P"}
+          }
+        },
+        "predicate": {"type": "string"}
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["schema", "plane"],
+        "additionalProperties": false,
+        "properties": {
+          "schema": {"type": "string", "pattern": "^openaisf\\.evidence\\."},
+          "plane": {"enum": ["control", "data"]},
+          "source_hint": {"type": "array", "items": {"type": "string"}},
+          "fields": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "failure_mode": {"type": "string", "minLength": 40},
+    "rationale": {"type": "string", "minLength": 40},
+    "crosswalk": {
+      "type": "object",
+      "description": "regime -> list of references. A bare string defaults to strength 'full', meaning that external requirement on its own demands substantially what this control demands. Claiming novelty requires explicitly marking a mapping 'partial'.",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "oneOf": [
+            {"type": "string"},
+            {
+              "type": "object",
+              "required": ["ref"],
+              "additionalProperties": false,
+              "properties": {
+                "ref": {"type": "string"},
+                "strength": {"enum": ["full", "partial"]},
+                "note": {"type": "string"}
+              }
+            }
+          ]
+        }
+      }
+    },
+    "provenance": {"enum": ["OpenAISF-original", "derived", "adopted"]}
+  }
+}

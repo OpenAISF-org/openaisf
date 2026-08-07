@@ -1,0 +1,154 @@
+# OpenAISF catalog — D20 Resource, Cost & Environmental Impact
+#
+# Small domain, and it exists for two reasons that have nothing to do with each
+# other: Annex XI of the AI Act requires energy consumption reporting for GPAI
+# models, and unbounded consumption climbed from tenth to sixth in the 2026
+# OWASP list on the strength of real incidents.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D20
+name: Resource, Cost & Environmental Impact
+controls:
+  - id: D20-C01
+    title: Consumption is accounted per system and attributable to a principal
+    domain: D20
+    level: core
+    normative: >
+      Token, compute and monetary consumption MUST be accounted per AI system and
+      attributable to the principal that caused it. Consumption that cannot be
+      attributed MUST be recorded as unattributed rather than absorbed into a
+      total.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [operate, observe]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        accounting.per_system == true
+        AND accounting.per_principal == true
+        AND unattributed.recorded_separately == true
+    evidence:
+      - schema: openaisf.evidence.consumption_policy.v1
+        plane: control
+        fields: [dimensions, attribution_scheme]
+      - schema: openaisf.evidence.consumption_records.v1
+        plane: data
+        fields: [system, principal, tokens, compute, spend, unattributed, window]
+    failure_mode: >
+      Denial of wallet works because consumption is aggregated into a bill nobody
+      reads until month end. Unattributed consumption is also the first observable
+      signal of an agent operating outside its intended scope, and pooling it into
+      a total destroys exactly that signal.
+    rationale: >
+      Recording unattributed consumption separately rather than absorbing it is
+      the part that matters. It supplies the denominator for the velocity
+      signatures in D15-C03 and it is the cheapest available detector for an agent
+      nobody knew was running.
+    crosswalk:
+      iso_42001: [A.4.5]
+      nist_ai_rmf: [MANAGE-2.1, MEASURE-2.6]
+      csa_aicm: [I&S-01, I&S-04]
+      owasp_llm_2025: [LLM10]
+      owasp_llm_2026: [LLM06]
+      mitre_atlas: [AML.T0034, AML.T0034.000, AML.T0034.001]
+
+  - id: D20-C02
+    title: Consumption limits are enforced and breaches are acted on
+    domain: D20
+    level: core
+    normative: >
+      Declared consumption limits MUST be enforced at the point of spend, and a
+      breach MUST produce an action of throttle, halt or alert rather than a
+      retrospective report.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [operate]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        limits declared
+        AND enforcement.at_point_of_spend == true
+        AND breaches.without_action == 0
+    evidence:
+      - schema: openaisf.evidence.consumption_limits.v1
+        plane: control
+        fields: [scope, limits, action_on_breach]
+      - schema: openaisf.evidence.limit_enforcement.v1
+        plane: data
+        fields: [breaches, throttled, halted, alerted, unactioned, window]
+    failure_mode: >
+      A budget alert that fires after the spend has occurred is an accounting
+      entry, not a control. Reasoning models make the asymmetry worse: a single
+      crafted request can cost orders of magnitude more than a typical one, so a
+      limit expressed in requests per minute permits an unbounded bill.
+    rationale: >
+      Enforcement at the point of spend is the same requirement as the action
+      budget in D07-C02, applied to the whole system rather than to a single agent
+      session. Both exist because the alternative is discovering the problem in
+      arrears.
+    crosswalk:
+      iso_42001: [A.4.5]
+      nist_ai_rmf: [MANAGE-2.1, MANAGE-2.2]
+      csa_aicm: [I&S-02, BCR-05]
+      owasp_llm_2025: [LLM10]
+      owasp_llm_2026: [LLM06]
+      mitre_atlas: [AML.T0029, AML.T0034.002]
+
+  - id: D20-C03
+    title: Energy consumption is measured and disclosed where required
+    domain: D20
+    level: core
+    normative: >
+      Providers of general-purpose AI models MUST measure and disclose the known
+      or estimated energy consumption associated with the model, stating the
+      method and boundary of the estimate.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [build, release]
+    applies_when:
+      eu_risk: [gpai, gpai_systemic]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P365D
+        T4: P180D
+    evidence:
+      - schema: openaisf.evidence.energy_disclosure.v1
+        plane: control
+        fields: [value, unit, method, boundary, artefact_digest]
+    failure_mode: >
+      Energy figures published without a stated boundary are not comparable
+      between providers and cannot be verified by anyone. A figure covering only
+      the final training run, presented without saying so, understates the true
+      consumption by a large and unknowable factor.
+    rationale: >
+      Requiring the method and boundary is the only thing that makes the
+      disclosure useful. The AI Act asks for the information; it is the stated
+      boundary that turns it from a number into a claim someone can check.
+    crosswalk:
+      eu_ai_act: ["Annex.XI", "Art.53(1)(a)"]
+      nist_ai_rmf: [MEASURE-2.12]
+      iso_42001: [A.4.5]
+      csa_aicm: [I&S-05]

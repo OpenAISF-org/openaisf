@@ -1,0 +1,64 @@
+# OWASP Top 10 for LLM Applications, 2026 edition (v1.0, published 2026-08-03).
+#
+# WHY THIS IS A SEPARATE REGIME AND NOT AN UPDATE.
+# The 2026 edition reuses the identifiers LLM01-LLM10 for a re-ranked and partly
+# renamed set of risks. LLM03 denotes Supply Chain in the 2025 edition and
+# Excessive Agency in the 2026 edition. Overwriting owasp_llm_2025 would
+# therefore have silently changed the meaning of every existing crosswalk entry
+# without changing a single character of the controls referencing them.
+#
+# Identifiers are permanent in OpenAISF. When an external regime recycles its
+# own identifiers across editions, the edition becomes part of the regime key.
+# A control may legitimately map to both regimes; that is not duplication, it is
+# an accurate statement about two different published lists.
+#
+# COPYRIGHT POSITION. The OWASP GenAI Security Project publishes under
+# CC BY-SA 4.0. ShareAlike propagates to Adapted Material, which would conflict
+# with the CC-BY-4.0 licence of this specification. This file therefore avoids
+# creating Adapted Material: it carries the identifiers, which are factual
+# designations, and descriptors written by OpenAISF rather than OWASP's own risk
+# descriptions. Attribution is given regardless. See ATTRIBUTIONS.md section 3.
+#
+# RANKING NOTE. The 2026 edition was the first to test the community vote
+# against a record of real incidents, drawing on 7,714 incidents from public
+# vulnerability and AI-harm databases. Excessive Agency rose from 6 to 3 and
+# Unbounded Consumption from 10 to 6, both on the strength of real agentic
+# deployments. That movement is direct evidence for the weighting OpenAISF gives
+# D07 (Agentic Authority & Containment) and D20 (Resource, Cost & Environmental
+# Impact).
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+regime: owasp_llm_2026
+name: OWASP Top 10 for LLM Applications 2026
+version: "2026"
+source: "https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/"
+licence: "CC-BY-SA-4.0"
+licence_url: "https://creativecommons.org/licenses/by-sa/4.0/"
+attribution: >
+  Risk identifiers refer to the OWASP Top 10 for Large Language Model
+  Applications 2026 (v1.0, 3 August 2026), OWASP GenAI Security Project,
+  licensed CC BY-SA 4.0. Descriptors are OpenAISF's own and are not OWASP text.
+regime_kind: threat
+reproduction: authored
+declared_total: 10
+requirements:
+  - ref: LLM01
+    text_summary: Injected instructions subverting model behaviour, including cross-modal and persisted-memory paths
+  - ref: LLM02
+    text_summary: Disclosure of sensitive information through model output
+  - ref: LLM03
+    text_summary: Model-driven actions exceeding the authority the system should hold
+  - ref: LLM04
+    text_summary: Compromise reaching the system through models, data or dependencies
+  - ref: LLM05
+    text_summary: Manipulation of training or fine-tuning data to alter model behaviour
+  - ref: LLM06
+    text_summary: Uncontrolled consumption of compute, tokens or spend
+  - ref: LLM07
+    text_summary: Generation or propagation of false or misleading output
+  - ref: LLM08
+    text_summary: Exposure of instructions or context the operator intended to keep hidden
+  - ref: LLM09
+    text_summary: Weaknesses in vector stores and embeddings used for retrieval
+  - ref: LLM10
+    text_summary: Unsafe handling of model output by downstream components

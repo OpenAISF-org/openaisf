@@ -1,0 +1,235 @@
+# OpenAISF catalog — D11 Transparency, Disclosure & Output Provenance
+#
+# Article 50 of the AI Act became applicable on 2 August 2026, together with
+# national market surveillance powers. This domain is the one with live
+# enforcement behind it today.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D11
+name: Transparency, Disclosure & Output Provenance
+controls:
+  - id: D11-C01
+    title: A system card describes the system, its limits and its intended use
+    domain: D11
+    level: core
+    normative: >
+      The provider MUST publish a system card stating the intended purpose, the
+      conditions of intended use, known limitations, the population the system was
+      designed for, and the artefact version it describes.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [release]
+    tiers:
+      T1: recommended
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T1: P365D
+        T2: P180D
+        T3: P90D
+        T4: P30D
+      predicate: |
+        system_card.present == true
+        AND system_card.artefact_digest_matches_deployed == true
+    evidence:
+      - schema: openaisf.evidence.system_card.v1
+        plane: control
+        fields: [purpose, conditions, limitations, population, artefact_digest]
+      - schema: openaisf.evidence.card_currency.v1
+        plane: data
+        fields: [deployed_digest, card_digest, matched, window]
+    failure_mode: >
+      System cards are written at first release and not revised, so they describe
+      a model two versions out of date. A deployer reading one is relying on
+      limitations that may have changed and on an intended-use statement the
+      provider has since expanded.
+    rationale: >
+      Tying the card to the deployed artefact digest is what converts it from
+      marketing collateral into an artefact the conformance run can check. It is
+      the same binding used for evaluation results in D08-C01, for the same
+      reason.
+    crosswalk:
+      iso_42001: [A.6.2.7, A.8.2]
+      nist_ai_rmf: [MAP-3.3, MEASURE-2.8, GOVERN-4.2]
+      eu_ai_act: ["Art.13(1)", "Art.13(3)", "Art.11", "Annex.IV"]
+      csa_aicm: [GRC-09]
+
+  - id: D11-C02
+    title: People are told when they are interacting with an AI system
+    domain: D11
+    level: core
+    normative: >
+      Where a natural person interacts with an AI system, they MUST be informed of
+      that fact unless it is obvious from the context to a reasonably well-
+      informed person. The disclosure MUST be made at or before the first
+      interaction.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [release, operate]
+    tiers:
+      T1: required
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: asserted
+      planes: [control]
+      freshness:
+        T1: P365D
+        T2: P180D
+        T3: P90D
+        T4: P30D
+    evidence:
+      - schema: openaisf.evidence.interaction_disclosure.v1
+        plane: control
+        fields: [surface, disclosure_text, timing]
+    failure_mode: >
+      Disclosure buried in terms of service or shown after the interaction has
+      concluded does not inform anyone. Article 50(1) has been enforceable since
+      2 August 2026 and market surveillance authorities can now demand
+      documentation and impose fines.
+    rationale: >
+      Required at every tier including T1, because it costs nothing, applies to
+      the smallest deployment, and is the single obligation most likely to catch
+      an otherwise well-run system that never considered it.
+    crosswalk:
+      iso_42001: [A.8.2]
+      nist_ai_rmf: [GOVERN-4.2, MEASURE-2.8]
+      eu_ai_act: ["Art.50(1)", "Art.26(7)"]
+
+  - id: D11-C03
+    title: Synthetic content is marked in a machine-readable form
+    domain: D11
+    level: core
+    normative: >
+      Audio, image, video and text generated or materially modified by the system
+      MUST be marked as artificially generated in a machine-readable form that
+      survives ordinary handling. The marking scheme MUST be stated.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [build, release, operate]
+    applies_when:
+      system_class: [generative_media, llm]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        marking_scheme declared
+        AND (generated_artefacts > 0 IMPLIES marked == generated_artefacts)
+    evidence:
+      - schema: openaisf.evidence.provenance_marking.v1
+        plane: control
+        fields: [scheme, media_types, durability]
+      - schema: openaisf.evidence.marking_coverage.v1
+        plane: data
+        fields: [generated, marked, unmarked, window]
+    failure_mode: >
+      Marking applied at one output surface and not another produces a corpus
+      where the absence of a mark carries no information, which defeats the
+      purpose entirely. ATLAS tracks deepfake generation and deepfake-assisted
+      phishing as live techniques that provenance marking is intended to blunt.
+    rationale: >
+      The two-plane check matters here more than usual: a declared marking scheme
+      with an unmarked-output counter above zero is a direct contradiction, and it
+      is the common state of systems that added marking to their main path only.
+    crosswalk:
+      iso_42001: [A.8.2]
+      nist_ai_rmf: [MEASURE-2.8, GOVERN-4.2]
+      eu_ai_act: ["Art.50(2)"]
+      mitre_atlas: [AML.T0088, AML.T0052.001]
+
+  - id: D11-C04
+    title: Emotion recognition, biometric categorisation and deep fakes are disclosed
+    domain: D11
+    level: core
+    normative: >
+      Where the system performs emotion recognition or biometric categorisation,
+      the persons exposed to it MUST be informed. Where it produces deep fake
+      content or AI-generated text published to inform the public on matters of
+      public interest, that content MUST be disclosed as artificially generated.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [release, operate]
+    applies_when:
+      system_class: [biometric, generative_media, llm]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: asserted
+      planes: [control]
+      freshness:
+        T2: P180D
+        T3: P90D
+        T4: P30D
+    evidence:
+      - schema: openaisf.evidence.special_disclosure.v1
+        plane: control
+        fields: [category, disclosure_method, exposed_persons]
+    failure_mode: >
+      These disclosures are separate obligations from the general interaction
+      notice and are frequently missed because a system doing biometric
+      categorisation as one feature among many is not thought of as a biometric
+      system.
+    rationale: >
+      Kept distinct from D11-C02 because the trigger is the function performed
+      rather than the fact of interaction, and because these obligations apply to
+      people who may never interact with the system at all.
+    crosswalk:
+      eu_ai_act: ["Art.50(3)", "Art.50(4)"]
+      nist_ai_rmf: [GOVERN-4.2]
+      iso_42001: [A.8.2]
+
+  - id: D11-C05
+    title: Downstream providers receive what they need to meet their own obligations
+    domain: D11
+    level: core
+    normative: >
+      A provider MUST supply downstream providers integrating its model or system
+      with the information and documentation they require to understand its
+      capabilities and limitations and to discharge their own obligations,
+      including a summary of training content where required.
+    rfc2119: MUST
+    roles: [provider, supplier]
+    lifecycle: [release]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.downstream_pack.v1
+        plane: control
+        fields: [recipients, contents, training_summary, energy_disclosure]
+    failure_mode: >
+      Downstream providers cannot assess a model they cannot characterise, so
+      they either over-restrict it or deploy it on assumptions the upstream
+      provider never confirmed. The AI Act makes this an explicit obligation
+      because the information asymmetry does not resolve commercially.
+    rationale: >
+      This is the transparency counterpart of inheritance in the SoA. An upstream
+      provider that publishes a badge and this documentation makes its downstream
+      deployers' conformance genuinely cheaper, which is the mechanism by which
+      inheritance becomes attractive to the party that has to do the work.
+    crosswalk:
+      iso_42001: [A.8.2, A.8.5, A.10.4]
+      nist_ai_rmf: [GOVERN-6.1, MAP-4.1]
+      eu_ai_act: ["Art.53(1)(a)", "Art.53(1)(b)", "Art.53(1)(d)", "Annex.XII", "Annex.XI"]
+      csa_aicm: [STA-11, IPY-01]

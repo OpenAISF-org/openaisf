@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenAISF — your compliance has a TTL</title>
+<meta name="description" content="An open conformance framework for AI safety and security. Conformance is a state with a heartbeat, not an event that produced a document. Created by Maarten Loose.">
+<style>
+:root {
+  --bg: #fbfaf8; --fg: #1a1a18; --muted: #5d5b56; --rule: #e2ded6;
+  --accent: #8a3324; --code-bg: #f3f0ea; --ok: #2d6a4f; --bad: #9b2226;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14140f; --fg: #eae7df; --muted: #9c988e; --rule: #2e2d27;
+    --accent: #d98b6a; --code-bg: #1d1d17; --ok: #74c69d; --bad: #e5807a;
+  }
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 17px/1.65 ui-serif, Georgia, "Times New Roman", serif;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 44rem; margin: 0 auto; padding: 0 1.5rem 6rem; }
+header { padding: 5rem 0 3rem; border-bottom: 1px solid var(--rule); }
+h1 { font-size: 2.6rem; line-height: 1.1; margin: 0 0 1rem; letter-spacing: -0.02em; }
+h2 { font-size: 1.35rem; margin: 3.5rem 0 1rem; letter-spacing: -0.01em; }
+h3 { font-size: 1.05rem; margin: 2rem 0 .5rem; }
+p { margin: 0 0 1.1rem; }
+.lede { font-size: 1.2rem; color: var(--muted); margin-bottom: 1.5rem; }
+.claim {
+  border-left: 3px solid var(--accent); padding: .3rem 0 .3rem 1.2rem;
+  margin: 2rem 0; font-size: 1.15rem;
+}
+.ttl { font-weight: 600; color: var(--accent); }
+code, pre {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .85em;
+}
+pre {
+  background: var(--code-bg); padding: 1rem 1.1rem; border-radius: 4px;
+  overflow-x: auto; line-height: 1.5; margin: 1.2rem 0;
+}
+.tablewrap { overflow-x: auto; margin: 1.5rem 0; }
+table { border-collapse: collapse; width: 100%; font-size: .92rem; }
+th, td { text-align: left; padding: .45rem .8rem .45rem 0; border-bottom: 1px solid var(--rule); }
+th { font-weight: 600; color: var(--muted); font-size: .82rem; text-transform: uppercase; letter-spacing: .04em; }
+td.num, th.num { text-align: right; padding-right: 1.4rem; }
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+.ok { color: var(--ok); } .bad { color: var(--bad); }
+.muted { color: var(--muted); }
+footer {
+  margin-top: 5rem; padding-top: 2rem; border-top: 1px solid var(--rule);
+  color: var(--muted); font-size: .9rem;
+}
+.pills { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0; }
+.pill {
+  border: 1px solid var(--rule); border-radius: 999px; padding: .25rem .85rem;
+  font-size: .82rem; color: var(--muted);
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>Your compliance has a TTL.</h1>
+  <p class="lede">OpenAISF is an open conformance framework for AI safety and security in which conformance is a state with a heartbeat, rather than an event that produced a document.</p>
+  <div class="pills">
+    <span class="pill">20 domains · 112 controls</span>
+    <span class="pill">677 requirements · 0 gaps</span>
+    <span class="pill">CC-BY-4.0 / Apache-2.0</span>
+    <span class="pill">RFC open for comment</span>
+  </div>
+</header>
+
+<div class="claim">
+  An AI system is OpenAISF-conformant at tier T <strong>for as long as</strong> it keeps producing signed evidence that satisfies tier T's applicable controls.
+</div>
+
+<p>Every AI governance regime in use today answers <em>“were you compliant when somebody looked?”</em> OpenAISF answers <em>“are you compliant right now?”</em> — and makes the answer checkable by a stranger.</p>
+
+<h2>What it does not claim</h2>
+
+<p>Each of the following is a claim OpenAISF does not make.</p>
+
+<p><strong>It does not promise no agent goes rogue.</strong> Nothing can, and a standard implying otherwise would be destroyed by the first incident. It requires that agent authority is bounded, that departure is detected by detectors <em>proven to fire</em>, that it can be contained by a kill-switch that has been exercised and timed, that damage is recoverable — and that all four are proven on a clock, or the certificate expires.</p>
+
+<p><strong>It does not claim to be the first machine-readable AI compliance work.</strong> By 2026 that is simply false. OSCAL, Policy Cards, AIP and DEMM-Bench all exist and are cited. OpenAISF exports OSCAL rather than competing with it.</p>
+
+<p><strong>It does not pretend incumbent assurance is naïve.</strong> SOC&nbsp;2 Type&nbsp;II examines a period. ISO 42001 runs surveillance audits. The EU AI Act already <em>requires</em> post-market monitoring. The difference lies in four specific places, and the RFC states them precisely.</p>
+
+<h2>How a lie gets caught</h2>
+
+<p>Evidence has two planes. The <strong>control plane</strong> says a policy is configured. The <strong>data plane</strong> says it was enforced, from live traffic. Claim a policy is on while a day of traffic crossed the enforcement point with zero decisions recorded, and the run says:</p>
+
+<pre>D07-C01  [fail]  declared enabled, but 184203 requests crossed the
+                 enforcement point with 0 decisions recorded. A policy
+                 that never fired under live traffic was not operating.
+
+lease: <span class="bad">revoked</span></pre>
+
+<p>No auditor was involved, and an attestation cannot resolve it. Fabrication is <em>disqualifying</em> — it blocks even where the control is only recommended, and revokes rather than degrades. Obligation level governs whether a shortfall matters. It does not govern whether a lie counts as a lie.</p>
+
+<p>Two companion rules: a <strong>missing signal is failure, not silence</strong>, because a compliant system and a broken pipeline emit the same silence; and <strong>freshness expires on its own</strong>, per control, capped by tier.</p>
+
+<h2>A badge is a function of the reader's clock</h2>
+
+<p>A conformance statement carries its own <code>stale_after</code> and <code>expires_at</code>. A verifier needs the statement, a key and a clock — not the catalog, not your evidence, not your cooperation, and not a registry that could be captured or pressured.</p>
+
+<pre><span class="bad">✗</span> TruCert · OpenAISF-T2 · expired
+
+This badge no longer asserts conformance. Nobody revoked it;
+the lease simply ran out.</pre>
+
+<p>No lease outlives its tier ceiling, so a subject cannot construct a statement that never needs renewing. The log is hash-chained: rewrite a past entry to upgrade yourself and verification stops. And <strong>assurance decay propagates downstream</strong> — a provider who lets their badge lapse degrades every customer depending on it. No existing framework models that.</p>
+
+<h2>Provable coverage, and honest exclusion</h2>
+
+<p>Every framework claims it maps to the others. Mapping <em>outward</em> from your own controls can only show what you found. OpenAISF inverts it: each regime is inventoried to its atomic requirements, and every one must be covered by named controls or excluded with a written reason. No third state. A gap fails the build.</p>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Regime</th><th class="num">Requirements</th><th class="num">Covered</th><th class="num">Excluded</th><th class="num">Gap</th></tr></thead>
+<tbody>
+<tr><td>CSA AICM v1.1.1</td><td class="num">247</td><td class="num">156</td><td class="num">91</td><td class="num ok">0</td></tr>
+<tr><td>MITRE ATLAS 2026.07</td><td class="num">178</td><td class="num">136</td><td class="num">42</td><td class="num ok">0</td></tr>
+<tr><td>EU AI Act 2024/1689</td><td class="num">84</td><td class="num">84</td><td class="num">0</td><td class="num ok">0</td></tr>
+<tr><td>NIST AI RMF 1.0</td><td class="num">72</td><td class="num">72</td><td class="num">0</td><td class="num ok">0</td></tr>
+<tr><td>ISO/IEC 42001 Annex A</td><td class="num">38</td><td class="num">38</td><td class="num">0</td><td class="num ok">0</td></tr>
+<tr><td>MCP-38</td><td class="num">38</td><td class="num">38</td><td class="num">0</td><td class="num ok">0</td></tr>
+<tr><td>OWASP LLM Top 10 2025</td><td class="num">10</td><td class="num">10</td><td class="num">0</td><td class="num ok">0</td></tr>
+<tr><td>OWASP LLM Top 10 2026</td><td class="num">10</td><td class="num">10</td><td class="num">0</td><td class="num ok">0</td></tr>
+<tr><td><strong>Total</strong></td><td class="num"><strong>677</strong></td><td class="num"><strong>544</strong></td><td class="num"><strong>133</strong></td><td class="num ok"><strong>0</strong></td></tr>
+</tbody>
+</table>
+</div>
+
+<p>Every one of the 133 exclusions carries a written reason, and nothing was excluded to make the report green. The RFC puts them in front of reviewers as the framework's most consequential judgement.</p>
+
+<h2>An exhaustive catalog, a short list</h2>
+
+<p>Controls declare their own scope, so the reader never decides whether one applies to them.</p>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>System</th><th class="num">T1</th><th class="num">T2</th><th class="num">T3</th></tr></thead>
+<tbody>
+<tr><td>Internal non-agentic LLM application</td><td class="num">4</td><td class="num">34</td><td class="num muted">—</td></tr>
+<tr><td>Agentic, tool-using, personal data</td><td class="num">4</td><td class="num">49</td><td class="num">77</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>112 controls exist. Nobody reads more than 77 and most read 34. <strong>T1 is four controls, of which one is required</strong> — and that is an executable test, not an aspiration.</p>
+
+<h2>Three names, three jobs</h2>
+
+<div class="tablewrap">
+<table>
+<thead><tr><th>Name</th><th>What it is</th><th>Who owns it</th></tr></thead>
+<tbody>
+<tr><td><strong>OpenAISF</strong></td><td>The open standard</td><td>Open. Created by Maarten Loose</td></tr>
+<tr><td><strong>Certifier</strong></td><td>A <em>role</em> defined by the standard</td><td>Anyone meeting its requirements</td></tr>
+<tr><td><strong>TruCert</strong></td><td>TruSecure's implementation of that role</td><td>TruSecure</td></tr>
+</tbody>
+</table>
+</div>
+
+<p>A system can reach <strong>any tier, including T4, with no money changing hands and no certifier involved.</strong> That is not a concession; it is how a standard spreads. The Certifier requirements are published before any certifier launches, so the role demonstrably predates its first occupant.</p>
+
+<h2>Try it</h2>
+
+<pre>openaisf scope   --context system.yaml --tier T2
+openaisf check   --context system.yaml --evidence ./evidence --tier T2
+openaisf publish --context system.yaml --evidence ./evidence --log log.jsonl
+openaisf verify  --log log.jsonl --system urn:… --key signer.pub</pre>
+
+<p>Exit 0 means conformant. There is also an MCP server, so an agent can read the catalog and check its own conformance while it builds — though it deliberately <em>cannot</em> submit evidence, sign or publish. An agent asserting its own compliance is a claim, not evidence.</p>
+
+<footer>
+  <p><strong>OpenAISF — created by <a href="https://www.linkedin.com/">Maarten Loose</a>.</strong><br>
+  Specification CC-BY-4.0. Reference tooling Apache-2.0.<br>
+  Derivative works must carry: <em>Based on OpenAISF, created by Maarten Loose.</em></p>
+  <p class="muted">Status: Request for Comments, 7 August 2026. OpenAISF references external regimes; it never reproduces them.</p>
+</footer>
+
+</div>
+</body>
+</html>

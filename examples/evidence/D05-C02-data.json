@@ -1,0 +1,28 @@
+{
+  "openaisf_evidence": "1.0",
+  "subject": {
+    "system_id": "urn:openaisf:system:acme-support-agent",
+    "artefact_digest": "sha256:1f0c9a2b3d4e5f60"
+  },
+  "control": "D05-C02",
+  "plane": "data",
+  "window": {
+    "from": "2026-08-06T13:16:54+00:00",
+    "to": "2026-08-07T13:16:54+00:00"
+  },
+  "observations": {
+    "traffic_requests": 184203,
+    "decisions_total": 184203,
+    "encoded": 184203,
+    "blocked": 0
+  },
+  "producer": {
+    "adapter": "openaisf-adapter-reference-gateway",
+    "version": "1.0.0"
+  },
+  "signature": {
+    "scheme": "sha256-digest",
+    "value": "269cbbe9c05e47a817d6f728d43ebc54c17000b9f0d48a5fd0c0184a41317d49",
+    "key_id": "reference-gateway"
+  }
+}

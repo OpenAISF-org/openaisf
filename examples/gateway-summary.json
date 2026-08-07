@@ -1,0 +1,30 @@
+{
+  "_comment": "What a gateway, guardrail stack and CI system observed for one AI system over one day. Input to tools/adapters/gateway_adapter.py. This is the shape an adapter reads; it is not part of the standard.",
+  "system_id": "urn:openaisf:system:acme-support-agent",
+  "artefact_digest": "sha256:1f0c9a2b3d4e5f60",
+  "window_hours": 24,
+  "controls": {
+    "D01-C01": {
+      "enabled": true,
+      "config": {"accountable_person_recorded": true}
+    },
+    "D11-C02": {
+      "enabled": true,
+      "config": {"disclosure_surface": "chat-header", "timing": "first-turn"}
+    },
+    "D05-C02": {
+      "enabled": true,
+      "config": {"sinks_enumerated": 4, "sinks_without_handling": 0},
+      "traffic_requests": 184203,
+      "decisions_total": 184203,
+      "counters": {"encoded": 184203, "blocked": 0}
+    },
+    "D07-C01": {
+      "enabled": true,
+      "config": {"default_policy": "deny", "manifest_signed": true},
+      "traffic_requests": 184203,
+      "decisions_total": 184203,
+      "counters": {"allowed": 183994, "denied": 209, "undeclared_attempts": 6}
+    }
+  }
+}

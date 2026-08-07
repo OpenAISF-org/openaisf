@@ -1,0 +1,204 @@
+# OpenAISF catalog — D17 Third-Party, Procurement & Inherited Assurance
+#
+# The domain that makes conformance affordable. Duplicated assurance is the
+# largest single source of compliance cost, and principle P5 treats it as a
+# defect rather than as diligence.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D17
+name: Third-Party, Procurement & Inherited Assurance
+controls:
+  - id: D17-C01
+    title: AI suppliers are assessed before use and their obligations are recorded
+    domain: D17
+    level: core
+    normative: >
+      Before an external model, dataset, tool server or AI service is used, the
+      organisation MUST assess it against declared criteria and MUST record which
+      obligations remain with the supplier and which fall to the organisation.
+    rfc2119: MUST
+    roles: [deployer, provider]
+    lifecycle: [source, release]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P180D
+        T3: P90D
+        T4: P30D
+      predicate: |
+        suppliers.assessed == suppliers.total
+        AND responsibility_split.recorded == true
+    evidence:
+      - schema: openaisf.evidence.supplier_assessment.v1
+        plane: control
+        fields: [supplier, criteria, outcome, responsibility_split]
+      - schema: openaisf.evidence.supplier_usage.v1
+        plane: data
+        fields: [suppliers_in_use, assessed, unassessed, window]
+    failure_mode: >
+      Where the responsibility split is not recorded, both parties assume the
+      other is handling a control and neither does. This is the standard failure
+      of shared-responsibility models, and AI adds a layer because the model
+      provider, the orchestration provider and the application provider each hold
+      a genuinely different part of the surface.
+    rationale: >
+      Recording the split is what makes inheritance in D17-C02 sound. You cannot
+      import a control from an upstream party without first establishing that they
+      hold it, and the assessment is where that is decided.
+    crosswalk:
+      iso_42001: [A.10.2, A.10.3]
+      nist_ai_rmf: [GOVERN-6.1, MANAGE-3.1, MAP-4.1]
+      eu_ai_act: ["Art.25", "Art.23", "Art.24", Art.22, Art.54]
+      csa_aicm: [STA-01, STA-02, STA-03]
+
+  - id: D17-C02
+    title: Inherited controls carry a live upstream lease and a delta assessment
+    domain: D17
+    level: core
+    normative: >
+      A control recorded as inherited in the Statement of Applicability MUST
+      reference an upstream conformance statement, MUST NOT claim a tier above the
+      upstream's verified tier, and MUST record the delta the downstream system
+      adds. Where the upstream lease is stale or expired, the inheriting system's
+      own lease MUST degrade within one freshness window.
+    rfc2119: MUST
+    roles: [deployer]
+    lifecycle: [conceive, operate, observe]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        inherited.all_reference_upstream_statement == true
+        AND inherited.tier <= upstream.verified_tier
+        AND inherited.with_degraded_upstream_still_valid == 0
+    evidence:
+      - schema: openaisf.evidence.inheritance_declaration.v1
+        plane: control
+        fields: [control_id, upstream, upstream_tier, delta_assessment]
+      - schema: openaisf.evidence.inheritance_state.v1
+        plane: data
+        fields: [inherited, upstream_valid, upstream_stale, upstream_expired, window]
+    failure_mode: >
+      Assurance inherited from a supplier is normally captured as a PDF at
+      procurement and never re-examined. The supplier's own position can change
+      completely without any signal reaching the organisations relying on it,
+      which is the same staleness problem as the bridge letter, one level down the
+      supply chain.
+    rationale: >
+      Propagating degradation downstream is the property no existing framework
+      models, and it falls directly out of the lease design. It also creates the
+      commercial incentive that makes the whole inheritance mechanism work:
+      an upstream provider that lets its badge lapse degrades every customer who
+      depends on it, and will hear about it.
+    crosswalk:
+      iso_42001:
+        - {ref: A.10.3, strength: partial}
+      nist_ai_rmf:
+        - {ref: MANAGE-3.1, strength: partial}
+        - {ref: GOVERN-6.2, strength: partial}
+      eu_ai_act:
+        - {ref: "Art.25", strength: partial}
+      csa_aicm:
+        - {ref: STA-04, strength: partial}
+        - {ref: STA-13, strength: partial}
+
+  - id: D17-C03
+    title: AI obligations flow down through contracts
+    domain: D17
+    level: core
+    normative: >
+      Contracts with suppliers of AI components MUST require the information the
+      organisation needs to meet its own obligations, including notification of
+      material change, incident notification, and continued availability of the
+      documentation the organisation relies on.
+    rfc2119: MUST
+    roles: [deployer, provider]
+    lifecycle: [source]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P365D
+        T4: P180D
+    evidence:
+      - schema: openaisf.evidence.contract_terms.v1
+        plane: control
+        fields: [supplier, change_notification, incident_notification, documentation]
+    failure_mode: >
+      Without a contractual notification obligation, a downstream provider learns
+      about an upstream model change from its own drift metrics, if it has any.
+      Silent provider-side change is a documented dominant risk and the contract
+      is the only place it can be made not silent.
+    rationale: >
+      Deliberately verified by attestation. Contract terms are legal artefacts and
+      pretending to derive them from telemetry would be exactly the theatre
+      principle P3 exists to prevent.
+    crosswalk:
+      iso_42001: [A.10.2, A.10.3, A.10.4]
+      nist_ai_rmf: [GOVERN-6.1, GOVERN-6.2]
+      eu_ai_act: ["Art.25"]
+      csa_aicm: [STA-14, STA-15]
+
+  - id: D17-C04
+    title: Unsanctioned AI use is discovered and brought into scope or stopped
+    domain: D17
+    level: core
+    normative: >
+      The organisation MUST detect AI services in use that are not in the
+      inventory maintained under D01-C02, and MUST either bring each into scope or
+      stop it. Discovery MUST cover AI features embedded within already-approved
+      software.
+    rfc2119: MUST
+    roles: [deployer]
+    lifecycle: [operate, observe]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P30D
+        T4: P7D
+      predicate: |
+        discovery.covers_embedded_features == true
+        AND discovered.unresolved == 0
+    evidence:
+      - schema: openaisf.evidence.discovery_policy.v1
+        plane: control
+        fields: [sources, embedded_coverage, cadence]
+      - schema: openaisf.evidence.discovery_findings.v1
+        plane: data
+        fields: [discovered, onboarded, blocked, unresolved, window]
+    failure_mode: >
+      Ninety-eight percent of organisations have employees using unsanctioned AI
+      tools; in financial services 72 percent of employees use at least one, and
+      45 percent of legal professionals use consumer AI for work. The average
+      shadow-AI breach cost 4.2 million dollars in 2026, and incidents are
+      projected to triple by the end of that year. MCP adoption grew more than 400
+      percent in 2025 with most deployments outside any security review.
+    rationale: >
+      Requiring the finding to be resolved rather than merely reported is the
+      whole control. Discovery tools produce long lists that become a standing
+      report nobody actions; forcing each item to onboarding or blocking is what
+      converts the list into a decision.
+    crosswalk:
+      iso_42001: [A.4.2, A.10.2]
+      nist_ai_rmf: [GOVERN-1.6, GOVERN-6.1, MAP-4.2]
+      csa_aicm: [STA-16, GRC-11, IPY-02]

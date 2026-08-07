@@ -1,0 +1,49 @@
+# OWASP Top 10 for LLM Applications, 2025 edition (v2.0, published 2024-11-18).
+#
+# COPYRIGHT POSITION. The OWASP GenAI Security Project publishes under
+# CC BY-SA 4.0. ShareAlike propagates to Adapted Material, which would conflict
+# with the CC-BY-4.0 licence of this specification. This file therefore avoids
+# creating Adapted Material: it carries the LLM01-LLM10 identifiers, which are
+# factual designations, and descriptors written by OpenAISF rather than
+# OWASP's own risk descriptions. Attribution is given regardless.
+#
+# CURRENCY NOTE. OWASP published a 2026 edition on 4 August 2026. This
+# inventory tracks the 2025 edition; the 2026 edition should be added as a
+# separate regime rather than overwriting this one, because existing control
+# crosswalks reference these identifiers.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+regime: owasp_llm_2025
+name: OWASP Top 10 for LLM Applications 2025
+version: "2025"
+source: "https://genai.owasp.org/"
+licence: "CC-BY-SA-4.0"
+licence_url: "https://creativecommons.org/licenses/by-sa/4.0/"
+attribution: >
+  Risk identifiers refer to the OWASP Top 10 for Large Language Model
+  Applications 2025, OWASP GenAI Security Project, licensed CC BY-SA 4.0.
+  Descriptors are OpenAISF's own and are not OWASP text.
+regime_kind: threat
+reproduction: authored
+declared_total: 10
+requirements:
+  - ref: LLM01
+    text_summary: Prompt injection — manipulation of inputs to alter model behaviour
+  - ref: LLM02
+    text_summary: Sensitive information disclosure through model output
+  - ref: LLM03
+    text_summary: Supply chain vulnerabilities in models, data and dependencies
+  - ref: LLM04
+    text_summary: Data and model poisoning during training or fine-tuning
+  - ref: LLM05
+    text_summary: Improper output handling of model-generated content
+  - ref: LLM06
+    text_summary: Excessive agency granted to model-driven actions
+  - ref: LLM07
+    text_summary: System prompt leakage exposing operational instructions
+  - ref: LLM08
+    text_summary: Vector and embedding weaknesses in retrieval systems
+  - ref: LLM09
+    text_summary: Misinformation generated or propagated by the model
+  - ref: LLM10
+    text_summary: Unbounded consumption of compute, tokens or cost

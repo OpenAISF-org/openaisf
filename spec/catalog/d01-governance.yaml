@@ -1,0 +1,327 @@
+# OpenAISF catalog — D01 Governance, Accountability & Roles
+#
+# The cheapest domain in the catalog and the precondition for the rest of it.
+# Every control elsewhere assumes somebody can accept a risk, approve an
+# exclusion, or authorise a containment action.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D01
+name: Governance, Accountability & Roles
+controls:
+  - id: D01-C01
+    title: A named accountable person is recorded for every AI system in scope
+    domain: D01
+    level: core
+    normative: >
+      The organisation MUST record, for every AI system within scope, a single
+      named natural person accountable for its conformance, together with the
+      date of appointment. A role title alone MUST NOT be recorded in place of
+      a person.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [conceive, operate]
+    tiers:
+      T1: recommended
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: asserted
+      planes: [control]
+      freshness:
+        T2: P180D
+        T3: P90D
+        T4: P30D
+    evidence:
+      - schema: openaisf.evidence.accountability_record.v1
+        plane: control
+        fields: [system_id, person, appointed_on]
+    failure_mode: >
+      Organisations fail AI audits primarily on the disconnect between
+      documentation and day-to-day execution. Where accountability is recorded
+      as a role rather than a person, ownership is lost at the first
+      reorganisation or departure and no one discovers this until an incident
+      requires a decision that nobody is empowered to take.
+    rationale: >
+      Every downstream control in this framework assumes somebody can accept a
+      risk, approve an exclusion, or authorise a containment action. Naming that
+      person is the cheapest control in the catalog and the precondition for the
+      rest of it.
+    crosswalk:
+      iso_42001: [A.3.2]
+      nist_ai_rmf: [GOVERN-2.1, GOVERN-3.2]
+      eu_ai_act: ["Art.17"]
+
+  - id: D01-C02
+    title: An inventory of AI systems is maintained and reconciled against reality
+    domain: D01
+    level: core
+    normative: >
+      The organisation MUST maintain an inventory of AI systems it provides or
+      deploys, including systems reached through features embedded in other
+      software. The inventory MUST be reconciled at declared intervals against
+      observed AI traffic, and discrepancies MUST be recorded.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [conceive, operate, observe]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        inventory.present == true
+        AND reconciliation.performed_within_interval == true
+        AND observed_systems_absent_from_inventory.reviewed == true
+    evidence:
+      - schema: openaisf.evidence.system_inventory.v1
+        plane: control
+        fields: [system_id, owner, purpose, tier]
+      - schema: openaisf.evidence.inventory_reconciliation.v1
+        plane: data
+        fields: [inventoried, observed, unmatched, window]
+    failure_mode: >
+      Ninety-eight percent of organisations have employees using unsanctioned AI
+      tools, and by 2026 around seventy percent of employee AI interaction runs
+      through features embedded in already-approved software, which makes
+      sanctioned and unsanctioned use nearly indistinguishable from a purchase
+      order. An inventory assembled by asking people what they use will not find
+      any of it.
+    rationale: >
+      Reconciliation against observed traffic is what separates this from the
+      spreadsheet every framework already asks for. The discrepancy list is the
+      shadow-AI discovery mechanism, and it is the only part of this control that
+      finds anything nobody already knew.
+    crosswalk:
+      iso_42001:
+        - {ref: A.4.2, strength: partial}
+      nist_ai_rmf:
+        - {ref: GOVERN-1.6, strength: partial}
+      csa_aicm:
+        - {ref: GRC-04, strength: partial}
+
+  - id: D01-C03
+    title: Every AI system is bound to an authorised business purpose
+    domain: D01
+    level: core
+    normative: >
+      Each AI system and each agent MUST have a recorded authorised business
+      purpose, approved by the accountable person named under D01-C01. The
+      purpose MUST be specific enough that activity outside it is
+      distinguishable, and MUST be re-approved when materially changed.
+    rfc2119: MUST
+    roles: [deployer, provider]
+    lifecycle: [conceive, release, operate]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: asserted
+      planes: [control]
+      freshness:
+        T2: P180D
+        T3: P90D
+        T4: P30D
+    evidence:
+      - schema: openaisf.evidence.purpose_binding.v1
+        plane: control
+        fields: [system_id, authorised_purpose, approved_by, approved_on]
+    failure_mode: >
+      An AI system operating entirely within its technical permissions can still
+      be doing work nobody sanctioned. The average shadow-AI breach cost 4.2
+      million dollars in 2026, and in most cases no permission was violated —
+      the system simply did something the organisation had never agreed to.
+    rationale: >
+      This is the registry half of purpose binding; D15-C07 is the detection
+      half, and neither works without the other. Recording the purpose up front
+      is what makes "should this system have been doing that" an answerable
+      question rather than a matter of opinion after the fact. Requiring it to be
+      specific enough that divergence is distinguishable is the whole difficulty:
+      a purpose of "improve productivity" excludes nothing.
+    crosswalk:
+      iso_42001:
+        - {ref: A.9.4, strength: partial}
+      nist_ai_rmf:
+        - {ref: MAP-1.3, strength: partial}
+        - {ref: MAP-1.1, strength: partial}
+        - {ref: MAP-1.4, strength: partial}
+      eu_ai_act:
+        - {ref: "Art.26(1)", strength: partial}
+
+  - id: D01-C04
+    title: An AI policy is documented, approved and reviewed
+    domain: D01
+    level: core
+    normative: >
+      The organisation MUST maintain a documented AI policy, approved at
+      executive level, aligned with its other governing policies, and reviewed at
+      declared intervals. The review date and approver MUST be recorded.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [conceive]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P365D
+        T4: P180D
+    evidence:
+      - schema: openaisf.evidence.policy_record.v1
+        plane: control
+        fields: [document, approved_by, approved_on, next_review]
+    failure_mode: >
+      Policy documents drift out of alignment with what the organisation
+      actually does faster than they are reviewed, and an unreviewed policy is
+      worse than none because it creates a false record of intent that nobody
+      follows.
+    rationale: >
+      This is the most conventional control in the catalog and is deliberately
+      verified by attestation rather than telemetry: a policy is a human artefact
+      and pretending otherwise would be the kind of theatre this framework
+      exists to remove. It earns its place because ISO, NIST and the AI Act all
+      require it and a superset claim cannot skip it.
+    crosswalk:
+      iso_42001: [A.2.2, A.2.3, A.2.4, A.6.1.2]
+      nist_ai_rmf: [GOVERN-1.1, GOVERN-1.2, GOVERN-1.4]
+      eu_ai_act: ["Art.17"]
+      csa_aicm: [GRC-01, GRC-02]
+
+  - id: D01-C05
+    title: People with AI responsibilities are competent for them
+    domain: D01
+    level: core
+    normative: >
+      The organisation MUST identify the competences required for each AI role it
+      assigns, including human oversight roles, and MUST record how each named
+      holder meets them.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [conceive, operate]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P365D
+        T4: P180D
+    evidence:
+      - schema: openaisf.evidence.competence_record.v1
+        plane: control
+        fields: [role, holder, competences, evidence_of_competence]
+    failure_mode: >
+      The AI Act requires deployers to assign human oversight to persons who have
+      the necessary competence, training and authority. In practice oversight is
+      routinely assigned to whoever is available, which produces a named overseer
+      who cannot in fact evaluate the output they are overseeing and whose
+      approval therefore means nothing.
+    rationale: >
+      Human oversight controls in D10 are only worth the friction if the human
+      can actually exercise judgement. Recording the competence is what stops
+      oversight degrading into a signature.
+    crosswalk:
+      iso_42001: [A.4.6]
+      nist_ai_rmf: [GOVERN-2.2]
+      eu_ai_act: ["Art.26(2)"]
+      csa_aicm: [HRS-03]
+
+  - id: D01-C06
+    title: A channel exists to report concerns about AI systems
+    domain: D01
+    level: core
+    normative: >
+      The organisation MUST provide a route by which staff and affected persons
+      can report concerns about an AI system, MUST record what was reported, and
+      MUST record the disposition of each report.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [operate, observe]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.concern_channel.v1
+        plane: control
+        fields: [channel, reports_received, dispositions, window]
+    failure_mode: >
+      Harms from deployed AI are usually visible to the people closest to the
+      output long before they appear in any metric. Where no route exists, the
+      first formal record of a problem is the incident.
+    rationale: >
+      Recording dispositions rather than just receipts is the part that matters.
+      A channel that collects reports and does nothing observable with them
+      trains people to stop using it, which is worse than not having one.
+    crosswalk:
+      iso_42001: [A.3.3, A.8.5]
+      nist_ai_rmf: [GOVERN-4.1, GOVERN-5.1, MEASURE-3.3, MAP-5.2]
+      csa_aicm: [GRC-06]
+
+  - id: D01-C07
+    title: Conformance state across the portfolio is reported to executive level
+    domain: D01
+    level: core
+    normative: >
+      The organisation MUST report to executive or board level, at declared
+      intervals, the lease state of every AI system in scope, including systems
+      whose conformance is stale, expired or revoked, and those inheriting
+      assurance from an upstream component whose own lease has lapsed.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [observe]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P90D
+        T4: P30D
+      predicate: |
+        report.generated_from_lease_state == true
+        AND report.interval_met == true
+    evidence:
+      - schema: openaisf.evidence.board_report_policy.v1
+        plane: control
+        fields: [interval, recipients]
+      - schema: openaisf.evidence.portfolio_state.v1
+        plane: data
+        fields: [valid, stale, expired, revoked, inherited_degraded, window]
+    failure_mode: >
+      Board reporting on AI is typically assembled by hand from what programme
+      owners choose to surface, which means the board learns about a lapse after
+      it has been resolved or after it has become an incident, and never in
+      between.
+    rationale: >
+      This is the C-level view from architecture section 6.2, and it is
+      deliberately computed from the same lease state the engineer sees rather
+      than written separately. It is not possible for the board dashboard to be
+      green while the conformance run is failing, which is the single most common
+      governance pathology this framework can actually eliminate.
+    crosswalk:
+      iso_42001:
+        - {ref: A.2.4, strength: partial}
+        - {ref: A.8.3, strength: partial}
+      nist_ai_rmf:
+        - {ref: GOVERN-2.3, strength: partial}
+        - {ref: GOVERN-1.5, strength: partial}
+      csa_aicm:
+        - {ref: GRC-07, strength: partial}

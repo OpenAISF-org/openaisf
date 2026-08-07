@@ -1,0 +1,292 @@
+# OpenAISF catalog — D19 Conformance & Evidence Integrity
+#
+# The framework governing itself. Every other domain produces evidence;
+# this one decides whether that evidence can be believed.
+#
+# A conformance system in which the subject reports on itself is worthless
+# unless the reporting is constrained. These controls are the constraints, and
+# they are the reason a relying party can verify a badge without trusting the
+# organisation that holds it.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D19
+name: Conformance & Evidence Integrity
+controls:
+  - id: D19-C01
+    title: Evidence is signed at the producer before it leaves the system
+    domain: D19
+    level: core
+    chain_stage: prove
+    normative: >
+      Every evidence record MUST be cryptographically signed by the component
+      that produced it, before transmission or aggregation. A record that arrives
+      unsigned, or signed by an aggregator rather than a producer, MUST be
+      treated as absent rather than as evidence.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [operate, observe]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P30D
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        signing.scheme declared
+        AND records.unsigned == 0
+        AND records.signed_by_producer == records.total
+    evidence:
+      - schema: openaisf.evidence.signing_policy.v1
+        plane: control
+        fields: [scheme, key_management, producers]
+      - schema: openaisf.evidence.signature_audit.v1
+        plane: data
+        fields: [total, signed, unsigned, aggregator_signed, window]
+    failure_mode: >
+      Aggregator-signed evidence attests only that the aggregator received
+      something. It cannot distinguish a genuine enforcement counter from a value
+      inserted between the enforcement point and the aggregator, which is exactly
+      the modification an operator under commercial pressure to keep a badge
+      alive would make.
+    rationale: >
+      Signing at the producer is what makes the two-plane rule in D19-C03
+      meaningful. Without it, telemetry and attestation come from the same
+      trusted-to-be-honest pipeline and comparing them proves nothing.
+    crosswalk:
+      iso_42001: [A.6.2.8]
+      nist_ai_rmf: [MEASURE-2.8]
+      eu_ai_act: ["Art.12(1)"]
+      csa_aicm: [LOG-02, CEK-03]
+      mcp_38: [MCP-27]
+
+  - id: D19-C02
+    title: Evidence producers are themselves attested
+    domain: D19
+    level: core
+    chain_stage: prove
+    normative: >
+      Each evidence-producing adapter MUST carry an attestation identifying its
+      source and version and demonstrating that the running instance matches it.
+      A producer whose attestation cannot be verified MUST NOT contribute to a
+      conformance decision.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [release, operate]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        producers.attested == producers.total
+        AND producers.attestation_verified == true
+    evidence:
+      - schema: openaisf.evidence.producer_attestation.v1
+        plane: control
+        fields: [producer, version, digest]
+      - schema: openaisf.evidence.producer_verification.v1
+        plane: data
+        fields: [total, verified, failed, window]
+    failure_mode: >
+      An adapter that can be edited is an adapter that can lie. This is the
+      framework's exact equivalent of a compromised auditor, and it deserves to
+      be named as such rather than assumed away: the entire evidence model rests
+      on producers reporting what actually happened.
+    rationale: >
+      Attestation raises the cost of forging evidence from editing a file to
+      compromising a signed supply chain. It does not make forgery impossible and
+      this framework does not claim it does. It makes forgery an act that leaves
+      traces, which is the honest standard to hold.
+    crosswalk:
+      iso_42001: [A.10.2, A.6.2.7]
+      nist_ai_rmf: [GOVERN-6.1, MEASURE-1.3]
+      eu_ai_act: ["Art.15(1)"]
+      owasp_llm_2025: [LLM03]
+      owasp_llm_2026: [LLM04]
+      mitre_atlas: [AML.T0010]
+      csa_aicm: [STA-06, CCC-04]
+      mcp_38: [MCP-26, MCP-27]
+
+  - id: D19-C03
+    title: Declared configuration and observed enforcement are checked against each other
+    domain: D19
+    level: core
+    chain_stage: prove
+    normative: >
+      For every control verified by emitted evidence, the declared configuration
+      and the observed enforcement telemetry MUST both be present and MUST be
+      checked for consistency. A control whose declared policy is contradicted by
+      its telemetry MUST fail, and MUST NOT be resolvable by attestation.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [operate, observe]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        for each emitted control:
+          control_plane.present AND data_plane.present
+          AND NOT (policy.enabled == true AND traffic.requests > 0
+                   AND enforcement.decisions.total == 0)
+    evidence:
+      - schema: openaisf.evidence.consistency_check.v1
+        plane: control
+        fields: [controls_checked, rule_version]
+      - schema: openaisf.evidence.consistency_result.v1
+        plane: data
+        fields: [checked, consistent, contradictions, window]
+    failure_mode: >
+      Organisations fail AI audits primarily on the disconnect between what the
+      documentation says and what happens day to day. A redaction policy declared
+      but never invoked across a million requests is the canonical case: every
+      artefact an auditor would ask for exists, and the control was never
+      operating.
+    rationale: >
+      This is the honesty layer with teeth, and it is the one control that
+      removes the human from the loop entirely. Nobody has to judge whether an
+      operator is telling the truth; a policy claiming to be enforced while its
+      decision counter sits at zero under live traffic is a contradiction a
+      machine settles. Making it unresolvable by attestation is deliberate —
+      otherwise it becomes a paperwork exercise like everything it replaces.
+    crosswalk:
+      iso_42001:
+        - {ref: A.6.2.4, strength: partial}
+        - {ref: A.6.2.6, strength: partial}
+      nist_ai_rmf:
+        - {ref: MEASURE-1.2, strength: partial}
+        - {ref: MEASURE-2.13, strength: partial}
+        - {ref: MEASURE-4.3, strength: partial}
+      eu_ai_act:
+        - {ref: Art.17, strength: partial}
+        - {ref: Art.72, strength: partial}
+      csa_aicm:
+        - {ref: A&A-04, strength: partial}
+        - {ref: LOG-05, strength: partial}
+
+  - id: D19-C04
+    title: Evidence timestamps derive from a verifiable clock
+    domain: D19
+    level: core
+    chain_stage: prove
+    normative: >
+      Evidence records MUST carry timestamps traceable to a verifiable time
+      source. Where a conformance lease depends on freshness, the freshness
+      determination MUST NOT rely solely on a clock the subject controls.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [operate, observe]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P7D
+        T4: PT24H
+      predicate: |
+        time_source declared
+        AND time_source.externally_anchored == true
+        AND clock_skew.max <= declared_tolerance
+    evidence:
+      - schema: openaisf.evidence.time_source.v1
+        plane: control
+        fields: [source, anchoring, tolerance]
+      - schema: openaisf.evidence.clock_audit.v1
+        plane: data
+        fields: [max_skew, anchored_records, window]
+    failure_mode: >
+      A conformance lease expires on elapsed time. If the subject controls the
+      only clock that decides elapsed time, expiry becomes optional, and the one
+      mechanism that distinguishes OpenAISF from a point-in-time certificate
+      quietly stops working.
+    rationale: >
+      Every claim this framework makes about currency reduces to a claim about
+      time. External anchoring is what stops a lapsed system presenting itself as
+      current, and it costs almost nothing because the transparency log entry is
+      already externally timestamped.
+    crosswalk:
+      iso_42001:
+        - {ref: A.6.2.8, strength: partial}
+      nist_ai_rmf:
+        - {ref: MEASURE-2.4, strength: partial}
+      eu_ai_act:
+        - {ref: "Art.12(1)", strength: partial}
+      csa_aicm:
+        - {ref: LOG-04, strength: partial}
+
+  - id: D19-C05
+    title: Statement of Applicability exclusions are checked against observed reality
+    domain: D19
+    level: core
+    chain_stage: prove
+    normative: >
+      Every exclusion recorded in the Statement of Applicability MUST carry a
+      stated reason and, at T3 and above, a named accountable person. An
+      exclusion whose stated reason is contradicted by observed telemetry MUST
+      fail the conformance run.
+    rfc2119: MUST
+    roles: [deployer, provider]
+    lifecycle: [conceive, operate, observe]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P90D
+        T3: P30D
+        T4: P7D
+      predicate: |
+        exclusions.all_have_reasons == true
+        AND (tier >= T3 IMPLIES exclusions.all_have_owners == true)
+        AND exclusions.contradicted_by_telemetry == 0
+    evidence:
+      - schema: openaisf.evidence.soa_exclusions.v1
+        plane: control
+        fields: [control_id, reason, accountable_person]
+      - schema: openaisf.evidence.exclusion_check.v1
+        plane: data
+        fields: [checked, contradicted, window]
+    failure_mode: >
+      Scope reduction is the oldest way to pass an assessment without being
+      secure. A system declaring no agentic behaviour while its gateway records
+      tool calls has excluded the entire agentic domain on a false premise, and
+      no document review would catch it because the document is internally
+      consistent.
+    rationale: >
+      Exclusion is legitimate and expected; most systems genuinely do not need
+      most of this catalog. What must not be possible is excluding something on
+      grounds the running system contradicts. Checking exclusions against
+      telemetry rather than against the reviewer's patience is what keeps the
+      SoA an executable plan instead of a negotiating position.
+    crosswalk:
+      iso_42001:
+        - {ref: A.5.2, strength: partial}
+        - {ref: A.6.2.4, strength: partial}
+      nist_ai_rmf:
+        - {ref: MANAGE-1.4, strength: partial}
+        - {ref: GOVERN-1.4, strength: partial}
+      eu_ai_act:
+        - {ref: "Art.9(5)", strength: partial}
+        - {ref: Art.17, strength: partial}
+      csa_aicm:
+        - {ref: GRC-05, strength: partial}
+        - {ref: A&A-03, strength: partial}

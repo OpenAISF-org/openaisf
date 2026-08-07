@@ -1,0 +1,193 @@
+# OpenAISF catalog — D13 Fairness, Non-Discrimination & Societal Impact
+#
+# D03-C05 governs bias in the data. This domain governs it in the behaviour of
+# the deployed system, which is where it is actually experienced.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D13
+name: Fairness, Non-Discrimination & Societal Impact
+controls:
+  - id: D13-C01
+    title: Disparity is measured across the groups the system affects
+    domain: D13
+    level: core
+    normative: >
+      Where the system informs decisions about people, its performance MUST be
+      measured separately for the groups it affects, using metrics stated in
+      advance. Aggregate performance MUST NOT be reported as evidence of fairness.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [evaluate, observe]
+    applies_when:
+      eu_risk: [high]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P180D
+        T4: P90D
+      predicate: |
+        groups declared
+        AND metrics.stated_in_advance == true
+        AND results.disaggregated == true
+    evidence:
+      - schema: openaisf.evidence.fairness_plan.v1
+        plane: control
+        fields: [groups, metrics, thresholds]
+      - schema: openaisf.evidence.fairness_result.v1
+        plane: data
+        fields: [artefact_digest, group, metric, value, window]
+    failure_mode: >
+      A model can hold high aggregate accuracy while failing systematically for a
+      subgroup that is small in the evaluation set and large in the deployment
+      population. The aggregate figure not only fails to show this, it actively
+      conceals it.
+    rationale: >
+      Stating metrics in advance is what stops the fairness measure being selected
+      after the results are known. This is the same discipline as declaring an
+      attack budget in D05-C05, applied to a different kind of number that is
+      equally easy to choose favourably.
+    crosswalk:
+      iso_42001: [A.5.4]
+      nist_ai_rmf: [MEASURE-2.11, MEASURE-2.1]
+      eu_ai_act: ["Art.10(2)(f)", "Art.15(3)"]
+      csa_aicm: [MDS-05]
+
+  - id: D13-C02
+    title: Disparity findings have a recorded response
+    domain: D13
+    level: core
+    normative: >
+      Where measured disparity exceeds a declared threshold, the organisation MUST
+      record a response of mitigation, restriction of intended use, or accepted
+      risk with the name of the person accepting it. A finding without a recorded
+      response MUST fail.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [evaluate, release]
+    applies_when:
+      eu_risk: [high]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P180D
+        T4: P90D
+      predicate: |
+        findings.above_threshold_without_response == 0
+    evidence:
+      - schema: openaisf.evidence.disparity_response_policy.v1
+        plane: control
+        fields: [thresholds, response_options]
+      - schema: openaisf.evidence.disparity_responses.v1
+        plane: data
+        fields: [findings, mitigated, use_restricted, accepted, unanswered, window]
+    failure_mode: >
+      Fairness measurement without a required response produces reports that
+      document a known disparity year after year while the system continues
+      unchanged, which is a worse position than not having measured, because the
+      knowledge is now on the record.
+    rationale: >
+      Permitting accepted risk as an outcome is deliberate and follows D02-C06.
+      Some disparities have no available mitigation, and forcing a claim of
+      mitigation where none exists produces a false record. Naming the acceptor
+      makes the decision real.
+    crosswalk:
+      iso_42001: [A.5.4, A.5.2]
+      nist_ai_rmf: [MEASURE-2.11, MANAGE-1.3, MANAGE-1.4]
+      eu_ai_act: ["Art.10(2)(g)", "Art.9(5)"]
+
+  - id: D13-C03
+    title: The system is usable by people with disabilities
+    domain: D13
+    level: core
+    normative: >
+      Interfaces through which people interact with the AI system, and through
+      which oversight is exercised, MUST meet the organisation's declared
+      accessibility standard.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [build, release]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P365D
+        T4: P180D
+    evidence:
+      - schema: openaisf.evidence.accessibility.v1
+        plane: control
+        fields: [standard, surfaces_assessed, findings]
+    failure_mode: >
+      Where the oversight interface is inaccessible, the pool of people who can
+      exercise oversight is silently restricted, which undermines D01-C05
+      competence and D10 oversight simultaneously and for a reason nobody records.
+    rationale: >
+      Included for superset completeness and kept deliberately short. The
+      organisation names its own standard rather than the framework imposing one,
+      because accessibility requirements are jurisdictional and a vendor-neutral
+      standard has no business picking.
+    crosswalk:
+      iso_42001:
+        - {ref: A.5.4, strength: partial}
+      nist_ai_rmf:
+        - {ref: MAP-1.2, strength: partial}
+        - {ref: MAP-3.4, strength: partial}
+
+  - id: D13-C04
+    title: Affected people can contest a decision made about them
+    domain: D13
+    level: core
+    normative: >
+      Where the system informs a decision producing legal or similarly
+      significant effects for a person, that person MUST be informed and MUST have
+      a route to obtain an explanation and to contest the outcome.
+    rfc2119: MUST
+    roles: [deployer]
+    lifecycle: [operate]
+    applies_when:
+      eu_risk: [high]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P90D
+        T4: P30D
+      predicate: |
+        notification.route_exists == true
+        AND contest.route_exists == true
+        AND contests.responded_within_period == contests.total
+    evidence:
+      - schema: openaisf.evidence.contest_process.v1
+        plane: control
+        fields: [notification_method, explanation_method, contest_route, period]
+      - schema: openaisf.evidence.contest_activity.v1
+        plane: data
+        fields: [decisions, notified, contests, upheld, overturned, window]
+    failure_mode: >
+      Contest routes that exist on paper but require the affected person to
+      identify which system made the decision, and to whom, function as an
+      absence. The overturn rate is the observable that shows whether the route
+      works, and it is almost never collected.
+    rationale: >
+      Recording overturns rather than only contests is what makes this control
+      informative. A route with many contests and no overturns is either a system
+      that is right every time or a process that cannot overturn anything, and the
+      organisation should know which.
+    crosswalk:
+      iso_42001: [A.8.5, A.3.3]
+      nist_ai_rmf: [MEASURE-3.3, GOVERN-5.1, GOVERN-5.2]
+      eu_ai_act: ["Art.26(11)", "Art.27"]
+      csa_aicm: [GRC-10]

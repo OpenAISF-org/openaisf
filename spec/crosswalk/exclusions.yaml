@@ -1,0 +1,1167 @@
+# Requirements deliberately not implemented as OpenAISF controls.
+#
+# Every entry needs a reason. An empty reason fails the load, and an exclusion
+# contradicted by the runtime probe fails the conformance run under D19-C05.
+#
+# Exclusion is legitimate where a requirement is a screening obligation, an
+# adversary behaviour outside the defender's control surface, or a general
+# information security control already governed by an established regime. It is
+# not legitimate as a way to make the coverage report green.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+
+csa_aicm:
+  - ref: AIS-07
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: AIS-08
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: AIS-09
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: AIS-10
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: AIS-11
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: AIS-12
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: AIS-13
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: AIS-14
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: AIS-15
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: BCR-07
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: BCR-08
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: BCR-09
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: BCR-10
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: BCR-11
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-02
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-05
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-06
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-07
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-08
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-09
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-10
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-11
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-12
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-13
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-14
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-15
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-16
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-17
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-18
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-19
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-20
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: CEK-21
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-01
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-02
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-03
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-04
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-05
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-06
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-07
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-08
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-09
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-10
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-11
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-12
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-13
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-14
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-15
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-16
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-17
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: DCS-18
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: HRS-01
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: HRS-02
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: HRS-04
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: HRS-05
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: HRS-09
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: HRS-10
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: HRS-11
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: HRS-12
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: HRS-13
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: HRS-14
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: HRS-15
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: TVM-06
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: TVM-07
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: TVM-08
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: TVM-09
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: TVM-10
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: TVM-11
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: TVM-12
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: TVM-13
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: UEM-01
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: UEM-02
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: UEM-03
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: UEM-04
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: UEM-05
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: UEM-06
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: UEM-07
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: UEM-08
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: UEM-09
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: UEM-10
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: UEM-11
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: UEM-12
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: UEM-13
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: UEM-14
+    reason: >
+      General information security control that is not AI-specific. The
+      AICM extends the Cloud Controls Matrix, so it necessarily restates a
+      full cloud security baseline. OpenAISF does not duplicate that
+      baseline: this control is satisfied through the organisation's
+      existing information security regime (ISO/IEC 27001, SOC 2 or
+      equivalent) and imported as inherited assurance under D17-C02.
+      Restating it here would add bureaucracy without adding safety.
+  - ref: GRC-13
+    reason: >
+      Organisational or interoperability control with no AI-specific
+      obligation beyond what D01 governance and D17 third-party assurance
+      already require. Covered by the organisation's general governance
+      regime and inherited under D17-C02.
+  - ref: GRC-14
+    reason: >
+      Organisational or interoperability control with no AI-specific
+      obligation beyond what D01 governance and D17 third-party assurance
+      already require. Covered by the organisation's general governance
+      regime and inherited under D17-C02.
+  - ref: GRC-15
+    reason: >
+      Organisational or interoperability control with no AI-specific
+      obligation beyond what D01 governance and D17 third-party assurance
+      already require. Covered by the organisation's general governance
+      regime and inherited under D17-C02.
+  - ref: IPY-03
+    reason: >
+      Organisational or interoperability control with no AI-specific
+      obligation beyond what D01 governance and D17 third-party assurance
+      already require. Covered by the organisation's general governance
+      regime and inherited under D17-C02.
+  - ref: IPY-04
+    reason: >
+      Organisational or interoperability control with no AI-specific
+      obligation beyond what D01 governance and D17 third-party assurance
+      already require. Covered by the organisation's general governance
+      regime and inherited under D17-C02.
+  - ref: "I&S-07"
+    reason: >
+      Organisational or interoperability control with no AI-specific
+      obligation beyond what D01 governance and D17 third-party assurance
+      already require. Covered by the organisation's general governance
+      regime and inherited under D17-C02.
+  - ref: "I&S-08"
+    reason: >
+      Organisational or interoperability control with no AI-specific
+      obligation beyond what D01 governance and D17 third-party assurance
+      already require. Covered by the organisation's general governance
+      regime and inherited under D17-C02.
+  - ref: "I&S-09"
+    reason: >
+      Organisational or interoperability control with no AI-specific
+      obligation beyond what D01 governance and D17 third-party assurance
+      already require. Covered by the organisation's general governance
+      regime and inherited under D17-C02.
+
+mitre_atlas:
+  - ref: AML.T0000.000
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0000.001
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0000.002
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0001
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0002
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0003
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0004
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0005
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0005.000
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0005.001
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0005.002
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0006
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0007
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0008
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0008.000
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0008.001
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0008.002
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0008.003
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0008.004
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0008.005
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0013
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0014
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0016
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0016.000
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0016.001
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0016.002
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0063
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0065
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0068
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0079
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0087
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0095
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0095.000
+    reason: >
+      Adversary reconnaissance or resource-development technique performed
+      outside the defender's systems. No control a conformant organisation
+      can implement prevents an adversary reading public research,
+      acquiring infrastructure or training a proxy model. Inventoried for
+      completeness of the threat surface; the defensive response is the
+      detection and containment posture in D15 and D16 rather than a
+      control on this technique.
+  - ref: AML.T0048
+    reason: >
+      Describes an impact suffered rather than a technique to control. The
+      corresponding OpenAISF obligations are impact assessment in D02-C04
+      and D02-C05, and incident handling in D16; a control mapped directly
+      to the harm would restate those without adding a distinct
+      requirement.
+  - ref: AML.T0048.000
+    reason: >
+      Describes an impact suffered rather than a technique to control. The
+      corresponding OpenAISF obligations are impact assessment in D02-C04
+      and D02-C05, and incident handling in D16; a control mapped directly
+      to the harm would restate those without adding a distinct
+      requirement.
+  - ref: AML.T0048.001
+    reason: >
+      Describes an impact suffered rather than a technique to control. The
+      corresponding OpenAISF obligations are impact assessment in D02-C04
+      and D02-C05, and incident handling in D16; a control mapped directly
+      to the harm would restate those without adding a distinct
+      requirement.
+  - ref: AML.T0048.002
+    reason: >
+      Describes an impact suffered rather than a technique to control. The
+      corresponding OpenAISF obligations are impact assessment in D02-C04
+      and D02-C05, and incident handling in D16; a control mapped directly
+      to the harm would restate those without adding a distinct
+      requirement.
+  - ref: AML.T0048.003
+    reason: >
+      Describes an impact suffered rather than a technique to control. The
+      corresponding OpenAISF obligations are impact assessment in D02-C04
+      and D02-C05, and incident handling in D16; a control mapped directly
+      to the harm would restate those without adding a distinct
+      requirement.
+  - ref: AML.T0048.004
+    reason: >
+      Describes an impact suffered rather than a technique to control. The
+      corresponding OpenAISF obligations are impact assessment in D02-C04
+      and D02-C05, and incident handling in D16; a control mapped directly
+      to the harm would restate those without adding a distinct
+      requirement.
+  - ref: AML.T0052
+    reason: >
+      General security concern not specific to the AI system's own
+      controls. Phishing and physical access are governed by the
+      organisation's information security and physical security regimes
+      and inherited under D17-C02.
+  - ref: AML.T0052.000
+    reason: >
+      General security concern not specific to the AI system's own
+      controls. Phishing and physical access are governed by the
+      organisation's information security and physical security regimes
+      and inherited under D17-C02.
+  - ref: AML.T0041
+    reason: >
+      General security concern not specific to the AI system's own
+      controls. Phishing and physical access are governed by the
+      organisation's information security and physical security regimes
+      and inherited under D17-C02.

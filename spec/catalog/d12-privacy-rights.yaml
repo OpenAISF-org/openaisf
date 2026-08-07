@@ -1,0 +1,189 @@
+# OpenAISF catalog — D12 Privacy, Rights & Data Protection
+#
+# D03 governs data as an engineering asset. This domain governs it as something
+# belonging to people who have rights over it. The two overlap deliberately;
+# they answer to different regimes and different reviewers.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D12
+name: Privacy, Rights & Data Protection
+controls:
+  - id: D12-C01
+    title: Personal data processed by the system is minimised to the stated purpose
+    domain: D12
+    level: core
+    normative: >
+      Personal data submitted to, retained by or derived from an AI system MUST be
+      limited to what is necessary for the authorised purpose recorded under
+      D01-C03. Data collected because it was available MUST NOT be retained.
+    rfc2119: MUST
+    roles: [deployer, provider]
+    lifecycle: [conceive, operate]
+    applies_when:
+      data_class: [personal, special_category, health, financial, children]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.minimisation_assessment.v1
+        plane: control
+        fields: [purpose, categories_processed, necessity_justification]
+    failure_mode: >
+      Conversational interfaces collect far more than the task requires because
+      users volunteer context, and that surplus is retained by default in traces,
+      caches and evaluation sets that were never scoped as personal data stores.
+    rationale: >
+      Tying minimisation to the authorised purpose in D01-C03 rather than to a
+      separate privacy statement means one definition of purpose governs both what
+      the system may do and what data it may hold, which removes a common source
+      of drift between the two.
+    crosswalk:
+      iso_42001: [A.7.2]
+      nist_ai_rmf: [MEASURE-2.10, MAP-1.1]
+      eu_ai_act: ["Art.10(5)"]
+      csa_aicm: [DSP-15, DSP-17]
+      mcp_38: [MCP-25]
+
+  - id: D12-C02
+    title: Data subject rights are exercisable against AI-held data
+    domain: D12
+    level: core
+    normative: >
+      The organisation MUST be able to locate, disclose, correct and delete
+      personal data held in AI-specific stores, including prompts, completions,
+      traces, fine-tuning corpora and retrieval indexes, in response to a rights
+      request within the applicable statutory period.
+    rfc2119: MUST
+    roles: [deployer, provider]
+    lifecycle: [operate]
+    applies_when:
+      data_class: [personal, special_category, health, financial, children]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P90D
+        T4: P30D
+      predicate: |
+        stores_in_scope declared
+        AND requests.completed_within_period == requests.total
+    evidence:
+      - schema: openaisf.evidence.rights_process.v1
+        plane: control
+        fields: [stores_in_scope, statutory_period, procedure]
+      - schema: openaisf.evidence.rights_requests.v1
+        plane: data
+        fields: [received, completed, late, stores_covered, window]
+    failure_mode: >
+      Rights processes built before AI adoption enumerate databases and miss every
+      AI-specific store. A deletion completes successfully against the customer
+      record while the same content persists in an embedding, a trace and an
+      evaluation set, none of which appeared in the data map.
+    rationale: >
+      This is the operational counterpart to D03-C08. That control requires
+      deletion to reach derived stores; this one requires the organisation to be
+      able to find them in the first place when someone asks.
+    crosswalk:
+      iso_42001: [A.7.2, A.8.5]
+      nist_ai_rmf: [MEASURE-2.10, MEASURE-3.3]
+      csa_aicm: [DSP-18, DSP-20]
+
+  - id: D12-C03
+    title: Memorisation and leakage of training data is assessed and constrained
+    domain: D12
+    level: core
+    normative: >
+      Where a model is trained or fine-tuned on data containing personal or
+      confidential information, the provider MUST assess the model's propensity to
+      reproduce that data verbatim and MUST record the mitigations applied.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [evaluate]
+    applies_when:
+      data_class: [personal, special_category, health, financial, confidential]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.memorisation_assessment.v1
+        plane: control
+        fields: [artefact_digest, method, findings, mitigations]
+    failure_mode: >
+      Memorisation is invisible in ordinary use and surfaces under adversarial
+      prompting or by coincidence. ATLAS catalogues training data membership
+      inference and LLM data leakage as distinct techniques, and neither requires
+      access beyond the inference interface.
+    rationale: >
+      Assessed rather than prohibited, because memorisation cannot be reduced to
+      zero and a control demanding that would violate principle P2. What is
+      achievable is knowing the propensity and having decided what to do about it.
+    crosswalk:
+      iso_42001: [A.6.2.4, A.7.4]
+      nist_ai_rmf: [MEASURE-2.10, MEASURE-2.7]
+      csa_aicm: [DSP-21, MDS-04]
+      owasp_llm_2025: [LLM02]
+      owasp_llm_2026: [LLM02]
+      mitre_atlas: [AML.T0024.000, AML.T0057]
+
+  - id: D12-C04
+    title: Cross-border transfer of AI-processed data is governed
+    domain: D12
+    level: core
+    normative: >
+      The jurisdictions in which prompts, completions, training data and traces
+      are processed and stored MUST be recorded, and transfers MUST be governed by
+      a recorded lawful mechanism. Model routing that changes the processing
+      jurisdiction MUST be treated as a transfer.
+    rfc2119: MUST
+    roles: [deployer, operator]
+    lifecycle: [operate]
+    applies_when:
+      data_class: [personal, special_category, health, financial, children]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T3: P30D
+        T4: P7D
+      predicate: |
+        jurisdictions declared
+        AND routing.outside_declared_jurisdictions == 0
+    evidence:
+      - schema: openaisf.evidence.residency_policy.v1
+        plane: control
+        fields: [permitted_jurisdictions, transfer_mechanism]
+      - schema: openaisf.evidence.routing_audit.v1
+        plane: data
+        fields: [requests, by_jurisdiction, outside_policy, window]
+    failure_mode: >
+      Model gateways route by availability, latency and cost, and a failover can
+      move processing to another jurisdiction without any configuration change
+      anyone reviewed. The transfer is real, continuous and invisible in every
+      artefact the privacy team maintains.
+    rationale: >
+      Treating routing as a transfer is the specific insight this control adds.
+      Every organisation already governs data transfer; almost none of them have
+      considered that a load balancer in front of several model providers makes
+      the decision automatically many times a second.
+    crosswalk:
+      iso_42001: [A.7.2, A.10.3]
+      nist_ai_rmf: [GOVERN-1.1, GOVERN-6.1]
+      csa_aicm: [DSP-22, DSP-23, STA-12]

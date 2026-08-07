@@ -1,0 +1,166 @@
+# NIST AI Risk Management Framework 1.0 (NIST AI 100-1) subcategory inventory.
+# 72 subcategories: GOVERN 19, MAP 18, MEASURE 22, MANAGE 13.
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+regime: nist_ai_rmf
+name: NIST AI Risk Management Framework 1.0
+version: "1.0"
+source: "NIST AI 100-1 and the AI RMF Playbook"
+licence: "public-domain-US-Gov"
+licence_url: "https://www.nist.gov/open/license"
+attribution: >
+  Subcategory identifiers refer to the NIST AI Risk Management Framework 1.0
+  (NIST AI 100-1). Works of NIST employees are not subject to copyright
+  protection in the United States under 17 U.S.C. 105; NIST does not endorse
+  OpenAISF. This material may be subject to copyright in other jurisdictions.
+regime_kind: requirement
+reproduction: authored
+declared_total: 72
+requirements:
+  # GOVERN — 19
+  - ref: GOVERN-1.1
+    text_summary: Legal and regulatory requirements are understood and managed
+  - ref: GOVERN-1.2
+    text_summary: Trustworthy AI characteristics are integrated into policy
+  - ref: GOVERN-1.3
+    text_summary: Risk tolerance and risk management activities are determined
+  - ref: GOVERN-1.4
+    text_summary: Risk management process is transparent and documented
+  - ref: GOVERN-1.5
+    text_summary: Periodic review of risk management roles and processes
+  - ref: GOVERN-1.6
+    text_summary: An inventory of AI systems is maintained
+  - ref: GOVERN-1.7
+    text_summary: Processes for decommissioning and phasing out AI systems
+  - ref: GOVERN-2.1
+    text_summary: Roles, responsibilities and lines of communication documented
+  - ref: GOVERN-2.2
+    text_summary: Personnel are trained and competent in AI risk management
+  - ref: GOVERN-2.3
+    text_summary: Executive leadership holds responsibility for AI risk
+  - ref: GOVERN-3.1
+    text_summary: Decision-making teams are diverse and interdisciplinary
+  - ref: GOVERN-3.2
+    text_summary: Human-AI configuration roles and oversight are defined
+  - ref: GOVERN-4.1
+    text_summary: Organisational culture supports critical thinking and safety
+  - ref: GOVERN-4.2
+    text_summary: Risks and potential impacts are documented and communicated
+  - ref: GOVERN-4.3
+    text_summary: Testing, incident identification and information sharing
+  - ref: GOVERN-5.1
+    text_summary: Feedback is collected from external stakeholders
+  - ref: GOVERN-5.2
+    text_summary: Adjudicated feedback is integrated into system design
+  - ref: GOVERN-6.1
+    text_summary: Policies address risks from third-party AI resources
+  - ref: GOVERN-6.2
+    text_summary: Contingency processes exist for third-party system failures
+  # MAP — 18
+  - ref: MAP-1.1
+    text_summary: Intended purposes, laws, norms and deployment settings understood
+  - ref: MAP-1.2
+    text_summary: Interdisciplinary actors and demographic diversity documented
+  - ref: MAP-1.3
+    text_summary: Organisational mission and AI goals are understood
+  - ref: MAP-1.4
+    text_summary: Business value of the AI system is defined or re-evaluated
+  - ref: MAP-1.5
+    text_summary: Organisational risk tolerances are determined and documented
+  - ref: MAP-1.6
+    text_summary: System requirements elicited with socio-technical implications
+  - ref: MAP-2.1
+    text_summary: Specific tasks and implementation methods are defined
+  - ref: MAP-2.2
+    text_summary: Knowledge limits and human oversight needs are documented
+  - ref: MAP-2.3
+    text_summary: Scientific integrity and TEVV considerations are identified
+  - ref: MAP-3.1
+    text_summary: Potential benefits of the AI system are examined
+  - ref: MAP-3.2
+    text_summary: Potential costs including non-monetary impacts are examined
+  - ref: MAP-3.3
+    text_summary: Targeted application scope is specified and documented
+  - ref: MAP-3.4
+    text_summary: Operator and practitioner proficiency processes are defined
+  - ref: MAP-3.5
+    text_summary: Human oversight processes defined per organisational policy
+  - ref: MAP-4.1
+    text_summary: Approaches for mapping technology and legal risks of components
+  - ref: MAP-4.2
+    text_summary: Internal risk controls for system components are identified
+  - ref: MAP-5.1
+    text_summary: Likelihood and magnitude of impacts are identified
+  - ref: MAP-5.2
+    text_summary: Practices for stakeholder engagement and feedback established
+  # MEASURE — 22
+  - ref: MEASURE-1.1
+    text_summary: Measurement approaches and metrics selected by risk priority
+  - ref: MEASURE-1.2
+    text_summary: Appropriateness of metrics and controls regularly assessed
+  - ref: MEASURE-1.3
+    text_summary: Internal experts and independent assessors involved in assessment
+  - ref: MEASURE-2.1
+    text_summary: Test sets, metrics and TEVV tooling are documented
+  - ref: MEASURE-2.2
+    text_summary: Human-subject evaluations meet protection requirements
+  - ref: MEASURE-2.3
+    text_summary: Performance demonstrated under deployment-like conditions
+  - ref: MEASURE-2.4
+    text_summary: System functionality and behaviour monitored in production
+  - ref: MEASURE-2.5
+    text_summary: System demonstrated valid and reliable with documented limits
+  - ref: MEASURE-2.6
+    text_summary: System evaluated for safety with safe-failure demonstration
+  - ref: MEASURE-2.7
+    text_summary: System security and resilience are evaluated and documented
+  - ref: MEASURE-2.8
+    text_summary: Transparency and accountability risks examined and documented
+  - ref: MEASURE-2.9
+    text_summary: Model explained, validated and documented for interpretation
+  - ref: MEASURE-2.10
+    text_summary: Privacy risk is examined and documented
+  - ref: MEASURE-2.11
+    text_summary: Fairness and bias are evaluated with documented results
+  - ref: MEASURE-2.12
+    text_summary: Environmental impact and sustainability are assessed
+  - ref: MEASURE-2.13
+    text_summary: Effectiveness of TEVV metrics and processes is evaluated
+  - ref: MEASURE-3.1
+    text_summary: Approaches identify and track existing and emergent risks
+  - ref: MEASURE-3.2
+    text_summary: Risk tracking considered for difficult-to-assess settings
+  - ref: MEASURE-3.3
+    text_summary: End-user and impacted-community feedback processes established
+  - ref: MEASURE-4.1
+    text_summary: Measurement approaches connected to the deployment context
+  - ref: MEASURE-4.2
+    text_summary: Measurement results validated by domain experts and AI actors
+  - ref: MEASURE-4.3
+    text_summary: Performance improvements and declines identified and documented
+  # MANAGE — 13
+  - ref: MANAGE-1.1
+    text_summary: A go or no-go decision is made on AI system deployment
+  - ref: MANAGE-1.2
+    text_summary: Risk treatment prioritised by impact and likelihood
+  - ref: MANAGE-1.3
+    text_summary: Risk responses are developed and documented
+  - ref: MANAGE-1.4
+    text_summary: Negative residual risks are documented and accepted
+  - ref: MANAGE-2.1
+    text_summary: Resource allocation and non-AI alternatives are considered
+  - ref: MANAGE-2.2
+    text_summary: Mechanisms sustain the value of deployed AI systems
+  - ref: MANAGE-2.3
+    text_summary: Procedures exist for responding to previously unknown risks
+  - ref: MANAGE-2.4
+    text_summary: Mechanisms to disengage or deactivate underperforming systems
+  - ref: MANAGE-3.1
+    text_summary: Third-party AI resources and their risk controls are monitored
+  - ref: MANAGE-3.2
+    text_summary: Pre-trained models are monitored as part of maintenance
+  - ref: MANAGE-4.1
+    text_summary: Post-deployment monitoring plans and incident response exist
+  - ref: MANAGE-4.2
+    text_summary: Measurable continual improvement with stakeholder engagement
+  - ref: MANAGE-4.3
+    text_summary: Incident communication and documented recovery processes

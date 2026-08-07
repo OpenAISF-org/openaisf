@@ -1,0 +1,313 @@
+# OpenAISF catalog — D02 Risk, Context & Impact
+#
+# Where the system's own risk position is established, and where the SoA gets
+# the facts it resolves scope against. D02-C01 runs first: a prohibited practice
+# is not a risk to be managed, it is a system that must not exist.
+#
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.
+domain: D02
+name: Risk, Context & Impact
+controls:
+  - id: D02-C01
+    title: Systems are screened against prohibited practices before development proceeds
+    domain: D02
+    level: core
+    normative: >
+      Before development or deployment proceeds, the intended use MUST be
+      screened against practices prohibited in the jurisdictions where the system
+      will be placed on the market or used. A system matching a prohibited
+      practice MUST NOT proceed, and the screening outcome MUST be recorded
+      whether or not it matched.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [conceive]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T2: P365D
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.prohibition_screen.v1
+        plane: control
+        fields: [system_id, jurisdictions, practices_checked, outcome, screened_on]
+    failure_mode: >
+      Prohibited-practice provisions became applicable well before the rest of the
+      AI Act's obligations, and national market surveillance authorities gained
+      investigative and fining powers on 2 August 2026. A system that turns out to
+      implement a prohibited practice cannot be remediated by adding controls; the
+      only remedy is not to have built it, which is why the screen belongs before
+      the first line of code rather than in a pre-launch review.
+    rationale: >
+      This control is recorded even when it does not match, because the absence of
+      a screen and a screen that found nothing are indistinguishable afterwards.
+      It is also why the requirements it maps to are screening obligations rather
+      than implementable controls, and why those requirements are excluded from
+      coverage elsewhere rather than mapped twice.
+    crosswalk:
+      eu_ai_act:
+        ["Art.5(1)(a)", "Art.5(1)(b)", "Art.5(1)(c)", "Art.5(1)(d)",
+         "Art.5(1)(e)", "Art.5(1)(f)", "Art.5(1)(g)", "Art.5(1)(h)"]
+      nist_ai_rmf: [MAP-1.1]
+      iso_42001: [A.5.2]
+
+  - id: D02-C02
+    title: A risk management system is established and runs across the lifecycle
+    domain: D02
+    level: core
+    normative: >
+      The organisation MUST establish, document and maintain a risk management
+      process covering the whole system lifecycle, and MUST update it with risks
+      identified from operation. The process MUST state how risks are identified,
+      estimated, treated and re-evaluated.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [conceive, operate, observe]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.risk_process.v1
+        plane: control
+        fields: [document, owner, last_review, inputs_from_operation]
+    failure_mode: >
+      Risk processes established at project inception and never fed by production
+      data become a record of what the team feared before they had any evidence,
+      which is systematically different from what actually goes wrong.
+    rationale: >
+      The requirement that operational data feeds back is the load-bearing part.
+      It connects this domain to D14 post-market monitoring, and it is what the
+      AI Act means by risk management being a continuous iterative process rather
+      than a document produced once.
+    crosswalk:
+      iso_42001: [A.5.2, A.5.3, A.6.1.3]
+      nist_ai_rmf: [GOVERN-1.3, MAP-1.5, MANAGE-1.2, MANAGE-1.3]
+      eu_ai_act: ["Art.9(1)", "Art.9(2)(c)", "Art.9(2)(d)", "Art.9(6)"]
+      csa_aicm: [GRC-03, GRC-05]
+
+  - id: D02-C03
+    title: Known and foreseeable risks are identified for intended use and misuse
+    domain: D02
+    level: core
+    normative: >
+      Risk identification MUST cover both the intended use and reasonably
+      foreseeable misuse of the system, MUST estimate the likelihood and severity
+      of each identified risk, and MUST record the deployment context the estimate
+      assumes.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [conceive, evaluate]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.risk_register.v1
+        plane: control
+        fields: [risk, use_or_misuse, likelihood, severity, context, treatment]
+    failure_mode: >
+      Reasonably foreseeable misuse is where the incidents come from. GTG-1002
+      succeeded partly because operators told the model they were a security firm
+      conducting authorised testing, which is not an exotic scenario but the
+      obvious social-engineering move against any capable model.
+    rationale: >
+      Recording the assumed deployment context is what makes the estimate
+      falsifiable later. A severity estimate that does not say what it assumed
+      cannot be shown to have been wrong when the context changes.
+    crosswalk:
+      iso_42001: [A.5.2]
+      nist_ai_rmf: [MAP-1.1, MAP-1.6, MAP-5.1, MEASURE-3.1, MAP-2.1]
+      eu_ai_act: ["Art.9(2)(a)", "Art.9(2)(b)"]
+      mitre_atlas: [AML.T0000]
+
+  - id: D02-C04
+    title: Impacts on individuals and groups are assessed before deployment
+    domain: D02
+    level: core
+    normative: >
+      The organisation MUST assess and document the impact of the system on
+      individuals and on groups of individuals, MUST give specific consideration
+      to minors and to persons in a position of vulnerability, and MUST record
+      who performed the assessment.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [conceive, evaluate]
+    applies_when:
+      eu_risk: [high, limited, gpai, gpai_systemic]
+    tiers:
+      T3: required
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T3: P365D
+        T4: P180D
+    evidence:
+      - schema: openaisf.evidence.impact_assessment.v1
+        plane: control
+        fields: [system_id, affected_groups, vulnerable_groups, findings, assessor]
+    failure_mode: >
+      Impact assessments performed by the team that built the system reliably
+      find the impacts that team already considered. The groups most affected are
+      typically the ones with no representation in the room.
+    rationale: >
+      Recording the assessor is not bureaucracy. It is what allows a reviewer to
+      ask whether the assessment could plausibly have found the impact that was
+      missed, which is the only useful question to ask of one after the fact.
+    crosswalk:
+      iso_42001: [A.5.3, A.5.4]
+      nist_ai_rmf: [MAP-1.2, MAP-3.1, MAP-3.2, MAP-5.1, GOVERN-3.1]
+      eu_ai_act: ["Art.9(9)", "Art.27"]
+
+  - id: D02-C05
+    title: Societal and environmental impacts are assessed
+    domain: D02
+    level: core
+    normative: >
+      The organisation MUST assess and document the impacts of the AI system on
+      society and on the environment, at a depth proportionate to the system's
+      scale and risk classification.
+    rfc2119: MUST
+    roles: [provider]
+    lifecycle: [conceive, evaluate]
+    applies_when:
+      eu_risk: [high, gpai, gpai_systemic]
+    tiers:
+      T3: recommended
+      T4: required
+    verification:
+      method: attested
+      planes: [control]
+      freshness:
+        T4: P365D
+    evidence:
+      - schema: openaisf.evidence.societal_impact.v1
+        plane: control
+        fields: [system_id, societal_findings, environmental_findings, assessor]
+    failure_mode: >
+      Societal impact is the assessment most often reduced to a paragraph
+      asserting that none exists, because it is the one with no obvious owner and
+      no immediate commercial consequence.
+    rationale: >
+      Kept deliberately narrow in scope and tier. A control that demands societal
+      impact analysis from a two-person startup shipping an internal tool is the
+      bureaucracy this framework exists to remove, so it applies only where the
+      risk classification already implies scale.
+    crosswalk:
+      iso_42001: [A.5.5]
+      nist_ai_rmf: [MAP-3.2, MEASURE-2.12]
+      eu_ai_act: ["Art.27"]
+
+  - id: D02-C06
+    title: Residual risk is accepted by a named person, not by omission
+    domain: D02
+    level: core
+    normative: >
+      Risk that remains after treatment MUST be recorded as residual, judged
+      acceptable or not, and where accepted MUST carry the name of the person who
+      accepted it and the date. Residual risk MUST NOT be closed by absence of
+      record.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [evaluate, release]
+    tiers:
+      T2: recommended
+      T3: required
+      T4: required
+    verification:
+      method: asserted
+      planes: [control]
+      freshness:
+        T3: P180D
+        T4: P90D
+    evidence:
+      - schema: openaisf.evidence.residual_risk.v1
+        plane: control
+        fields: [risk, residual_level, accepted_by, accepted_on, rationale]
+    failure_mode: >
+      Unaccepted residual risk does not disappear; it becomes the organisation's
+      position by default, discovered only when someone asks after an incident who
+      decided the risk was tolerable and no one can answer.
+    rationale: >
+      This is the same mechanism as D01-C01 applied to decisions rather than
+      systems. Naming the acceptor converts a diffuse organisational shrug into an
+      accountable act, and it is the control that makes risk acceptance visible in
+      the board view.
+    crosswalk:
+      iso_42001: [A.5.2]
+      nist_ai_rmf: [MANAGE-1.4, MANAGE-1.1]
+      eu_ai_act: ["Art.9(5)"]
+      csa_aicm: [GRC-08]
+
+  - id: D02-C07
+    title: Risk classification determines scope and is recorded machine-readably
+    domain: D02
+    level: core
+    normative: >
+      The system's risk classification under each applicable regime MUST be
+      determined, recorded in machine-readable form, and used as an input to the
+      Statement of Applicability. A change of classification MUST trigger
+      re-resolution of the SoA.
+    rfc2119: MUST
+    roles: [provider, deployer]
+    lifecycle: [conceive, operate]
+    tiers:
+      T2: required
+      T3: required
+      T4: required
+    verification:
+      method: emitted
+      planes: [control, data]
+      freshness:
+        T2: P180D
+        T3: P90D
+        T4: P30D
+      predicate: |
+        classification.recorded == true
+        AND soa.derived_from_classification == true
+        AND classification.changes_triggered_resolution == true
+    evidence:
+      - schema: openaisf.evidence.risk_classification.v1
+        plane: control
+        fields: [regime, classification, determined_on, determined_by]
+      - schema: openaisf.evidence.soa_resolution.v1
+        plane: data
+        fields: [resolved_on, classification_digest, controls_in_scope]
+    failure_mode: >
+      Risk classification is normally recorded in prose in a document nobody
+      re-reads, so when a system's use expands from internal pilot to customer
+      decisioning the classification does not follow it and the control set
+      silently stays at the old level.
+    rationale: >
+      Making classification machine-readable is what connects this domain to the
+      applicability engine. It is the single fact that most determines how large
+      the SoA is, and tying re-resolution to a change in it is how the framework
+      notices scope creep without anybody remembering to look.
+    crosswalk:
+      eu_ai_act:
+        - {ref: "Art.8", strength: partial}
+        - {ref: "Art.51", strength: partial}
+      nist_ai_rmf:
+        - {ref: MAP-1.5, strength: partial}
+        - {ref: MAP-3.3, strength: partial}
+      iso_42001:
+        - {ref: A.5.2, strength: partial}
