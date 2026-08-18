@@ -8,6 +8,10 @@ release.
 An exhaustive catalog is only tolerable if the Statement of Applicability is
 short. These tests are what stop the catalog growing without the scoping model
 keeping pace.
+
+The two pinned-scope tests exist because the public sites quote exact figures
+(3/35/54 typical, 4/51/82 agentic) and promise the build fails if they rise.
+The ceilings below remain as a secondary guard against silent creep.
 """
 
 from pathlib import Path
@@ -72,6 +76,24 @@ def test_t1_is_genuinely_minutes_of_work():
 def test_scope_grows_monotonically_with_tier():
     sizes = [_soa(t).in_scope for t in ("T1", "T2", "T3", "T4")]
     assert sizes == sorted(sizes), f"tier scope is not monotonic: {sizes}"
+
+
+def test_typical_scope_is_pinned_to_the_published_table():
+    """The openaisf.org scope table must match the reference implementation."""
+    sizes = [_soa(t).in_scope for t in ("T1", "T2", "T3")]
+    assert sizes == [3, 35, 54], f"typical scope drifted from the published table: {sizes}"
+
+
+def test_agentic_scope_is_pinned_to_the_published_table():
+    """An agentic, tool-using system handling personal data at limited EU risk."""
+    ctx = dict(
+        system_class=["llm", "agentic"],
+        autonomy="tool_use",
+        data_class=["internal", "personal"],
+        eu_risk=["limited"],
+    )
+    sizes = [_soa(t, **ctx).in_scope for t in ("T1", "T2", "T3")]
+    assert sizes == [4, 51, 82], f"agentic scope drifted from the published table: {sizes}"
 
 
 def test_autonomy_and_data_class_actually_reduce_scope():

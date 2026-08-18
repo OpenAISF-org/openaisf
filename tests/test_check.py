@@ -76,7 +76,7 @@ def rec(control, plane, age_days=0.0, *, scheme=ED25519, verified=True,
 
 def run(records, catalog=CATALOG, tier="T3"):
     soa = resolve_soa(catalog, CTX, tier)
-    return evaluate(catalog, soa, index_evidence(records))
+    return evaluate(catalog, soa, index_evidence(records), now=NOW)
 
 
 def _status(result_run, control_id):
@@ -232,14 +232,14 @@ def test_out_of_scope_controls_do_not_block():
 def test_asserted_inheritance_is_accepted_below_t3():
     catalog = [{**ASSERTED, "tiers": {"T2": "required", "T3": "required"}}]
     soa = resolve_soa(catalog, CTX, "T2", inherits={"D01-C01": "upstream/model"})
-    out = evaluate(catalog, soa, index_evidence([]))
+    out = evaluate(catalog, soa, index_evidence([]), now=NOW)
     assert _status(out, "D01-C01") == INHERITED_OK
 
 
 def test_asserted_inheritance_is_refused_at_t3():
     """An unverifiable claim about somebody else's conformance is not assurance."""
     soa = resolve_soa(CATALOG, CTX, "T3", inherits={"D01-C01": "upstream/model"})
-    out = evaluate(CATALOG, soa, index_evidence([]))
+    out = evaluate(CATALOG, soa, index_evidence([]), now=NOW)
     assert _status(out, "D01-C01") == FAIL
     detail = next(r.detail for r in out.results if r.control_id == "D01-C01")
     assert "not verifiable" in detail

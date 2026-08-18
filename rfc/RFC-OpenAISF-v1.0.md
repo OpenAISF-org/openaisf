@@ -139,10 +139,10 @@ system creates stores nobody inventories and derives artefacts that are
 
 | System | T1 | T2 | T3 |
 |---|---:|---:|---:|
-| Internal non-agentic LLM application | 4 | 35 | — |
-| Agentic, tool-using, handling personal data | 4 | 51 | 77 |
+| Internal non-agentic LLM application | 3 | 35 | 54 |
+| Agentic, tool-using, handling personal data | 4 | 51 | 82 |
 
-118 controls exist. Nobody reads more than 77 and most read 35. **T1 is four controls, of which one is required** — the free tier is meant to be minutes, and that is an executable test in the reference implementation rather than an aspiration.
+118 controls exist. Nobody reads more than 82 and most read 35. **T1 is three controls for the typical system, one of them required, and four for an agentic one** — the free tier is meant to be minutes, and that is an executable test in the reference implementation rather than an aspiration.
 
 ---
 
