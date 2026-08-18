@@ -2,7 +2,6 @@
 
 **An open conformance framework for AI safety and security.**
 
-Created by **Maarten Loose**.<br>
 **Specification** CC-BY-4.0<br>
 **Tooling** Apache-2.0<br>
 **Status:** Request for Comments, August 2026
@@ -374,7 +373,6 @@ Attribution is a licence condition, not a courtesy. Derivative works must carry:
 Every conformance report, badge and log entry the reference implementation
 produces carries that line.
 
-**Maarten Loose** — creator and author of OpenAISF.<br>
 [LinkedIn](https://www.linkedin.com/in/mloose/) · [TruSecure](https://www.trusecure.co)
 
 OpenAISF references external regimes by identifier and reproduces none of their
