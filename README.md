@@ -171,7 +171,7 @@ exists to prevent, citing a named incident where one exists.
 **The Statement of Applicability.** Controls declare their own scope over system
 class, autonomy level, data class and risk classification, so the reader never
 decides whether a control applies to them. A typical internal non-agentic LLM
-application resolves to **35 controls of 118**; tier 1 resolves to **four**, of
+application resolves to **35 controls of 118**; tier 1 resolves to **three**, of
 which one is mandatory. Both figures are enforced by tests that fail the build
 if they rise.
 
@@ -313,7 +313,7 @@ emits OSCAL 1.1.2 for GRC pipelines, and `openaisf mcp` runs the MCP server.
 
 A staged path that produces something useful at every step.
 
-1. **Scope one real system at T1.** Four controls, one mandatory. This exists to
+1. **Scope one real system at T1.** Three controls, one mandatory. This exists to
    prove the loop runs end to end, not to produce assurance.
 2. **Point one adapter at your gateway.** Whatever is already in the request
    path. This is where evidence stops being a document.
@@ -330,7 +330,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) first — it states what makes a good
 control and what will be refused. Two gates are hard:
 
 ```bash
-python -m pytest                      # 170 tests
+python -m pytest                      # 172 tests
 openaisf coverage                     # must exit 0 — no unresolved requirement
 ```
 
