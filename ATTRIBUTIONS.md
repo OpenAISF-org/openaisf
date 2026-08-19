@@ -6,10 +6,6 @@ This document records the licence terms of every external regime OpenAISF maps
 to, the basis on which OpenAISF references each one, and the actions still
 required before commercial launch.
 
-> **This is not legal advice.** It is a factual record of published terms and
-> the design decisions taken in response, prepared to be handed to counsel. The
-> items in §5 need a lawyer's sign-off before TruCert sells anything.
-
 ---
 
 ## 1. The governing principle
