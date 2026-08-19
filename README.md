@@ -366,6 +366,7 @@ trying to certify.
 |---|---|
 | **[openaisf.org](https://openaisf.org)** | The case for adopting it, with the numbers |
 | [MANUAL.md](MANUAL.md) | A plain-language guide: install, use, maintain, interpret, update, integrate |
+| [USECASES.md](USECASES.md) | Where the framework works, and where it does not — by persona and scenario |
 | [rfc/RFC-OpenAISF-v1.0.md](rfc/RFC-OpenAISF-v1.0.md) | The normative specification |
 | [spec/catalog/](spec/catalog/) | 118 controls, one file per domain |
 | [CHANGELOG.md](CHANGELOG.md) | What changed, including which v0.1 claims were wrong |
