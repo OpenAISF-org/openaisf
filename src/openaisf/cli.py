@@ -415,6 +415,9 @@ def main(argv: list[str] | None = None) -> int:
     except SpecError as exc:
         sys.stderr.write(f"error: {exc}\n")
         return 2
+    except (OSError, ValueError) as exc:
+        sys.stderr.write(f"error: {exc}\n")
+        return 2
 
 
 if __name__ == "__main__":

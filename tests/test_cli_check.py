@@ -53,6 +53,30 @@ def test_evidence_for_another_system_is_refused(tmp_path, capsys):
     assert "scoped to one subject" in capsys.readouterr().err
 
 
+def test_missing_context_file_is_a_config_error_not_a_failure(tmp_path, capsys):
+    exit_code = main(["scope", "--context", str(tmp_path / "nope.yaml"),
+                      "--out", str(tmp_path / "soa.yaml")])
+    err = capsys.readouterr().err
+    assert exit_code == 2
+    assert err.startswith("error:")
+    assert "Traceback" not in err
+
+
+def test_missing_verify_key_file_is_a_config_error(tmp_path, capsys):
+    log = str(tmp_path / "log.jsonl")
+    assert main(["publish", "--context", CONTEXT, "--evidence", EVIDENCE,
+                 "--tier", "T1", "--log", log]) == 0
+    capsys.readouterr()
+
+    exit_code = main(["verify", "--log", log,
+                      "--system", "urn:openaisf:system:acme-support-agent",
+                      "--key", str(tmp_path / "nope.pem")])
+    err = capsys.readouterr().err
+    assert exit_code == 2
+    assert err.startswith("error:")
+    assert "Traceback" not in err
+
+
 def test_reference_adapter_reproduces_the_example_evidence(tmp_path):
     """The committed example is generated, not hand-written."""
     subprocess.run(
