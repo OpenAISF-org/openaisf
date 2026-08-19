@@ -63,7 +63,7 @@ whether the world is safe.
 
 ---
 
-## 3. Personas — the three you named
+## 3. Personas examples
 
 ### 3.1 An AI provider keeping its own AI app compliant — **WORKS**
 
