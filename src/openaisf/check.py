@@ -217,6 +217,12 @@ def _contradiction(
             f"point with 0 decisions recorded. A policy that never fired under "
             f"live traffic was not operating."
         )
+    if traffic == 0 and decisions > 0:
+        return (
+            f"declared enabled, but {decisions} decisions were recorded with "
+            f"0 requests crossing the enforcement point. Decisions with no "
+            f"traffic could not have been produced by that point."
+        )
     return None
 
 

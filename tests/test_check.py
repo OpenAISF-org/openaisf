@@ -133,6 +133,26 @@ def test_no_traffic_and_no_decisions_is_not_a_contradiction():
     assert _status(out, "D07-C01") == PASS
 
 
+def test_decisions_without_traffic_fail_as_fabricated():
+    out = run([
+        rec("D07-C01", "control", enabled=True),
+        rec("D07-C01", "data", traffic_requests=0, decisions_total=3),
+        rec("D01-C01", "control"),
+    ])
+    assert _status(out, "D07-C01") == FAIL
+    detail = next(r.detail for r in out.results if r.control_id == "D07-C01")
+    assert "no traffic" in detail
+
+
+def test_decisions_outnumbering_requests_is_not_a_contradiction():
+    out = run([
+        rec("D07-C01", "control", enabled=True),
+        rec("D07-C01", "data", traffic_requests=1, decisions_total=7),
+        rec("D01-C01", "control"),
+    ])
+    assert _status(out, "D07-C01") == PASS
+
+
 def test_contradiction_on_an_asserted_control_cannot_be_resolved_by_attestation():
     out = run([
         rec("D07-C01", "control", enabled=True),
