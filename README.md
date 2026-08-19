@@ -4,12 +4,14 @@
 
 **Specification** CC-BY-4.0<br>
 **Tooling** Apache-2.0<br>
-**Status:** Request for Comments, August 2026
+**Version:** 1.0.0a2 · **Status:** Request for Comments, August 2026
 
 > **This document is the why and the how.** For the numbers, the differentiator
 > and the case for adopting it, see **[openaisf.org](https://openaisf.org)**.
 > For the normative specification, see
 > [rfc/RFC-OpenAISF-v1.0.md](rfc/RFC-OpenAISF-v1.0.md).
+> For plain-language instructions — install, use, maintain, interpret, update,
+> integrate — see **[MANUAL.md](MANUAL.md)**.
 
 ---
 
@@ -269,7 +271,8 @@ documents the contract by example:
    signature attests only that the aggregator received something.
 4. **Never invent an observation.** If the source cannot answer, omit the record
    and let the control fail as a missing signal. Emitting a plausible zero is
-   fabrication, and `D19-C03` exists to catch exactly that.
+   fabrication, and `D19-C03` exists to catch exactly that — as does a record of
+   decisions with no traffic to have produced them.
 
 ```bash
 python tools/adapters/gateway_adapter.py summary.json ./evidence \
@@ -278,16 +281,22 @@ python tools/adapters/gateway_adapter.py summary.json ./evidence \
 
 From tier 3 upward an unsigned record is treated as absent, and the check states
 which of three things went wrong: unsigned, signed with a scheme that proves
-integrity but not authorship, or a signature that does not verify.
+integrity but not authorship, or a signature that does not verify. Supply your
+producers' public keys as a `--keyring` folder (`<key_id>.pem` per key) so
+`check` and `publish` can recognise and verify them.
 
 ### 10. Check, publish, verify
 
 ```bash
-openaisf check --context system.yaml --evidence ./evidence --tier T2
+openaisf check --context system.yaml --evidence ./evidence --tier T2 \
+               --keyring ./keys
 ```
 
-Exit code 0 means conformant. When it is not, the output says why in terms of
-the system rather than the paperwork:
+Exit code 0 means conformant, 1 means not conformant, and 2 means the
+configuration could not be loaded (a missing file or a malformed scoping file)
+— so CI can distinguish a failed assessment from a broken setup instead of
+guessing from a stack trace. When it is not conformant, the output says why in
+terms of the system rather than the paperwork:
 
 ```
 D07-C01  [fail]  declared enabled, but 184203 requests crossed the enforcement
@@ -300,14 +309,16 @@ lease: revoked
 Then sign a statement, append it to a log, and let anyone verify it:
 
 ```bash
-openaisf publish --context system.yaml --evidence ./evidence \
-                 --log openaisf-log.jsonl --key signer.key
+openaisf publish --context system.yaml --evidence ./evidence --tier T2 \
+                 --log openaisf-log.jsonl --key signer.key --keyring ./keys
 openaisf verify  --log openaisf-log.jsonl --system urn:… --key signer.pub
 openaisf badge   --log openaisf-log.jsonl --system urn:…
 ```
 
 Every command accepts `--json` for CI. `openaisf export assessment-results`
-emits OSCAL 1.1.2 for GRC pipelines, and `openaisf mcp` runs the MCP server.
+emits OSCAL 1.1.2 for GRC pipelines (and accepts `--keyring`, so T3 results can
+be exported already verified), and `openaisf mcp` runs the MCP server — whose
+`openaisf_check` tool accepts a keyring too.
 
 ### 11. Adopting it in an organisation
 
@@ -330,9 +341,13 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md) first — it states what makes a good
 control and what will be refused. Two gates are hard:
 
 ```bash
-python -m pytest                      # 172 tests
+python -m pytest                      # 181 tests
 openaisf coverage                     # must exit 0 — no unresolved requirement
 ```
+
+Both gates run automatically on every push to `main` and on every pull request
+(`.github/workflows/ci.yml`, on Python 3.11–3.13) — so a change that would
+break a control or leave a requirement uncovered never lands quietly.
 
 The most valuable contributions, in order:
 
@@ -350,6 +365,7 @@ trying to certify.
 | | |
 |---|---|
 | **[openaisf.org](https://openaisf.org)** | The case for adopting it, with the numbers |
+| [MANUAL.md](MANUAL.md) | A plain-language guide: install, use, maintain, interpret, update, integrate |
 | [rfc/RFC-OpenAISF-v1.0.md](rfc/RFC-OpenAISF-v1.0.md) | The normative specification |
 | [spec/catalog/](spec/catalog/) | 118 controls, one file per domain |
 | [CHANGELOG.md](CHANGELOG.md) | What changed, including which v0.1 claims were wrong |
