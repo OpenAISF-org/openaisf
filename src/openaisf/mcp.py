@@ -60,7 +60,7 @@ import yaml
 from openaisf.applicability import SystemContext
 
 SERVER_NAME = "openaisf"
-SERVER_VERSION = "1.0.0a1"
+SERVER_VERSION = "1.0.0a2"
 ATTRIBUTION = "OpenAISF — created by Maarten Loose."
 
 SUPPORTED_VERSIONS = ("2026-07-28", "2025-11-25")

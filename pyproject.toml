@@ -1,6 +1,6 @@
 [project]
 name = "openaisf"
-version = "1.0.0a1"
+version = "1.0.0a2"
 description = "OpenAISF — open AI safety and security conformance framework. Created by Maarten Loose."
 requires-python = ">=3.11"
 dependencies = ["pyyaml>=6.0", "jsonschema>=4.0"]

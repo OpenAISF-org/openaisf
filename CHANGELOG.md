@@ -2,6 +2,34 @@
 
 **OpenAISF — created by Maarten Loose.**
 
+## v1.0.0a2 — 7 August 2026
+
+### Added
+
+- **Six original AI data governance controls.** Existing data governance was
+  written for records in databases; an AI system creates stores nobody
+  inventories and derives artefacts that silently lose their classification.
+  `D03-C11` prompts and completions inventoried as a data store rather than as
+  logs. `D03-C12` derived artefacts inherit source classification and residency.
+  `D03-C13` deletion proven by attempted retrieval including semantic queries,
+  not by a deletion record. `D03-X01` context assembly may not combine data
+  classes without recorded authority. `D03-X02` operational data may not be
+  reused for training outside its collection purpose. `D03-X03` tenant isolation
+  in shared retrieval and cache layers verified by attempted cross-boundary
+  retrieval.
+
+All six compute as OpenAISF-original. The catalog is now 118 controls, 36 of
+them with no incumbent equivalent, and data governance is 16 controls of which
+7 are original. Coverage remains at zero gaps and the applicability ceilings
+still hold: a typical tier-2 system resolves to 35 controls against a limit of
+40.
+
+### Changed
+
+- README and website now lead with what OpenAISF requires that nothing else
+  does. Both previously opened with the crosswalk coverage table, which framed a
+  framework with 36 original controls as a mapping exercise.
+
 ## v1.0.0a1 — 7 August 2026
 
 A rewrite rather than an upgrade. The following section records the v0.1 claims
@@ -105,34 +133,6 @@ two occasions.** It is now computed from the crosswalk.
 - Intent–action divergence detection is the most original control here and the
   most likely to be noisy. It needs a measured baseline before it goes normative
   below tier 3.
-
-## v1.0.0a2 — 7 August 2026
-
-### Added
-
-- **Six original AI data governance controls.** Existing data governance was
-  written for records in databases; an AI system creates stores nobody
-  inventories and derives artefacts that silently lose their classification.
-  `D03-C11` prompts and completions inventoried as a data store rather than as
-  logs. `D03-C12` derived artefacts inherit source classification and residency.
-  `D03-C13` deletion proven by attempted retrieval including semantic queries,
-  not by a deletion record. `D03-X01` context assembly may not combine data
-  classes without recorded authority. `D03-X02` operational data may not be
-  reused for training outside its collection purpose. `D03-X03` tenant isolation
-  in shared retrieval and cache layers verified by attempted cross-boundary
-  retrieval.
-
-All six compute as OpenAISF-original. The catalog is now 118 controls, 36 of
-them with no incumbent equivalent, and data governance is 16 controls of which
-7 are original. Coverage remains at zero gaps and the applicability ceilings
-still hold: a typical tier-2 system resolves to 35 controls against a limit of
-40.
-
-### Changed
-
-- README and website now lead with what OpenAISF requires that nothing else
-  does. Both previously opened with the crosswalk coverage table, which framed a
-  framework with 36 original controls as a mapping exercise.
 
 ## v0.1 — August 2026
 
