@@ -12,7 +12,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from openaisf.errors import ValidationError
@@ -83,7 +83,7 @@ class EvidenceRecord:
     def decisions_total(self) -> int | None:
         return self.observations.get("decisions_total")
 
-    def age(self, now: datetime) -> "object":
+    def age(self, now: datetime) -> timedelta:
         """How stale this record is, measured from the end of its window."""
         return now - self.window_to
 
