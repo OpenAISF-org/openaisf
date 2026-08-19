@@ -306,7 +306,8 @@ def _cmd_export(args: argparse.Namespace) -> int:
 
     context, inherits, exclusions = load_context(Path(args.context))
     soa = resolve_soa(controls, context, args.tier, inherits, exclusions)
-    run = evaluate(controls, soa, index_evidence(load_evidence(Path(args.evidence))))
+    keyring = load_keyring(Path(args.keyring) if args.keyring else None)
+    run = evaluate(controls, soa, index_evidence(load_evidence(Path(args.evidence), keyring)))
     statement = build_statement(run, soa)
     sys.stdout.write(
         json.dumps(assessment_results(run, statement), indent=2) + "\n"
@@ -403,6 +404,11 @@ def main(argv: list[str] | None = None) -> int:
     export.add_argument("--context", help="required for assessment-results")
     export.add_argument("--evidence", help="required for assessment-results")
     export.add_argument("--tier", default="T2", choices=["T1", "T2", "T3", "T4"])
+    export.add_argument(
+        "--keyring",
+        help="directory of producer public keys named <key_id>.pem; required "
+             "from T3, where an unverifiable signature is treated as absent",
+    )
     export.set_defaults(func=_cmd_export)
 
     args = parser.parse_args(argv)

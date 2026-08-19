@@ -225,6 +225,71 @@ def test_incident_prompt_walks_the_containment_chain():
         assert stage in text
 
 
+# --- T3/T4: signed evidence needs a keyring -----------------------------------
+
+
+@pytest.fixture()
+def signed_evidence(tmp_path):
+    """A control-plane record signed by an ed25519 producer key, plus the keyring."""
+    crypto = pytest.importorskip("cryptography")
+    from cryptography.hazmat.primitives import serialization
+    from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
+
+    from openaisf.evidence import signable_payload
+    from openaisf.signing import Ed25519Signer
+
+    key = Ed25519PrivateKey.generate()
+    key_id = "gateway-prod"
+    private_pem = key.private_bytes(
+        serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8,
+        serialization.NoEncryption())
+
+    record = {
+        "openaisf_evidence": "1.0",
+        "subject": {"system_id": "urn:openaisf:system:acme-support-agent"},
+        "control": "D07-C01",
+        "plane": "control",
+        "window": {"from": "2026-08-06T12:00:00+00:00",
+                   "to": "2026-08-07T12:00:00+00:00"},
+        "observations": {"enabled": True},
+        "producer": {"adapter": "test", "version": "1.0"},
+    }
+    signature = Ed25519Signer(private_pem, key_id).sign(signable_payload(record))
+    record["signature"] = signature.to_dict()
+
+    evidence_dir = tmp_path / "evidence"
+    evidence_dir.mkdir()
+    (evidence_dir / "D07-C01-control.json").write_text(json.dumps(record))
+
+    keyring = tmp_path / "keyring"
+    keyring.mkdir()
+    (keyring / f"{key_id}.pem").write_bytes(
+        key.public_key().public_bytes(
+            serialization.Encoding.PEM,
+            serialization.PublicFormat.SubjectPublicKeyInfo))
+    return str(evidence_dir), str(keyring)
+
+
+def test_check_with_a_keyring_verifies_signed_evidence(signed_evidence):
+    evidence_dir, keyring = signed_evidence
+    result = tool("openaisf_check", {
+        "context": CONTEXT_YAML, "tier": "T3",
+        "evidence_dir": evidence_dir, "keyring": keyring,
+    })
+    text = result["content"][0]["text"]
+    assert "no public key available" not in text
+
+
+def test_check_without_a_keyring_reports_the_missing_key(signed_evidence):
+    evidence_dir, _keyring = signed_evidence
+    result = tool("openaisf_check", {
+        "context": CONTEXT_YAML, "tier": "T3",
+        "evidence_dir": evidence_dir,
+    })
+    text = result["content"][0]["text"]
+    assert "no public key available" in text
+
+
 # --- transport --------------------------------------------------------------
 
 

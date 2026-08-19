@@ -49,7 +49,7 @@ from openaisf.coverage import (
     threat_regimes,
 )
 from openaisf.errors import SpecError
-from openaisf.evidence import index_evidence, load_evidence
+from openaisf.evidence import index_evidence, load_evidence, load_keyring
 from openaisf.loader import load_catalog, load_inventories
 from openaisf.log import TransparencyLog
 from openaisf.soa import resolve_soa, to_document
@@ -253,7 +253,8 @@ def _tool_check(arguments: dict) -> dict:
         raise McpError(INVALID_PARAMS, "evidence_dir is required")
 
     soa = resolve_soa(_catalog(), context, tier, inherits, exclusions)
-    records = load_evidence(Path(evidence_dir))
+    keyring = load_keyring(Path(arguments["keyring"])) if arguments.get("keyring") else {}
+    records = load_evidence(Path(evidence_dir), keyring)
     foreign = {r.system_id for r in records} - {soa.system_id}
     if foreign:
         raise McpError(
@@ -404,6 +405,12 @@ TOOLS: list[tuple[str, str, dict, Callable[[dict], dict]]] = [
                 "evidence_dir": {
                     "type": "string",
                     "description": "Directory of evidence records emitted by adapters.",
+                },
+                "keyring": {
+                    "type": "string",
+                    "description": "Directory of producer public keys named "
+                                   "<key_id>.pem; required from T3, where an "
+                                   "unverifiable signature is treated as absent.",
                 },
             },
             "required": ["context", "evidence_dir"],

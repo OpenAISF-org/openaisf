@@ -87,3 +87,12 @@ def test_reference_adapter_reproduces_the_example_evidence(tmp_path):
     produced = {p.name for p in tmp_path.glob("*.json")}
     committed = {p.name for p in Path(EVIDENCE).glob("*.json")}
     assert produced == committed
+
+
+def test_export_accepts_a_keyring(tmp_path, capsys):
+    exit_code = main(["export", "assessment-results",
+                      "--context", CONTEXT, "--evidence", EVIDENCE,
+                      "--tier", "T1", "--keyring", str(tmp_path)])
+    assert exit_code == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert "assessment-results" in payload
