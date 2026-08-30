@@ -24,8 +24,9 @@ production. Three consequences follow, and they are why organisations pass
 audits and are harmed anyway.
 
 **They govern models. Organisations run agents.** An agent holds credentials,
-calls tools, and acts. Nothing in ISO/IEC 42001, NIST AI RMF or the EU AI Act
-asks what an agent is permitted to reach, how you would notice it going outside
+calls tools, and acts. Nothing in ISO/IEC 42001, ISO/IEC 23894, NIST AI RMF
+or the EU AI Act asks what an agent is permitted to reach, how you would notice
+it going outside
 that, or whether anyone has ever verified you can stop it. The measured
 consequence: 58–59% of enterprises report monitoring their AI agents and only
 37–40% report containment capability.

@@ -18,6 +18,11 @@
   the clause enumeration attested by the official NIST crosswalk rather than
   reproduced from the standard.
 
+- **ISO/IEC 23894:2023 carried through the documentation.** The regime is now
+  named wherever the other eight are: the MANUAL and USECASES regime lists,
+  the ATTRIBUTIONS per-regime table with its own §4 restricted-regime analysis,
+  and the RFC §9 note on its guidance position.
+
 ## v1.0.0a2 — 7 August 2026
 
 ### Added

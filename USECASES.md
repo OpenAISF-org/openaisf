@@ -145,7 +145,7 @@ precisely the assurance the framework exists to improve on.
 | Continuous monitoring of scoped systems | Leases expire against the reader's clock; stale badges lapse by themselves |
 | Catching fabricated evidence | Two-plane contradiction checks (e.g. `D19-C03`) fail a control even where it was only recommended; attestation cannot override telemetry |
 | Agents assisting with review (read/check only) | The MCP server exposes catalog, applicability, checking and verification — and **no** tool that writes, signs or publishes |
-| Crosswalking to external regimes | Coverage is walked against the requirements of EU AI Act, ISO/IEC 42001, NIST AI RMF, CSA AICM, OWASP LLM 2025/2026, MITRE ATLAS, MCP-38 |
+| Crosswalking to external regimes | Coverage is walked against the requirements of EU AI Act, ISO/IEC 42001, ISO/IEC 23894, NIST AI RMF, CSA AICM, OWASP LLM 2025/2026, MITRE ATLAS, MCP-38 |
 
 ---
 
@@ -209,8 +209,8 @@ need an asset-discovery process first.
 
 ### 6.5 Compliance with regimes outside the crosswalk — **NO**
 
-The crosswalk maps exactly these regimes: EU AI Act, ISO/IEC 42001, NIST AI
-RMF, CSA AICM, OWASP LLM 2025/2026, MITRE ATLAS, MCP-38. GDPR, HIPAA,
+The crosswalk maps exactly these regimes: EU AI Act, ISO/IEC 42001, ISO/IEC
+23894, NIST AI RMF, CSA AICM, OWASP LLM 2025/2026, MITRE ATLAS, MCP-38. GDPR, HIPAA,
 PCI-DSS and SOC 2 are **not** among them. The OSCAL export feeds your GRC tools,
 and the coverage engine proves no mapped requirement is uncovered — but
 OpenAISF is not a GDPR or HIPAA framework and makes no claim to be one.

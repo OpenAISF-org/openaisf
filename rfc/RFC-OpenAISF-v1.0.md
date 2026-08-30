@@ -236,6 +236,8 @@ The 133 exclusions are the framework's most consequential judgement and are the 
 
 No requirement was excluded to produce a complete coverage report, and control D19-C05 fails the conformance run where an exclusion is contradicted by the subject's telemetry.
 
+ISO/IEC 23894:2023 enters as guidance rather than certifiable requirements. Its 13 substantive risk-management clauses (5.2–5.7, 6.1–6.7) are all covered, every mapping to one is deliberately partial strength, and the clause enumeration is attested by the official NIST AI RMF ↔ ISO/IEC 23894 crosswalk rather than reproduced from the standard.
+
 **Originality is computed, never asserted.** Regimes are classified as *requirement* catalogs (ISO, NIST, EU, AICM) or *threat* catalogs (OWASP, ATLAS, MCP-38). A mapping to a threat catalog establishes that a control is relevant to a known attack and can never establish that somebody already requires it, so it can never count as full strength. Two or more full mappings is `adopted`; one is `derived`; zero is `OpenAISF-original`. **36 of 118** controls are original by that computation, and the default is `full` so claiming novelty costs an explicit, reviewable edit while disclaiming it is free.
 
 ---

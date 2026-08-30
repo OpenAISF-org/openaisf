@@ -365,7 +365,8 @@ right now, whatever the rest of the line claims.
 ### Reading the coverage report (maintainers)
 
 `coverage` walks the requirements of external regimes (EU AI Act, ISO/IEC 42001,
-NIST AI RMF, CSA AICM, OWASP LLM, MITRE ATLAS, MCP-38) and checks that every
+ISO/IEC 23894, NIST AI RMF, CSA AICM, OWASP LLM, MITRE ATLAS, MCP-38) and
+checks that every
 requirement is covered by a control or excluded with a written reason. There is
 no third state. The report lists, per regime, how many are covered, excluded,
 or a gap. A gap is a release blocker — the standard cannot ship until every

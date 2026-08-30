@@ -58,6 +58,7 @@ Each inventory carries machine-readable `licence`, `attribution` and
 | MCP-38 | CC BY-4.0 | descriptive | arXiv submission licensed CC BY 4.0 |
 | OWASP LLM Top 10 2025 | CC BY-SA-4.0 | authored | See §3 |
 | ISO/IEC 42001:2023 | ISO copyright, all rights reserved | **reference-only** | See §4 |
+| ISO/IEC 23894:2023 | ISO copyright, all rights reserved | **reference-only** | See §4 |
 | CSA AICM v1.1.1 | CSA proprietary | **reference-only** | See §4 |
 
 ### Required notices
@@ -80,8 +81,8 @@ to copyright in jurisdictions outside the United States.
 **OWASP** — Risk identifiers refer to the OWASP Top 10 for Large Language Model
 Applications 2025, OWASP GenAI Security Project, licensed CC BY-SA 4.0.
 
-**ISO** — Clause identifiers refer to ISO/IEC 42001:2023, copyright ISO/IEC. No
-ISO text is reproduced. Obtain the standard from ISO.
+**ISO** — Clause identifiers refer to ISO/IEC 42001:2023 and ISO/IEC 23894:2023,
+copyright ISO/IEC. No ISO text is reproduced. Obtain the standard from ISO.
 
 **CSA** — Control identifiers refer to the CSA AI Controls Matrix v1.1.1,
 copyright Cloud Security Alliance. No CSA text is reproduced. Obtain the AICM
@@ -112,7 +113,7 @@ already reference the 2025 identifiers and identifiers are permanent.
 
 ---
 
-## 4. The two restricted regimes
+## 4. The three restricted regimes
 
 ### ISO/IEC 42001:2023
 
@@ -131,6 +132,17 @@ reference into law was fair use, while expressly holding that those standards
 remain under copyright and do not enter the public domain. That authority runs
 *against* a commercial reproducer, which is why OpenAISF does not rely on fair
 use for ISO material and reproduces none of it.
+
+### ISO/IEC 23894:2023
+
+Same position as ISO/IEC 42001 above. The inventory is reference-only: 13 clause
+identifiers (5.2–5.7, 6.1–6.7) and nothing else — clauses 1–3 and the annexes
+carry no substantive obligation and are not inventoried. 23894 is guidance
+adapting ISO 31000 to AI systems rather than certifiable requirements, so its
+clauses are broad headings and no mapping to one is ever full strength. The
+clause enumeration follows the official NIST crosswalk (NIST AI RMF 1.0 to
+ISO/IEC 23894:2023, revised edition, airc.nist.gov) rather than the standard
+itself, so no memory or unlicensed reproduction is the source of the clause list.
 
 ### CSA AICM v1.1.1
 
