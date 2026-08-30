@@ -57,6 +57,8 @@ controls:
       nist_ai_rmf: [MEASURE-2.4, MANAGE-4.1, MANAGE-4.2]
       eu_ai_act: ["Art.72", "Art.26(5)", "Art.9(2)(c)"]
       csa_aicm: [LOG-11, A&A-02]
+      iso_23894:
+        - {ref: "6.6", strength: partial}
 
   - id: D14-C02
     title: Output quality is scored in production, not only in evaluation
@@ -160,6 +162,8 @@ controls:
       eu_ai_act: ["Art.72", "Art.15(4)"]
       csa_aicm: [LOG-13, MDS-07]
       mitre_atlas: [AML.T0031, AML.T0059]
+      iso_23894:
+        - {ref: "6.6", strength: partial}
 
   - id: D14-C04
     title: Telemetry is complete enough to answer the questions the controls require

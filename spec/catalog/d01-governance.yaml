@@ -51,6 +51,9 @@ controls:
       iso_42001: [A.3.2]
       nist_ai_rmf: [GOVERN-2.1, GOVERN-3.2]
       eu_ai_act: ["Art.17"]
+      iso_23894:
+        - {ref: "5.2", strength: partial}
+        - {ref: "5.4", strength: partial}
 
   - id: D01-C02
     title: An inventory of AI systems is maintained and reconciled against reality
@@ -196,6 +199,8 @@ controls:
       nist_ai_rmf: [GOVERN-1.1, GOVERN-1.2, GOVERN-1.4]
       eu_ai_act: ["Art.17"]
       csa_aicm: [GRC-01, GRC-02]
+      iso_23894:
+        - {ref: "5.2", strength: partial}
 
   - id: D01-C05
     title: People with AI responsibilities are competent for them
@@ -273,6 +278,8 @@ controls:
       iso_42001: [A.3.3, A.8.5]
       nist_ai_rmf: [GOVERN-4.1, GOVERN-5.1, MEASURE-3.3, MAP-5.2]
       csa_aicm: [GRC-06]
+      iso_23894:
+        - {ref: "6.2", strength: partial}
 
   - id: D01-C07
     title: Conformance state across the portfolio is reported to executive level
@@ -325,3 +332,6 @@ controls:
         - {ref: GOVERN-1.5, strength: partial}
       csa_aicm:
         - {ref: GRC-07, strength: partial}
+      iso_23894:
+        - {ref: "6.2", strength: partial}
+        - {ref: "6.7", strength: partial}

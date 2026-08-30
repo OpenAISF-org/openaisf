@@ -226,7 +226,8 @@ OpenAISF inverts it. Each regime is inventoried to its atomic requirements, and 
 | MCP-38 | 38 | 38 | 0 |
 | OWASP LLM Top 10 2025 | 10 | 10 | 0 |
 | OWASP LLM Top 10 2026 | 10 | 10 | 0 |
-| **Total** | **677** | **544** | **133** |
+| ISO/IEC 23894:2023 | 13 | 13 | 0 |
+| **Total** | **690** | **557** | **133** |
 
 The 133 exclusions are the framework's most consequential judgement and are the primary subject for review. They fall into two groups, each entry carrying a written reason:
 

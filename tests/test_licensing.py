@@ -16,7 +16,7 @@ INVENTORIES = Path(__file__).resolve().parent.parent / "spec" / "crosswalk" / "i
 # Regimes whose terms do not permit reproducing their authored text in a work
 # that is redistributed and commercially leveraged. These MUST stay
 # reference-only. Adding a regime here is a legal decision, not a style choice.
-RESTRICTED = {"iso_42001", "csa_aicm"}
+RESTRICTED = {"iso_42001", "csa_aicm", "iso_23894"}
 
 
 def test_every_inventory_declares_licence_and_reproduction_policy():
@@ -53,7 +53,8 @@ def test_restricted_regime_summaries_carry_no_source_authored_text():
         summaries = {r["text_summary"] for r in inventories[regime]["requirements"]}
         total = len(inventories[regime]["requirements"])
         # A generated descriptor form yields one distinct string per grouping
-        # (9 objectives for ISO, 18 domains for AICM). Pasting real titles back
+        # (9 objectives for ISO 42001, 18 domains for AICM, 2 clause groups
+        # for ISO 23894). Pasting real titles back
         # yields one distinct string per requirement. Half is a wide margin
         # between those two regimes.
         assert len(summaries) <= total // 2, (

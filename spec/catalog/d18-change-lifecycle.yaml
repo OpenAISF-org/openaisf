@@ -103,6 +103,9 @@ controls:
       nist_ai_rmf: [MANAGE-1.1, MAP-3.3, GOVERN-1.5]
       eu_ai_act: ["Art.9(2)(c)", "Art.43"]
       csa_aicm: [CCC-04, CCC-05, GRC-12]
+      iso_23894:
+        - {ref: "5.3", strength: partial}
+        - {ref: "5.7", strength: partial}
 
   - id: D18-C03
     title: Decommissioning removes access, data and downstream dependence

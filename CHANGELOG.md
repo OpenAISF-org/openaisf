@@ -2,6 +2,22 @@
 
 **OpenAISF — created by Maarten Loose.**
 
+## Unreleased
+
+### Added
+
+- **ISO/IEC 23894:2023 added to the coverage engine.** The AI risk-management
+  guidance is inventoried as a ninth regime — its 13 substantive body clauses
+  (framework 5.2–5.7, process 6.1–6.7), with clauses 1–3 and the annexes not
+  inventoried as they carry no obligation. Because 23894 is guidance rather
+  than certifiable requirements, every item is non-atomic and every mapping to
+  it is partial strength: 13 clauses covered by 15 controls across governance
+  (D01), risk (D02), monitoring (D14), incident (D16), change (D18) and
+  evidence (D19), zero exclusions, provenance unchanged. The inventory is
+  reference-only like ISO 42001's: clause identifiers only, no ISO text, with
+  the clause enumeration attested by the official NIST crosswalk rather than
+  reproduced from the standard.
+
 ## v1.0.0a2 — 7 August 2026
 
 ### Added

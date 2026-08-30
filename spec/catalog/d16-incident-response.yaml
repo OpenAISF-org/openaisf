@@ -345,3 +345,6 @@ controls:
       nist_ai_rmf: [MANAGE-4.2, MANAGE-4.3, GOVERN-4.3]
       eu_ai_act: ["Art.9(2)(c)", "Art.20", "Art.72"]
       csa_aicm: [SEF-09, SEF-10]
+      iso_23894:
+        - {ref: "5.7", strength: partial}
+        - {ref: "6.5", strength: partial}

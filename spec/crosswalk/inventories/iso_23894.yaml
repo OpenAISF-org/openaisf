@@ -1,0 +1,70 @@
+# Copyright position: ISO/IEC 23894 is an ISO/IEC copyright document. No clause
+# text is reproduced here — only clause identifiers, which are references, not
+# content. Obtain the standard from ISO to read it. Clause identifiers are
+# quoted throughout so YAML does not parse them as floating-point numbers.
+#
+# Position of this regime: ISO/IEC 23894:2023 is guidance, not certifiable
+# requirements — it adapts the generic ISO 31000 risk-management process to AI
+# systems. Its clauses are broad headings rather than auditable criteria, so
+# every item is atomic: false and no mapping to it is ever full strength; a
+# control can address part of a clause, never satisfy it wholly. Clauses 1–3
+# (scope, normative references, terms) and the annexes carry no substantive
+# obligation and are not inventoried. The clause enumeration follows the
+# official NIST crosswalk (NIST AI RMF 1.0 to ISO/IEC 23894:2023, revised
+# edition, airc.nist.gov) so that no memory or unlicensed reproduction is the
+# source of the clause list.
+
+regime: iso_23894
+name: ISO/IEC 23894:2023 — AI risk management guidance
+version: "2023"
+source: "https://www.iso.org/standard/77304.html"
+licence: "ISO copyright — all rights reserved"
+licence_url: "https://www.iso.org/terms-conditions-licence-agreement.html"
+attribution: >
+  Clause identifiers refer to ISO/IEC 23894:2023, copyright ISO/IEC. No ISO
+  text is reproduced. Obtain the standard from ISO to read it.
+regime_kind: requirement
+reproduction: reference-only
+declared_total: 13
+requirements:
+  - ref: "5.2"
+    atomic: false
+    text_summary: Framework clause of the AI risk management guidance
+  - ref: "5.3"
+    atomic: false
+    text_summary: Framework clause of the AI risk management guidance
+  - ref: "5.4"
+    atomic: false
+    text_summary: Framework clause of the AI risk management guidance
+  - ref: "5.5"
+    atomic: false
+    text_summary: Framework clause of the AI risk management guidance
+  - ref: "5.6"
+    atomic: false
+    text_summary: Framework clause of the AI risk management guidance
+  - ref: "5.7"
+    atomic: false
+    text_summary: Framework clause of the AI risk management guidance
+  - ref: "6.1"
+    atomic: false
+    text_summary: Process clause of the AI risk management guidance
+  - ref: "6.2"
+    atomic: false
+    text_summary: Process clause of the AI risk management guidance
+  - ref: "6.3"
+    atomic: false
+    text_summary: Process clause of the AI risk management guidance
+  - ref: "6.4"
+    atomic: false
+    text_summary: Process clause of the AI risk management guidance
+  - ref: "6.5"
+    atomic: false
+    text_summary: Process clause of the AI risk management guidance
+  - ref: "6.6"
+    atomic: false
+    text_summary: Process clause of the AI risk management guidance
+  - ref: "6.7"
+    atomic: false
+    text_summary: Process clause of the AI risk management guidance
+
+# OpenAISF — created by Maarten Loose. Specification licensed CC-BY-4.0.

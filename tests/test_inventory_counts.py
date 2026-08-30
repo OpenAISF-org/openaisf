@@ -6,6 +6,7 @@ INVENTORIES = Path(__file__).resolve().parent.parent / "spec" / "crosswalk" / "i
 
 PUBLISHED_COUNTS = {
     "iso_42001": 38,
+    "iso_23894": 13,
     "owasp_llm_2025": 10,
     "owasp_llm_2026": 10,
     "nist_ai_rmf": 72,
