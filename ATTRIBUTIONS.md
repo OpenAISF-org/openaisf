@@ -57,6 +57,7 @@ Each inventory carries machine-readable `licence`, `attribution` and
 | MITRE ATLAS | Apache-2.0 | descriptive | Licence expressly permits reproduction and distribution with attribution |
 | MCP-38 | CC BY-4.0 | descriptive | arXiv submission licensed CC BY 4.0 |
 | OWASP LLM Top 10 2025 | CC BY-SA-4.0 | authored | See §3 |
+| OWASP LLM Top 10 2026 | CC BY-SA-4.0 | authored | See §3 |
 | ISO/IEC 42001:2023 | ISO copyright, all rights reserved | **reference-only** | See §4 |
 | ISO/IEC 23894:2023 | ISO copyright, all rights reserved | **reference-only** | See §4 |
 | CSA AICM v1.1.1 | CSA proprietary | **reference-only** | See §4 |
@@ -79,7 +80,7 @@ to copyright in jurisdictions outside the United States.
 © European Union.
 
 **OWASP** — Risk identifiers refer to the OWASP Top 10 for Large Language Model
-Applications 2025, OWASP GenAI Security Project, licensed CC BY-SA 4.0.
+Applications 2025 and 2026, OWASP GenAI Security Project, licensed CC BY-SA 4.0.
 
 **ISO** — Clause identifiers refer to ISO/IEC 42001:2023 and ISO/IEC 23894:2023,
 copyright ISO/IEC. No ISO text is reproduced. Obtain the standard from ISO.
@@ -107,9 +108,13 @@ carries the `LLM01`–`LLM10` identifiers, which are designations rather than
 expression, and descriptors written by OpenAISF. Attribution is given regardless,
 as a matter of practice rather than obligation.
 
-**Currency note.** OWASP published a 2026 edition on 4 August 2026. It must be
-added as a **separate regime**, not as an overwrite, because existing controls
-already reference the 2025 identifiers and identifiers are permanent.
+**Currency note.** OWASP published a 2026 edition on 4 August 2026. It is
+inventoried as a **separate regime** (`owasp_llm_2026`), not as an overwrite of
+2025: the 2026 edition recycles the `LLM01`–`LLM10` identifiers for a re-ranked
+and partly renamed set of risks — `LLM03` means Supply Chain in 2025 and
+Excessive Agency in 2026 — so an overwrite would have silently changed the
+meaning of every existing crosswalk entry. Both editions are licensed CC BY-SA
+4.0 and the ShareAlike analysis above applies to each.
 
 ---
 
