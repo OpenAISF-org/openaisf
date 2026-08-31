@@ -23,6 +23,14 @@
   the ATTRIBUTIONS per-regime table with its own §4 restricted-regime analysis,
   and the RFC §9 note on its guidance position.
 
+### Fixed
+
+- **README overstated the MCP server's independence.** It said the server is
+  "standard library only"; it imports `pyyaml` (a runtime dependency, so
+  always present) and the OpenAISF package itself. The claim is now the true
+  one: the server adds nothing beyond the two runtime dependencies, speaking
+  plain stdio JSON-RPC by hand.
+
 ## v1.0.0a2 — 7 August 2026
 
 ### Added

@@ -218,7 +218,7 @@ python -m venv .venv && ./.venv/bin/pip install -e '.[dev]'
 
 Runtime dependencies are `pyyaml` and `jsonschema`. That is the entire list,
 deliberately, because this runs inside other organisations' CI. Signing is an
-optional extra; the MCP server is standard library only.
+optional extra; the MCP server adds nothing beyond those two — it is transported over plain stdio with hand-rolled JSON-RPC.
 
 ### 8. Work out what applies to you
 
