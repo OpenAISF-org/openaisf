@@ -51,18 +51,5 @@ mandatory log participation, public disclosure of every certification issued,
 suspended, expired and revoked — aligned to ISO/IEC 42006 so that accreditation
 is a path rather than a claim.
 
-**TruCert** (TruSecure) is the reference certifier and a commercial product. The
-specification grants it nothing another certifier cannot have, and the Certifier
-requirements are published before any certifier launches so the role
-demonstrably predates its first occupant.
-
 A system can reach any tier, including T4, with no money changing hands and no
 certifier involved.
-
-## Conflicts of interest
-
-The creator holds a commercial interest in TruSecure. The mitigation is
-structural: the catalog, crosswalk, SoA schema, evidence schemas, log format and
-CLI contain no reference to TruSecure other than attribution. A dependency of any
-specification artefact on TruSecure constitutes a defect and should be reported
-as one.

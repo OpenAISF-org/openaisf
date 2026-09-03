@@ -35,7 +35,7 @@ Stated first, because each of the following is a claim OpenAISF does not make an
 
 ---
 
-## 3. What is different, precisely
+## 3. What is different
 
 Four places, and no others.
 
@@ -250,7 +250,6 @@ Three names, three jobs, and they must not blur.
 |---|---|---|
 | **OpenAISF** | The open standard | Open. Created by Maarten Loose |
 | **Certifier** | A *role* defined by the standard — obligations, signing duties, independence rules, aligned to ISO/IEC 42006 | Anyone meeting the requirements |
-| **TruCert** | TruSecure's implementation of the Certifier role, and its commercial assurance product | TruSecure |
 
 A system can reach **any tier, including T4, with no money changing hands and no certifier involved.** That is not a concession; it is the mechanism by which a standard spreads. The Certifier requirements are published before any certifier launches, so the role demonstrably predates its first occupant.
 

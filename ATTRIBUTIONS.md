@@ -165,39 +165,7 @@ derived from each identifier's own prefix.
 
 ---
 
-## 5. Actions required before commercial launch
-
-1. **Obtain a CSA commercial licence.** CSA sells one covering commercial use of
-   the AICM. OpenAISF is a free open standard, but TruCert is a commercial
-   certification product built on it, and a reasonable reading is that AICM
-   identifiers are being leveraged within a commercial product. CSA offers the
-   licence; buying it is cheap certainty and removes the only structurally
-   awkward dependency in the crosswalk. **Owner: Maarten Loose. Blocking for
-   TruCert commercial launch, not for publishing the open standard.**
-
-2. **Notify ISO of the crosswalk.** No permission is required to cite clause
-   numbers, and none is being sought. A short factual notice describing what
-   OpenAISF does and does not reproduce is cheap goodwill and creates a record
-   predating any dispute. **Non-blocking.**
-
-3. **Counsel review of this document and the three inventories marked
-   reference-only or authored.** Specifically: the ShareAlike analysis in §3, the
-   *Feist* argument in §1, and whether the CSA licence in item 1 is required or
-   merely prudent. **Blocking for commercial launch.**
-
-4. **Trademark registration** for `OpenAISF` and `TruCert`. Copyright licensing
-   does not protect a name; trademark does. This is what actually stops someone
-   shipping a fake conformance mark. **Blocking for the badge to mean anything.**
-
-5. **Re-run this analysis whenever a regime is added.** The inventory schema
-   makes `licence`, `attribution` and `reproduction` mandatory, and
-   `tests/test_licensing.py` fails the build if a restricted regime stops being
-   reference-only. Adding a regime to the `RESTRICTED` set in that file is a
-   legal decision, not a style choice.
-
----
-
-## 6. What OpenAISF licenses to others
+## 5. What OpenAISF licenses to others
 
 Specification (`schema/`, `spec/`) — **CC-BY-4.0**.
 Tooling (`src/`, `tools/`) — **Apache-2.0**.

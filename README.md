@@ -71,17 +71,7 @@ including tier 4 — is reachable self-assessed, with no certifier and no fee.
 
 That is not generosity. A conformance standard is worth something only when
 relying parties recognise it, and nothing gates recognition faster than a
-paywall between an engineer and the control text. The commercial layer sits
-where independent assurance genuinely costs money to produce: **TruCert**,
-TruSecure's implementation of the Certifier role, sells a counter-signature and
-the work of running the evidence machinery. It sells nothing that gates access
-to the standard.
-
-**Declared interest.** The creator holds a commercial interest in TruSecure. The
-mitigation is structural rather than a promise: the catalog, crosswalk, SoA
-schema, evidence schemas, log format and CLI contain no reference to TruSecure
-other than attribution. A dependency of any specification artefact on TruSecure
-is a defect and should be filed as one.
+paywall between an engineer and the control text.
 
 ### 4. Decisions worth arguing with
 

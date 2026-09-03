@@ -13,7 +13,7 @@ does not assume you are a developer.
 
 ---
 
-## 1. What you are working with, in plain words
+## 1. What you are working with
 
 OpenAISF is an open standard for proving that an AI system is safe and secure —
 and, just as important, proving *for how long* it stayed that way. Think of it
@@ -300,7 +300,7 @@ Notes for non-technical readers:
 - Give the private key only to the people authorised to sign. The **public**
   key is safe to share — it is what verifiers use.
 
-### Step 6 — Verify and show the badge
+### Step 6 — Verify
 
 Anyone — a customer, an auditor, a stranger on the internet — can check your
 badge without your cooperation. That is the point. All they need is the log,
